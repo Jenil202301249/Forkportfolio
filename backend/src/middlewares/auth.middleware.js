@@ -5,7 +5,7 @@ const verifyToken = async (req, res, next) => {
     try {
         const token = req.cookies?.token;
         console.log("token: ",token);
-        console.log("request: ",req);
+        console.log("request: ",req.cookies);
         if(!token){
             
             return res
