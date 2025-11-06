@@ -5,16 +5,18 @@ import { searchUserByEmail } from "../../db/findUser.js";
 import { checkEmailSyntax } from "../../utils/checkUserSyntax.js";
 import { checkPasswordSyntax } from "../../utils/checkUserSyntax.js";
 import { insertActiveSession } from "../../db/insertActiveSession.js";
+import { addSecurityAlert } from "../../mongoModels/user.model.js";
+
 const loginUser = async (req, res) => {
     try {
-        const userAgentString = req.headers['user-agent'];
+        const userAgentString = req.headers["user-agent"];
         const parser = new UAParser(userAgentString);
-        const { browserDetails } = parser.getBrowser();
-        const { osDetails } = parser.getOS();
+        const browserDetails = parser.getBrowser();
+        const osDetails = parser.getOS();
 
         let { email, password } = req.body;
         email = email?.toLowerCase();
-        
+
         if (!email || !password) {
             return res.status(400).json({
                 success: false,
@@ -28,7 +30,7 @@ const loginUser = async (req, res) => {
                 message: "Please provide a valid email address",
             });
         }
-        
+
         if (!checkPasswordSyntax(password)) {
             return res.status(400).json({
                 success: false,
@@ -39,7 +41,7 @@ const loginUser = async (req, res) => {
 
         const user = await searchUserByEmail(email);
 
-        if(!user) {
+        if (!user) {
             return res
                 .status(500)
                 .json({ success: false, message: "Database error" });
@@ -60,18 +62,18 @@ const loginUser = async (req, res) => {
         }
 
         const token = jwt.sign(
-            { user: user[0].id, email: user[0].email,tokenversion:user[0].tokenversion },
+            { user: user[0].id, email: user[0].email },
             process.env.JWT_SECRET,
             {
                 expiresIn: process.env.JWT_EXPIRE,
             }
         );
-        
-        let browser = (browserDetails?.name + " " + browserDetails?.version);
-        if(!browser || browser === "undefined undefined") browser = "Unknown";
 
-        let os = (osDetails?.name + " " + osDetails?.version);
-        if(!os || os === "undefined undefined") os = "Unknown";
+        let browser = browserDetails?.name + " " + browserDetails?.version;
+        if (!browser || browser === "undefined undefined") browser = "Unknown";
+
+        let os = osDetails?.name + " " + osDetails?.version;
+        if (!os || os === "undefined undefined") os = "Unknown";
 
         const addActiveSessionStatus = await insertActiveSession({
             token: token,
@@ -83,8 +85,22 @@ const loginUser = async (req, res) => {
         if (!addActiveSessionStatus) {
             return res
                 .status(500)
-                .json({ success: false, message: "Database error while storing current session details" });
+                .json({
+                    success: false,
+                    message:
+                        "Database error while storing current session details",
+                });
         }
+
+        const newAlert = {
+            os_type: os,
+            browser_type: browser,
+            type: "Login",
+            message: "new device logged in",
+            token: token,
+        };
+
+        await addSecurityAlert(user[0].email, newAlert);
 
         return res
             .status(200)

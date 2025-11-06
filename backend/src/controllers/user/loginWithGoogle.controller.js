@@ -9,8 +9,8 @@ const loginWithGoogle = async (req, res) => {
   try {
     const userAgentString = req.headers['user-agent'];
     const parser = new UAParser(userAgentString);
-    const { browserDetails } = parser.getBrowser();
-    const { osDetails } = parser.getOS();
+    const browserDetails = parser.getBrowser();
+    const osDetails = parser.getOS();
 
     const { access_token } = req.body; //The access token for user profile
 
@@ -31,7 +31,7 @@ const loginWithGoogle = async (req, res) => {
         return res.status(401).json({ success: false, message: "User already exists with this email. Please login using email and password." });
     }
     const token = jwt.sign(
-      { user: user.id, email: user.email,tokenversion:user.tokenversion },
+      { user: user.id, email: user.email },
         process.env.JWT_SECRET,
       {
         expiresIn: process.env.JWT_EXPIRE,
@@ -61,6 +61,7 @@ const loginWithGoogle = async (req, res) => {
           .cookie("token", token, {
             httpOnly: true,
             secure: true,
+            sameSite: "none",
             maxAge: 7 * 24 * 60 * 60 * 1000,
           })
           .json({ success: true, message: "User logged in successfully"});

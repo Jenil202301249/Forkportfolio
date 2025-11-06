@@ -1,6 +1,7 @@
 import { toggleAiSuggestion } from "../../db/toggleAiSuggestion.js";
+import { addActivityHistory } from "../../mongoModels/user.model.js";
 
-const toggleAiSuggestionController = (req, res) => {
+const toggleAiSuggestionController = async (req, res) => {
     try {
         const result = toggleAiSuggestion(req.user.email);
         if (!result) {
@@ -14,6 +15,17 @@ const toggleAiSuggestionController = (req, res) => {
                 .json({ success: false, message: "User not found" });
         }
         req.user.aisuggestion = !req.user.aisuggestion;
+
+        const newActivity = {
+            os_type: req.activeSession.osType,
+            browser_type: req.activeSession.browserType,
+            type: "aisuggestion",
+            message: "Toggled ai suggestion",
+            token: req.cookies.token,
+        };
+
+        await addActivityHistory(req.user.email, newActivity);
+
         return res
             .status(200)
             .json({ success: true, message: "ai suggestion toggled" });

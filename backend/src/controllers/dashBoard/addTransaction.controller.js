@@ -2,10 +2,18 @@ import { insertTransaction } from "../../db/insertTransaction.js";
 
 
 export const addTransaction = async (req, res) => {
-    const { symbol, type, quantity,transaction_type } = req.body;
+    let { symbol, quantity,transaction_type } = req.body;
     const email = req.user.email;
-    if (!email || !symbol || !type || !quantity || !transaction_type) {
+    if (!email || !symbol || !quantity || !transaction_type) {
         return res.status(401).json({ success: false, message: "All fields are required" });
+    }
+    transaction_type = transaction_type.toUpperCase();
+    let check_transaction_type = ['BUY','SELL'];
+    if(!check_transaction_type.includes(transaction_type)){
+        return res.status(400).json({success:false,message:"Invalid transaction type."});
+    } 
+    if (quantity <= 0) {
+        return res.status(400).json({ success: false, message: "Quantity must be greater than zero" });
     }
     try {
         const now = new Date();

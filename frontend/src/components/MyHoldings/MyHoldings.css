@@ -1,0 +1,40 @@
+
+.card {
+  background-color: #161616;
+  border: 1px solid #7dff9e;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 20px;
+  box-shadow: 0 0 15px rgba(0,255,128,0.05);
+}
+
+.holdings-card {
+ justify-content: center;
+  width: 100%;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  text-align: center;
+  
+}
+
+th, td {
+  border: 1px solid #2c2c2c;
+  padding: 0.8rem;
+  border: 1px solid white;
+}
+
+th {
+  background-color: #1f1f1f;
+  font-weight: 700;
+  
+}
+
+td {
+  background-color: #1f1f1f;
+  font-weight: 700;
+  color: gray;
+}

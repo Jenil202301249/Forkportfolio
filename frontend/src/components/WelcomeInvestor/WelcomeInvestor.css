@@ -7,12 +7,12 @@ body {
 }
 
 .page-container {
-  max-width: 1200px;
+  max-width: 85%;
   margin: 0 auto;
   padding: 40px;
 }
 
-.text-positive { color: #00d27a !important;}
+.text-positive { color: #00C853 !important;}
 .text-negative { color: #ff4d4d !important;} 
 .text-neutral { color: #ffc107 !important;}  
 
@@ -44,7 +44,7 @@ body {
   margin: 0;
 }
 .welcome-header h1 strong {
-   color: #00d27a; 
+   color: #00C853; 
 }
 .welcome-header p {
   font-size: 1rem;
@@ -97,7 +97,7 @@ body {
 }
 
 .trending-title {
-  color: #00d27a;
+  color: #00C853;
   font-size: 1.5rem;
   margin: 0 0 20px 0;
 }
@@ -134,4 +134,8 @@ body {
   font-size: 0.8rem;
   margin: 4px 0 0; 
 }
+
+
+
+
 

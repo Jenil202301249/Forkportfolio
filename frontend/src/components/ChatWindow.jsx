@@ -5,6 +5,8 @@ import axios from "axios";
 import ReactMarkDown from 'react-markdown';
 // A plugin for react-markdown that adds GitHub-style Markdown features (tables, task lists, strikethrough, autolinks).
 import remarkGfm from 'remark-gfm';
+// Convert emoji shortnames like :rocket: to Unicode emoji
+import remarkEmoji from 'remark-emoji';
 const ChatWindow = () => {
     const [messages,setMessages] = useState([]);
     const [input,setInput] = useState("");
@@ -23,17 +25,18 @@ const ChatWindow = () => {
         const userMsg = {id:Date.now(),text, sender:"user"};
         setMessages((prev) => [...prev, userMsg, typingMsg]);
         try{
-                const res = await axios.post("/api/chat/send",{
+                const res = await axios.post(import.meta.env.VITE_BACKEND_LINK + "/api/v1/ai-insight/sendMessage",{
                 message : userMsg,
             });
             console.log("Response from backend:", res);
             const markdownText = res.data.reply;
-            const replyText = <ReactMarkDown remarkPlugins={[remarkGfm]}>{markdownText}</ReactMarkDown>;
+            console.log("Backend markdownText:", markdownText);
+            const replyText = <ReactMarkDown remarkPlugins={[remarkGfm, remarkEmoji]}>{markdownText}</ReactMarkDown>;
             setMessages((prev) => [...prev.filter((msg)=>msg.id !== "typing"), { id: Date.now(), text: replyText, sender: 'bot' }]);
         }catch(err){
             console.error("Error sending message:", err);
             setMessages((prev) => [...prev.filter((msg) => msg.id !== "typing"), { 
-                text: "Sorry, I'm having trouble connecting right now. Please try again.", 
+                text: err.message, 
                 sender: 'bot',
                 typing: false
                 }]);

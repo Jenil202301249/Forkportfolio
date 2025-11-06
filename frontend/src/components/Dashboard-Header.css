@@ -54,13 +54,16 @@
   font-size: 0.7rem;
   margin: 3px;
 }
-.d-stock-change.negative,.d-change-icon.negative {
-  color: #ff4444;
+.d-stock-change.negative,
+.d-change-icon.negative {
+  color: #C81B00 !important;
 }
 
-.d-stock-change.positive,.d-change-icon.positive {
-  color: #00ff88;
+.d-stock-change.positive,
+.d-change-icon.positive {
+  color: #00C853 !important;
 }
+
 .divider{
   display:flex;
   color: #888;

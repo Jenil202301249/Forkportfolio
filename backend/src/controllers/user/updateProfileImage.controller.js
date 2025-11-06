@@ -5,6 +5,7 @@ import {
 import { updateProfileImage } from "../../db/updateProfileImage.js";
 import { defaultProfileImage } from "../../../constants.js";
 import { removeOldProfileImagesFromCloudionary } from "../../utils/removeOldProfile.js";
+import { addActivityHistory } from "../../mongoModels/user.model.js";
 const updateProfileImageController = async (req, res) => {
     try {
         const oldProfileImage = req.user.profileimage;
@@ -54,7 +55,17 @@ const updateProfileImageController = async (req, res) => {
             }
         }
 
-        req.user.profileimage = profileImage.url;
+        req.user.profileimage = profileImage.secure_url;
+
+        const newActivity = {
+            os_type: req.activeSession.osType,
+            browser_type: req.activeSession.browserType,
+            type: "profileimage",
+            message: "Updated profile image",
+            token: req.cookies.token,
+        };
+
+        await addActivityHistory(email, newActivity);
 
         return res.status(200).json({
             success: true,

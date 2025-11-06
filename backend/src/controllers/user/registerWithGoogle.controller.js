@@ -10,8 +10,8 @@ const registerWithGoogle = async (req, res) => {
     try {
         const userAgentString = req.headers['user-agent'];
         const parser = new UAParser(userAgentString);
-        const { browserDetails } = parser.getBrowser();
-        const { osDetails } = parser.getOS();
+        const browserDetails = parser.getBrowser();
+        const osDetails = parser.getOS();
 
         const { access_token } = req.body;
         if (!access_token) {
@@ -29,7 +29,7 @@ const registerWithGoogle = async (req, res) => {
             if(existingUser[0].registrationmethod==="normal"){
                 return res.status(401).json({ success: false, message: "User already exists with this email. Please login using email and password." });
             }
-            const token = jwt.sign({user:existingUser[0].id,email:existingUser[0].email,tokenversion:existingUser[0].tokenversion}, process.env.JWT_SECRET,{expiresIn: process.env.JWT_EXPIRE});
+            const token = jwt.sign({user:existingUser[0].id,email:existingUser[0].email}, process.env.JWT_SECRET,{expiresIn: process.env.JWT_EXPIRE});
             
             let browser = (browserDetails?.name + " " + browserDetails?.version);
             if(!browser || browser === "undefined undefined") browser = "Unknown";
@@ -53,6 +53,7 @@ const registerWithGoogle = async (req, res) => {
             return res.status(200).cookie("token", token, {
             httpOnly: true,
             secure: true,
+            sameSite: "none",
             maxAge: 7 * 24 * 60 * 60 * 1000,
           }).json({ success: true, message: "Registered Successfully" });
         } else {
@@ -62,7 +63,7 @@ const registerWithGoogle = async (req, res) => {
                 return res.status(500).json({ success: false, message: "Database error occurred during user creation." });
             }
             const profilePicture = await updateProfileImage(email, picture);
-            const token = jwt.sign({ user: newUser.id, email: newUser.email, tokenversion: newUser.tokenversion }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE });
+            const token = jwt.sign({ user: newUser.id, email: newUser.email }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE });
 
             let browser = (browserDetails?.name + " " + browserDetails?.version);
             if(!browser || browser === "undefined undefined") browser = "Unknown";

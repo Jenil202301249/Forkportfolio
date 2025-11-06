@@ -20,9 +20,7 @@ export const showWatchlist = async (req, res) => {
                 if (!q) {
                     return res.status(500).json({ success: false, message: "Failed to fetch stock prices." });
                 }
-                priceData.add(symbol,{current: q.MarketPrice||0,
-                currency: q.currency,
-                expiresAt: Date.now()+60*1000});
+                priceData.add(symbol,{...q,expiresAt: Date.now()+60*1000});
             }
             const data = priceData.get(symbol);
             if (!data) continue;

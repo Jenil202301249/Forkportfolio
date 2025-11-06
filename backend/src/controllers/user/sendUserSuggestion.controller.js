@@ -1,3 +1,4 @@
+import { addActivityHistory } from "../../mongoModels/user.model.js";
 import { UserSuggestion } from "../../mongoModels/userSuggestion.model.js";
 import mongoose from "mongoose";
 
@@ -12,12 +13,21 @@ const sendUserSuggestion = async (req, res) => {
             });
 
         await UserSuggestion.create({ email, suggestion });
-        
+
+        const newActivity = {
+            os_type: req.activeSession.osType,
+            browser_type: req.activeSession.browserType,
+            type: "suggestion",
+            message: "Submitted a suggestion",
+            token: req.cookies.token,
+        };
+
+        await addActivityHistory(email, newActivity);
+
         return res
             .status(200)
             .json({ success: true, message: "suggestion sent successfully" });
-    }
-    catch (error) {
+    } catch (error) {
         if (error instanceof mongoose.Error.ValidationError)
             return res.status(400).json({
                 success: false,

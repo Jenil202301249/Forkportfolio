@@ -1,0 +1,62 @@
+.portfoliochart-container {
+  width: 85%;
+  margin: 0 auto;
+}
+
+.portfoliochart-box {
+  background-color: #000;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.portfoliochart-buttons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+  gap: 10px;
+}
+
+.portfoliochart-btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid #00C853;
+  background-color: transparent;
+  color: #00C853;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.portfoliochart-btn.active {
+  background-color: #00C853;
+  color: #000;
+}
+
+.portfoliochart-btn:hover {
+  background-color: #00C853;
+  color: #000;
+}
+
+.portfoliochart-graph {
+  height: 400px;
+}
+
+.portfoliochart-loading,
+.portfoliochart-error {
+  background-color: #000;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  color: #a1a1aa;
+}
+
+.portfoliochart-error {
+  color: #C81B00;
+}
+
+
+@media (max-width: 768px) {
+  .portfoliochart-container {
+    width: 95%;
+  }
+}

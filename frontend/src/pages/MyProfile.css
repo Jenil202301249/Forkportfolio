@@ -1,26 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap');
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
 }
 
-.Page {
+.myPage {
     height: 100%;
     width: 100%;
-    background-color: #000;
+    background-color: black;
+    overflow-x: hidden;
 }
 
-hr {
+.myPage_MainContent hr {
     border: none;
-    border-top: 3px solid #28282889;
+    border-top: 3px solid #1e1e1e;
     margin-right: 3rem;
     margin-top: 1.8rem;
 }
 
-.PasswordEditFields input {
+.myPage_PasswordEditFields input {
     background-color: #000;
     height: 3rem;
     width: 15.4rem;
@@ -32,9 +33,10 @@ hr {
     flex-wrap: wrap;
     flex: 1;
     min-width: 0;
+    font-family: 'Poppins', sans-serif;
 }
 
-.InfRow1 input {
+.myPage_InfRow1 input {
     background-color: #000;
     border: 1px solid #fff;
     height: 3rem;
@@ -42,48 +44,48 @@ hr {
     color: #fff;
     border-radius: 6px;
     padding: 0.3rem 0.8rem;
+    font-family: 'Poppins', sans-serif;
 }
 
-.nameWrap{
+.myPage_nameWrap{
     position: relative;
     min-width: 100%;
+    font-family: 'Poppins', sans-serif;
 }
 
-.name-error{
+.myPage_name-error{
     position: absolute;
     top: 100%;
     width: 90%;
     font-size: 0.8rem;
+    font-family: 'Poppins', sans-serif;
 }
 
-.popup {
+.myPage_popup {
     display: flex;
     flex-direction: column;
 
 }
 
-.Container {
+.myPage_Container {
     display: flex;
     justify-content: center;
     width: 100%;
     background-color: #000;
+    margin-top: 80px;
 }
 
-.Container::-webkit-scrollbar {
-    display: none;
-}
-
-.MainContent {
+.myPage_MainContent {
     width: 60%;
     min-height: 1080px;
-    margin-top: 7rem;
+    margin-top: 2rem;
     margin-bottom: 30px;
-    border: 4px solid #28282889;
-    background-color: #0f0f0f;
+    border: 4px solid #1e1e1e;
+    background-color: #0e0e0e;
 
 }
 
-.PersProfile {
+.myPage_PersProfile {
     margin-bottom: 4rem;
     margin-top: 3rem;
     margin-left: 3rem;
@@ -91,28 +93,31 @@ hr {
     display: flex;
     font-weight: 500;
     justify-content: space-between;
-
+    background-color: inherit;
+    font-family: 'Poppins', sans-serif;
 }
 
-.InvProfile {
+.myPage_InvProfile {
     font-weight: 500;
     margin-top: 3rem;
     font-size: 2rem;
     display: flex;
     justify-content: space-between;
+    background-color: #0e0e0e;
+    font-family: 'Poppins', sans-serif;
 }
 
-.InfHeader{
+.myPage_InfHeader{
     display: flex;
     justify-content: space-between;
     height: 100%;
 }
 
-.EditDetails,
-.SaveBtn,
-.CancelBtn {
+.myPage_EditDetails,
+.myPage_SaveBtn,
+.myPage_CancelBtn {
     height: 30px;
-    color: #0f0f0f;
+    color: #0e0e0e;
     border: 1px solid #00c853;
     background-color: #00c853;
     font-size: 0.8rem;
@@ -120,43 +125,44 @@ hr {
     margin-right: 3rem;
     cursor: pointer;
     border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
 }
 
-.EditDetails{
+.myPage_EditDetails{
     margin-top: 4rem;
 }
 
-.EditDetails:hover,
-.SaveBtn:hover,
-.CancelBtn:hover {
+.myPage_EditDetails:hover,
+.myPage_SaveBtn:hover,
+.myPage_CancelBtn:hover {
     color: #fff;
     background-color: transparent;
     border-color: #00c853;
     transition: 0.3s;
 }
 
-.SaveCancelBtns {
+.myPage_SaveCancelBtns {
     display: flex;
     margin-top: 2.5rem;
     justify-content: space-between;
     max-width: 30%;
 }
 
-.SaveBtn {
+.myPage_SaveBtn {
     white-space: nowrap;
 }
 
-.Handler {
+.myPage_Handler {
     min-width: 20%;
     display: block;
 }
 
-.PasswordEditFields {
+.myPage_PasswordEditFields {
     min-width: 20%;
     display: flex;
 }
 
-.ProfilePic {
+.myPage_ProfilePic {
     display: flex;
     width: 80px;
     height: 80px;
@@ -166,21 +172,20 @@ hr {
     margin-top: -20px;
 }
 
-.ProfilePic label {
-    font-weight: bold;
+.myPage_ProfilePic label {
     white-space: nowrap;
     margin-bottom: 3rem;
     display: inline-flex;
-    margin-left: 1rem;
+    font-family: 'Poppins', sans-serif;
 }
 
-.PicSection {
+.myPage_PicSection {
     display: flex;
     justify-content: space-between;
     min-width: 100%;
 }
 
-.PicPlaceholder {
+.myPage_PicPlaceholder {
     display: flex;
     width: 80px;
     height: 80px;
@@ -191,83 +196,89 @@ hr {
 
 }
 
-.Information {
+.myPage_Information {
     display: flex;
     flex-direction: column;
     margin-left: 3rem;
 }
 
-.InfRow1 label {
+.myPage_InfRow1 label {
     font-size: 1rem;
     display: flex;
     justify-content: space-between;
     margin-bottom: 0.6rem;
     margin-top: 4rem;
+    font-family: 'Poppins', sans-serif;
 }
 
-.InfRow2 label {
+.myPage_InfRow2 label {
     font-size: 1rem;
     display: block;
     margin-bottom: 0.6rem;
     margin-top: 2.5rem;
+    font-family: 'Poppins', sans-serif;
 }
 
-.InfRow3 {
+.myPage_InfRow3 {
     display: flex;
     margin-top: 0.8rem;
 }
 
-.InfRow6 {
+.myPage_InfRow6 {
     display: flex;
     margin-bottom: 3rem;
 }
 
-.InfRow3 label {
+.myPage_InfRow3 label {
     font-size: 1rem;
     display: block;
     margin-bottom: 0.6rem;
     margin-top: 2.5rem;
+    font-family: 'Poppins', sans-serif;
 }
 
-.InfRow6 label {
+.myPage_InfRow6 label {
     font-size: 1rem;
     display: block;
     margin-bottom: 0.6rem;
     margin-top: 2.5rem;
+    font-family: 'Poppins', sans-serif;
 }
 
-.InfRow5 label {
+.myPage_InfRow5 label {
     font-size: 1rem;
     display: flex;
     justify-content: space-between;
     margin-bottom: 0.6rem;
     margin-top: 2.5rem;
+    font-family: 'Poppins', sans-serif;
 }
 
-.InfRow4 label {
+.myPage_InfRow4 label {
     font-size: 1rem;
     display: block;
     margin-bottom: 0.6rem;
     margin-top: 2.5rem;
+    font-family: 'Poppins', sans-serif;
 }
 
-.InvExp {
+.myPage_InvExp {
     width: 50%;
 }
 
-.RiskProfile {
+.myPage_RiskProfile {
     width: 50%;
 }
 
-.InfValueDropDown1 {
+.myPage_InfValueDropDown1 {
     display: flex;
 }
 
-.InfValueDropDown2 {
+.myPage_InfValueDropDown2 {
     display: flex;
 }
 
-.InfRow3 img {
+.myPage_InfRow3 img {
     display: flex;
     width: 13px;
     height: 13px;
@@ -277,7 +288,7 @@ hr {
     cursor: pointer;
 }
 
-.InfRow3 select {
+.myPage_InfRow3 select {
     appearance: none;
     margin-top: 1.2rem;
     display: flex;
@@ -288,48 +299,51 @@ hr {
     cursor: pointer;
     min-width: 0;
     flex-shrink: 0;
+    font-family: 'Poppins', sans-serif;
 }
 
-.InfRow3 select:hover {
+.myPage_InfRow3 select:hover {
     border-color: #00c853;
     transition: 0.3s;
     box-shadow: 0 0 4px#00c853;
 }
 
-.InfRow3 select:focus {
+.myPage_InfRow3 select:focus {
     outline: none;
     border-color: #00c853;
 }
 
-.InfRow3 option {
+.myPage_InfRow3 option {
     background-color: #616161;
     color: #fff;
+    font-family: 'Poppins', sans-serif;
 }
 
-.AIspan {
+.myPage_AIspan {
     display: block;
     font-size: 0.9rem;
     margin-top: 1rem;
     opacity: 0.8;
+    font-family: 'Poppins', sans-serif;
 }
 
-.FinGoals {
+.myPage_FinGoals {
     width: 50%;
 }
 
-.InvHorizon {
+.myPage_InvHorizon {
     width: 50%;
 }
 
-.InfValueDropDown3 {
+.myPage_InfValueDropDown3 {
     display: flex;
 }
 
-.InfValueDropDown4 {
+.myPage_InfValueDropDown4 {
     display: flex;
 }
 
-.InfRow6 img {
+.myPage_InfRow6 img {
     display: flex;
     width: 13px;
     height: 13px;
@@ -339,7 +353,7 @@ hr {
     cursor: pointer;
 }
 
-.InfRow6 select {
+.myPage_InfRow6 select {
     appearance: none;
     margin-top: 1.2rem;
     display: flex;
@@ -350,78 +364,76 @@ hr {
     cursor: pointer;
     min-width: 0;
     flex-shrink: 0;
+    font-family: 'Poppins', sans-serif;
 }
 
-.InfRow6 select:hover {
+.myPage_InfRow6 select:hover {
     border-color: #00c853;
     transition: 0.3s;
     box-shadow: 0 0 4px#00c853;
 }
 
-.InfRow6 select:focus {
+.myPage_InfRow6 select:focus {
     outline: none;
     border-color: #00c853;
 }
 
-.InfRow6 option {
+.myPage_InfRow6 option {
     background-color: #616161;
     color: #fff;
+    font-family: 'Poppins', sans-serif;
 }
 
-.InfRow3 hr {
-    width: 355px;
-}
-
-.InfRow6 hr {
-    width: 355px;
-}
-
-.InfValue {
+.myPage_InfValue {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: 1.2rem;
+    font-family: 'Poppins', sans-serif;
 }
 
 
-.InfValue span {
+.myPage_InfValue span {
     opacity: 0.7;
+    font-family: 'Poppins', sans-serif;
 }
 
-.CurrPass, .NewPass, .ConfPass{
+.myPage_CurrPass, .myPage_NewPass, .myPage_ConfPass{
     display: flex;
     position: relative;
     justify-content: space-between;
     flex-wrap: wrap;
     width: 32%;
+    font-family: 'Poppins', sans-serif;
 }
 
-.eye-symbol{
-    margin-left: -3rem;
+.myPage_eye-symbol{
+    margin-left: -5rem;
 }
 
-.password-toggle1, .password-toggle2, .password-toggle3 {
+.myPage_password-toggle1, .myPage_password-toggle2, .myPage_password-toggle3 {
     cursor: pointer;
     width: auto;
-    margin-top: 0.8rem;
+    margin-top: 0.3rem;
     color: #00C853;
     background: none;
 }
 
-.password-toggle1:hover, .password-toggle2:hover, .password-toggle3:hover {
+.myPage_password-toggle1:hover, .myPage_password-toggle2:hover, .myPage_password-toggle3:hover {
     background: none;
     box-shadow: none;
     color: #00a844;
 }
 
-.pass-error, .confirm-pass-error{
+.myPage_pass-error, .myPage_confirm-pass-error{
     position: absolute;
     top: 100%;
     width: 90%;
     font-size: 0.8rem;
+    font-family: 'Poppins', sans-serif;
 }
 
-.ChangePhoto {
+.myPage_ChangePhoto {
     display: block;
     height: 30px;
     white-space: nowrap;
@@ -435,14 +447,15 @@ hr {
     cursor: pointer;
     font-size: 0.8rem;
     transition: 0.3s;
+    font-family: 'Poppins', sans-serif;
 }
 
-.ChangePhoto:hover {
+.myPage_ChangePhoto:hover {
     background-color: transparent;
     color: #fff;
 }
 
-.LinkedBox {
+.myPage_LinkedBox {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -451,13 +464,13 @@ hr {
     padding: 0.7rem 1rem;
     height: 70px;
     border-radius: 8px;
-    background-color: #111;
+    background-color: #0e0e0e;
     margin-top: 1rem;
     gap: 1rem;
     flex-wrap: nowrap;
 }
 
-.LinkedBox img {
+.myPage_LinkedBox img {
     height: 45px;
     border: 1px solid #fff;
     padding: 0.5rem;
@@ -465,7 +478,7 @@ hr {
     flex-shrink: 0;
 }
 
-.InsideBox {
+.myPage_InsideBox {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -473,13 +486,107 @@ hr {
     min-width: 0;
 }
 
-.ServiceName,
-.AccName {
+.myPage_ServiceName,
+.myPage_AccName {
     white-space: nowrap;
     font-size: 0.9rem;
     color: #fff;
+    font-family: 'Poppins', sans-serif;
 }
 
-.ServiceName {
+.myPage_ServiceName {
     font-weight: 600;
+}
+
+/* OTP modal styles */
+.myPage_OTPOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1200;
+}
+
+.myPage_OTPModel {
+    background: #0f0f0f;
+    border: 2px solid #28282889;
+    padding: 1.8rem;
+    width: 420px;
+    max-width: 90%;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    color: #fff;
+    text-align: center;
+}
+
+.myPage_OTPModel h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+.myPage_OTPNote {
+    opacity: 0.8;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+.myPage_OTPInput {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border-radius: 6px;
+    background: #000;
+    color: #fff;
+    border: 1px solid #fff;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+.myPage_OTPErrors {
+    color: #ff6b6b;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+.myPage_OTPButtons {
+    display: flex;
+    gap: 0.6rem;
+    justify-content: center;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.myPage_OTPButtons button {
+    padding: 0.3rem 1rem;
+    border-radius: 6px;
+    height: 35px;
+    align-items: center;
+    border: 1px solid #00c853;
+    background: #00c853;
+    color: #0f0f0f;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+}
+
+.myPage_OTPButtons button:hover {
+    background: transparent;
+    color: #fff;
+    transition: 0.3s;
+}
+
+.myPage_OTPResend[disabled], .myPage_OTPContinue[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.myPage_OTPCancel {
+    background: transparent;
+    color: #fff;
+    border-color: #999;
 }

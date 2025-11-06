@@ -4,10 +4,12 @@ import { updateProfileInvestmentExperience } from "../../db/updateProfileInfo.js
 import { updateProfileRiskProfile } from "../../db/updateProfileInfo.js";
 import { updateProfileFinancialGoals } from "../../db/updateProfileInfo.js";
 import { updateProfileInvestmentHorizon } from "../../db/updateProfileInfo.js";
+import { addActivityHistory } from "../../mongoModels/user.model.js";
 
 const updateProfileNameController = async (req, res) => {
     try {
         const { name } = req.body;
+        
         if (!name) {
             return res.status(400).json({
                 success: false,
@@ -41,6 +43,16 @@ const updateProfileNameController = async (req, res) => {
         }
 
         req.user.name = name;
+
+        const newActivity = {
+            os_type: req.activeSession.osType,
+            browser_type: req.activeSession.browserType,
+            type: "name",
+            message: `Updated profile name from ${prevName} to ${name}`,
+            token: req.cookies.token,
+        };
+
+        await addActivityHistory(email, newActivity);
 
         return res.status(200).json({
             success: true,
@@ -88,6 +100,16 @@ const updateProfileInvestmentExperienceController = async (req, res) => {
 
         req.user.investmentexperience = investmentExperience;
 
+        const newActivity = {
+            os_type: req.activeSession.osType,
+            browser_type: req.activeSession.browserType,
+            type: "investmentExperience",
+            message: `Updated profile investment experience from ${prevInvestmentExperience} to ${investmentExperience}`,
+            token: req.cookies.token,
+        };
+
+        await addActivityHistory(email, newActivity);
+
         return res.status(200).json({
             success: true,
             message: "Profile investment experience updated successfully.",
@@ -132,6 +154,16 @@ const updateProfileRiskProfileController = async (req, res) => {
         }
 
         req.user.riskprofile = riskProfile;
+
+        const newActivity = {
+            os_type: req.activeSession.osType,
+            browser_type: req.activeSession.browserType,
+            type: "riskProfile",
+            message: `Updated profile risk profile from ${prevRiskProfile} to ${riskProfile}`,
+            token: req.cookies.token,
+        };
+
+        await addActivityHistory(email, newActivity);
 
         return res.status(200).json({
             success: true,
@@ -178,6 +210,16 @@ const updateProfileFinancialGoalsController = async (req, res) => {
 
         req.user.financialgoals = financialGoals;
 
+        const newActivity = {
+            os_type: req.activeSession.osType,
+            browser_type: req.activeSession.browserType,
+            type: "financialGoals",
+            message: `Updated profile financial goals from ${prevFinancialGoals} to ${financialGoals}`,
+            token: req.cookies.token,
+        };
+
+        await addActivityHistory(email, newActivity);
+
         return res.status(200).json({
             success: true,
             message: "financial goals updated successfully.",
@@ -220,6 +262,16 @@ const updateProfileInvestmentHorizonController = async (req, res) => {
         }
 
         req.user.investmenthorizon = investmentHorizon;
+
+        const newActivity = {
+            os_type: req.activeSession.osType,
+            browser_type: req.activeSession.browserType,
+            type: "investmentHorizon",
+            message: `Updated profile investment horizon from ${prevInvestmentHorizon} to ${investmentHorizon}`,
+            token: req.cookies.token,
+        };
+
+        await addActivityHistory(email, newActivity);
 
         return res.status(200).json({
             success: true,

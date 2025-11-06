@@ -1,0 +1,289 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* --- Styles for Help & Support Page --- */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+.HelpSupportLayout {
+    height: 100%;
+    width: 100%;
+    background-color: #000;
+}
+
+.HelpSupportBody {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background-color: #000;
+}
+
+
+.HelpSupportContainer{
+    width: 60%;
+    min-height: 910px;
+    margin-top: 7rem;
+    margin-bottom: 30px;   
+    border: 4px solid #28282889;
+    background-color: #0f0f0f;
+    padding:2rem;
+    color:#ffffff;
+}
+
+/* Quick Help Buttons */
+
+.quick-help-section {
+  border-bottom: 0.95px solid #444444;
+  margin-bottom: 2.5rem;
+}
+
+.quick-help-section h2,
+.quick-help-section h3{
+   color:#ffffff;
+}
+
+.quick-help-section h2 {
+  font-weight:600;
+  font-size:2rem;
+  margin-bottom: 2.5rem;
+}
+
+.quick-help-section h3 {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-bottom:0.5rem;
+}
+
+.quick-help-section p {
+  color: #999999;
+  font-size: 14px;
+}
+
+.quick-help-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 1.5rem;;
+  margin-bottom: 1.5rem;
+}
+
+.quick-help-btn {
+    display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #1E1E1E;
+  color: #ffffff;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 300;
+  gap: 10px;
+  border: 1px solid transparent;
+}
+
+.quick-help-icon {
+width:1.5rem;
+height:1.5rem;
+}
+
+.quick-help-btn:hover {
+    background-color: #0f0f0f;
+    border-color: #242424;
+    transition: 0.3s;
+}
+
+/* FAQ Styles */
+
+.help-section{
+  border-bottom: 0.95px solid #444444;
+  margin-bottom: 2.5rem;
+}
+
+.help-section h3{
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+  font-weight: 500;
+  font-size: 18px;
+  color:#ffffff;
+}
+
+.help-section:last-child {
+  border-bottom: none;
+}
+
+.faq-item{
+color: #999999;
+margin-bottom: 1.5rem ;
+font-size: 14px;
+}
+
+.faq-question {
+  padding-bottom: 0.5rem;
+}
+
+.faq-answer {
+ padding-bottom: 0.5rem;
+
+}
+
+
+/* Contact support */
+
+.support-form p{
+  margin-bottom: 10px;
+  color: #999999;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.support-form label {
+  color:#ffffff;
+  display: block;
+  margin-bottom: 10px; 
+  font-weight: 500;
+}
+
+/* Feedback */
+
+.support-form textarea {
+  width: 100%;
+  min-height: 120px;
+  background-color: #1a1a1a;
+  border: 1px solid #444444;
+  border-radius: 10px;
+  padding: 0.5rem;
+  color: #999999;
+  font-size: 12px;
+  font-weight: 400;
+  font-family: inherit;
+  resize: vertical;
+  margin-bottom: 1rem;
+}
+
+.support-contact-info {
+  font-size: 12px;
+  color: #999999;
+  margin-top: 10px;
+}
+
+.support-form .btn-primary{
+    display:flex;
+    align-items: center;
+    padding: 8px 12px 8px 12px;
+    border-radius: 10px;
+    background-color:  #00C853;
+    justify-content: center;
+    cursor: pointer;
+    border: 1px solid #00c853;
+    color:#000000;
+    font-weight: 300;
+    gap:10px;
+    font-size: 1rem;
+}
+
+.support-form .btn-primary:hover{
+background-color: #0f0f0f;
+color:#ffffff;
+border:1px solid #00c853;
+transition: 0.3s;
+}
+
+.visually-hidden {    /*to hide the label of feedback form*/
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---  Styles for Detailed content card(model overlay) --- */
+ .modal-overlay {/* This class creates the dark, semi-transparent layer that covers the entire screen behind the pop-up. */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color:  rgba(255, 255, 255, 0.2);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} 
+
+.detailed-content-card {
+  width:55%;
+  max-width: 900px;
+  min-width: 340px;
+  background-color: #000000;
+  padding: 40px 32px 40px 32px;
+  border-radius: 10px;
+  max-height: 80vh; 
+  overflow-y: auto;
+}
+
+body.modal-open {
+  overflow: hidden; 
+}
+
+
+.detailed-content-card h3 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #FCF7F7;
+  font-weight: 500;
+}
+
+.detailed-content-card p,.detailed-content-card li {
+  color: #999999;
+  line-height: 35px;
+  margin-bottom: 0.5rem;
+}
+
+.detailed-content-card ul,.detailed-content-card ol {
+  padding-left: 1.5rem;
+}
+
+.detailed-content-card ul {
+  list-style-type: disc;
+}
+
+.detailed-content-card ol {
+  list-style-type: decimal;
+}
+
+.detailed-content-card button {
+  display: flex;
+  color: #000000;
+  background-color:  #00c853;
+  border-radius: 10px;
+  padding: 12px;
+  margin-top: 1.5rem;
+  cursor:pointer;
+  border:1px solid #00c853;
+  gap:10px;
+}
+.detailed-content-card button:hover {
+   background-color: transparent;
+    color: #fff;
+    transition: 0.3s;
+}
+
+
+
+
+
+
+

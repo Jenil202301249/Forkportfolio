@@ -1,6 +1,7 @@
 import { getStockSummary } from "../../db/stockSummary.js";
 import { getPrice } from "../../utils/getQuotes.js";
 import { stockPriceStore } from "../../utils/stockPriceStore.js";
+import { UserPortfolioValuationdaily,UserPortfolioValuationHourly } from "../../mongoModels/userPortfolioValuation.model.js";
 const safeDivision = (numerator, denominator) => {
     if (!denominator || denominator === 0) {
         return "0.00";
@@ -24,8 +25,8 @@ export const calculatePortfolio = async (req, res) => {
         let totalspending = 0;
         
         for (const row of stockSummary) {
-            const {symbol, current_holding, spended_amount, yestarday_holding } = row;
-            
+            let {symbol, current_holding, spended_amount, yestarday_holding } = row;
+            spended_amount = Number(spended_amount)
             let data = priceData.get(symbol); 
             
             if(!data){
@@ -37,31 +38,35 @@ export const calculatePortfolio = async (req, res) => {
                 
                 console.log(q);
                 
-                const newPriceData = {
-                    current: q.MarketPrice || 0,
-                    yesterdayClose: q.close || 0,
-                    currency: q.currency,
-                    expiresAt: Date.now() + 60 * 1000
-                };
-                
+                const newPriceData = {...q,expiresAt: Date.now() + 60 * 1000};
                 priceData.add(symbol, newPriceData);
                 data = newPriceData; 
             }
-            
-            if (!data || data.current === undefined || data.yesterdayClose === undefined) continue; 
-            
+            if (!data || data.current === undefined || data.close === undefined) continue;
             const currentValue = current_holding * data.current;
-            const yesterdayValue = yestarday_holding * data.yesterdayClose;
+            const yesterdayValue = yestarday_holding * data.close;
             const overallProfit = currentValue - spended_amount;
             const todayProfit = currentValue - yesterdayValue;
             
-            console.log(data.yesterdayClose);
             
             totalspending += spended_amount;
             totalValuation += currentValue;
             overallPL += overallProfit;
             todayPL += todayProfit;
         }
+        const today = new Date().setHours(0, 0, 0, 0);
+        const hour = new Date()
+        hour.setMinutes(0,0,0);
+        await UserPortfolioValuationdaily.updateOne(
+            { email, date: today },
+            { $set: { portfolioValuation: totalValuation.toFixed(2) } },
+            { upsert: true }
+        );
+        await UserPortfolioValuationHourly.updateOne(
+            { email, timestamp: hour },
+            { $set: { portfolioValuation: totalValuation.toFixed(2) } },
+            { upsert: true }
+        );
         
         console.log({totalValuation, overallPL, todayPL, totalspending});
         
@@ -73,7 +78,7 @@ export const calculatePortfolio = async (req, res) => {
             totalValuation: totalValuation.toFixed(2), 
             overallProfitLoss: overallPL.toFixed(2),
             todayProfitLoss: todayPL.toFixed(2), 
-            ttodayProfitLosspercentage: todayPLPercentage,
+            todayProfitLosspercentage: todayPLPercentage,
             overallProfitLosspercentage: overallPLPercentage
         });
 

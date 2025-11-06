@@ -62,4 +62,4 @@ function mapStockData(rawStock) {
   };
 }
 export { mapStockData };
-export const starterStocks = ["TCS.NS", "RELIANCE.NS", "^NSEI", "INFY.NS", "HINDUNILVR.NS", "ICICIBANK.NS", "^BSESN", "SBIN.NS", "BHARTIARTL.NS", "ITC.NS"];
+export const starterStocks = ["^NSEBANK","^NSEI","^BSESN"];

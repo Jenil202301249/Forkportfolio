@@ -1,5 +1,5 @@
 import { loginUser } from "./login.controller.js";
-import { logoutUser } from "./logout.controller.js";
+import { logoutUser, logoutUserSession , logoutAllUserSessions } from "./logout.controller.js";
 import { registerOtpGeneration } from "./registerOtpGeneration.controller.js";
 import { register } from "./verifyAndRegister.controller.js";
 import { loginWithGoogle } from "./loginWithGoogle.controller.js";
@@ -19,7 +19,7 @@ import {
     VerifyOtp,
     setNewPassword,
 } from "./forgotPassword.controller.js";
-import { ResetPassword } from "./resetPassword.controller.js";
+import { SendResetPasswordOtp, setNewPassword as setNewPasswordForProfile, VerifyOtp as VerifyOtpForProfile } from "./resetPassword.controller.js";
 import { registerWithGoogle } from "./registerWithGoogle.controller.js";
 import { createExcel } from "./downloadPortfolioData.controller.js";
 import { deleteAccount } from "./deleteAccount.controller.js";
@@ -29,9 +29,17 @@ import { updateDashboardLayoutController } from "./updatePreferencesAndPersonali
 import { sendUserQuery } from "./sendUserQuery.controller.js";
 import { sendUserSuggestion } from "./sendUserSuggestion.controller.js";
 import { checkToken } from "./checkToken.controller.js";
+import { activityAndSessionHistory } from "./activityAndSessionHistory.controller.js";
+import { getAllActivityHistoryController } from "./getAllActivityHistory.controller.js";
+import { getAllSecurityAlertsController } from "./getAllSecurityAlerts.controller.js";
+import { getActivityAndSessionByToken } from "./getActivityAndSessionByToken.controller.js";
+import { downloadActivityHistoryReport } from "./downloadActivityHistoryReport.controller.js";
+import { clearActivityHistory } from "./clearActivityHistory.controller.js";
 export {
     loginUser,
     logoutUser,
+    logoutUserSession,
+    logoutAllUserSessions,
     registerOtpGeneration,
     register,
     loginWithGoogle,
@@ -47,7 +55,9 @@ export {
     SendForgotPasswordOtp,
     VerifyOtp,
     setNewPassword,
-    ResetPassword,
+    SendResetPasswordOtp,
+    VerifyOtpForProfile,
+    setNewPasswordForProfile,
     registerWithGoogle,
     createExcel,
     deleteAccount,
@@ -57,4 +67,10 @@ export {
     sendUserQuery,
     sendUserSuggestion,
     checkToken,
+    activityAndSessionHistory,
+    getAllActivityHistoryController,
+    getAllSecurityAlertsController,
+    getActivityAndSessionByToken,
+    downloadActivityHistoryReport,
+    clearActivityHistory,
 };

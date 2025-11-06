@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap');
+
 .navbar {
   position: fixed;
   top: 0;
@@ -41,19 +44,18 @@
   background: none;
   border: 1px solid currentColor;
   color: inherit;
-
   font-size: 1rem;
   cursor: pointer;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-weight: 500;
   border-radius: 20px;
-  font-weight: 550;
   padding: 8px 24px;
   transition: all 0.3s ease;
 }
 
 .navbar_btn:hover {
   background-color: black ;
-    font-weight: 550; 
+    font-weight: 500; 
     color: #00C853 ;
     border: 1px solid #00C853 ;
 }
@@ -117,11 +119,6 @@
   animation: slideDown 0.3s ease;
   transform-origin: top right;
 }
-.popupheading {
-  display: flex;
-  gap: 10px;
-}
-
 .name-email {
   display: flex;
   flex-direction: column;

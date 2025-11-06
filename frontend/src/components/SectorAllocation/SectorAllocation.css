@@ -1,0 +1,30 @@
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 440px;
+  font-size: 1.25rem; 
+  color: #a1a1aa;
+  background-color: #000;
+  padding: 20px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 672px; 
+  margin: 0 auto;
+}
+
+.sector-allocation-container {
+  background-color: #000;
+  padding: 20px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 672px;
+  margin: 0 auto; 
+  color: #f4f4f5; 
+}
+
+.chart-wrapper {
+  height: 400px;
+  position: relative;
+}
+

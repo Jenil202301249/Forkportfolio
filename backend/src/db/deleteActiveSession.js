@@ -10,4 +10,14 @@ const deleteActiveSessionByToken = async (token) => {
     }
 };
 
-export { deleteActiveSessionByToken };
+const deleteActiveSessionByEmail = async (email) => {
+    try {
+        const row = await sql`Delete FROM "active_session" WHERE email = ${email}`;
+        return row;
+    } catch (error) {
+        console.log('Database error - deleteAcriveSessionByEmail');
+        return null;
+    }
+};
+
+export { deleteActiveSessionByToken, deleteActiveSessionByEmail };

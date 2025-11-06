@@ -1,0 +1,35 @@
+
+.insights-card {
+  flex: 1;
+  min-height: 40px;
+  min-width: 625px;
+  max-width: 45%;
+  border: 1px solid white;
+}
+
+.ai-title {
+  color: #00C853;
+  margin-left: 75px;
+}
+
+.insights {
+  list-style: none;
+  padding-left: 75px;
+  margin: 1rem 0;
+  line-height: 1.6;
+}
+
+.insights li {
+  margin-bottom: 0.8rem;
+}
+
+.view-all {
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 75px;
+}
+
+.view-all :hover {
+  color: #00C853;
+}

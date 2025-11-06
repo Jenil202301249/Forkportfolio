@@ -1,25 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Montserrat:wght@500;600;700&display=swap');
+
 
 * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
-.spin{
-  font-size: 1.5rem;           
-  color: black;   
-  animation: spin 1s linear infinite;
-  position: relative;
+
+.spin {
+    font-size: 1.5rem;
+    color: black;
+    animation: spin 1s linear infinite;
+    position: relative;
 }
-.loading span{
-    color: black; 
-    font-weight: 900; 
+
+.loading span {
+    color: black;
+    font-weight: 900;
 }
-.loading{
+
+.loading {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
 }
+
 .container {
     min-width: 100vw;
     min-height: 100vh;
@@ -70,12 +78,13 @@
     font-family: 'Montserrat', Arial, sans-serif;
     font-style: italic;
 }
-.backToHome{
+
+.backToHome {
     position: absolute;
     top: 20px;
     left: 20px;
     z-index: 2;
-    background-color:#111;
+    background-color: #111;
     color: white;
     padding: 10px 15px;
     border-radius: 5px;
@@ -83,20 +92,23 @@
     cursor: pointer;
     transition: box-shadow 0.2s ease-in-out;
 }
-.backToHome:hover{
+
+.backToHome:hover {
     box-shadow: 1px 1px 12px rgb(0, 0, 0);
 }
-.right_inner_div{
+
+.right_inner_div {
     min-width: 100%;
     height: 100vh;
     background-color: black;
     display: grid;
     grid-template-rows: 0.9fr 2.5fr;
 }
+
 .auth_form {
     background-color: black;
     color: white;
-    padding: 2rem ;
+    padding: 2rem;
     padding-top: 5px;
     display: flex;
     flex-direction: column;
@@ -104,7 +116,7 @@
     align-items: center;
 }
 
-.auth_form form{
+.auth_form form {
     background-color: black;
     display: flex;
     flex-direction: column;
@@ -112,24 +124,29 @@
     width: 100%;
     max-width: 400px;
 }
-.logo{
+
+.logo {
     margin-top: 2rem;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.right_inner_div .logo img{
+
+.right_inner_div .logo img {
     height: 120px;
 }
-.auth_form .title-text{
+
+.auth_form .title-text {
     margin-bottom: 1.5rem;
 }
-.title-text h1{
+
+.title-text h1 {
     font-size: 2rem;
     font-weight: 700;
     font-family: 'Montserrat', sans-serif;
 }
-.title-text p{
+
+.title-text p {
     margin-top: 10px;
     font-size: 1.5rem;
     font-weight: 500;
@@ -152,7 +169,7 @@
     transition: all 0.5s ease-in-out;
 }
 
-.auth_form form input::placeholder{
+.auth_form form input::placeholder {
     color: rgba(255, 255, 255, 0.759);
 }
 
@@ -181,23 +198,26 @@
     transition: all 0.3s ease-in-out;
     box-shadow: 0 2px 8px rgba(0, 200, 83, 0.2);
 }
-.title-error{
+
+.title-error {
     min-height: 1.5rem;
     text-align: center;
     color: red;
     font-size: 1rem;
 }
+
 .auth_form form input:focus {
     border-color: white;
     box-shadow: 2px 2px 10px #00ff6a84;
 }
+
 .auth_form button:hover {
     background-color: #00a844;
     /* transform: translateY(-1px); */
     box-shadow: 0 2px 8px rgba(0, 200, 83, 0.3);
 }
 
-.auth_form .google-btn{
+.auth_form .google-btn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -206,7 +226,8 @@
     color: black;
     transition: all 0.3s ease-in-out;
 }
-.auth_form .resubmit{
+
+.auth_form .resubmit {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -215,10 +236,13 @@
     color: black;
     transition: all 0.3s ease-in-out;
 }
-.auth_form .google-btn:hover,.auth_form .resubmit:hover {
-   background-color: rgb(180, 178, 178);
+
+.auth_form .google-btn:hover,
+.auth_form .resubmit:hover {
+    background-color: rgb(180, 178, 178);
 }
-.error{
+
+.error {
     min-height: 1.1rem;
     width: 100%;
     color: white;
@@ -231,16 +255,17 @@
     margin-top: 2px;
     word-break: break-word;
     margin-top: 0.3rem;
-    min-height: 1.1rem; 
+    min-height: 1.1rem;
 }
 
 .pass-error {
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  /* min-height: 1.1rem; */
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* min-height: 1.1rem; */
 }
+
 .google-btn img {
     width: 24px;
     height: 24px;
@@ -255,12 +280,14 @@
     text-align: center;
     margin-top: 10px;
 }
-.forgot-password{
-   z-index: 2;
-   display: flex;
-   justify-content: flex-end;
+
+.forgot-password {
+    z-index: 2;
+    display: flex;
+    justify-content: flex-end;
 }
-.forgot-password a{
+
+.forgot-password a {
     color: white;
     font-size: 0.9rem;
     margin-bottom: -30px;
@@ -268,10 +295,12 @@
     font-family: 'Inter', sans-serif;
     width: fit-content;
 }
-.forgot-password a:hover{
+
+.forgot-password a:hover {
     cursor: pointer;
     text-decoration: underline;
 }
+
 .auth-text a {
     color: #00C853;
     text-decoration: none;
@@ -280,6 +309,7 @@
     text-align: center;
     font-family: 'Inter', sans-serif;
 }
+
 .auth-text a:hover {
     text-decoration: underline;
     color: #00a844;
@@ -312,40 +342,40 @@
 }
 
 @media (max-width: 1200px) {
-  .auth_main_div {
-    grid-template-columns:  0fr 1fr 1.2fr;
-  }
+    .auth_main_div {
+        grid-template-columns: 0fr 1fr 1.2fr;
+    }
 }
 
 @media (max-width: 900px) {
-  .auth_main_div {
-    display: flex;
-    flex-direction: column;
-  }
+    .auth_main_div {
+        display: flex;
+        flex-direction: column;
+    }
 
-  .left_inner_div {
-    display: none; 
-  }
+    .left_inner_div {
+        display: none;
+    }
 
-  .right_inner_div {
-    display: flex;
-    flex-direction: column;
-    padding-top: 4rem;
-  }
+    .right_inner_div {
+        display: flex;
+        flex-direction: column;
+        padding-top: 4rem;
+    }
 
-  .auth_form {
-    padding: 1rem;
- 
-  }
+    .auth_form {
+        padding: 1rem;
 
-  .backToHome {
-    position: fixed;
-    background-color: #00C853;
-    color: black;
-  }
+    }
 
-  .backToHome:hover {
-    box-shadow: 1px 1px 8px #00C853;
-  }
+    .backToHome {
+        position: fixed;
+        background-color: #00C853;
+        color: black;
+    }
+
+    .backToHome:hover {
+        box-shadow: 1px 1px 8px #00C853;
+    }
 
 }

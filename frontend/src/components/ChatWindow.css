@@ -137,7 +137,7 @@
     background: linear-gradient(to right, #00C853, #64DD17);
     transition: box-shadow 0.3s linear ,transform 0.3s ease;
     cursor: pointer;
-    color: white;
+    color: black;
     font-weight: 700;
 }
 

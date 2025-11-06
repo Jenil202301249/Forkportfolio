@@ -10,7 +10,7 @@ export const getData  = async (searchitem) => {
     }
     try {
         const result = await yahooFinance.search(searchitem,searchOptions);
-        console.log(result)
+        //console.log(result)
         const [quotes, news] = await Promise.all([
             // Fetch detailed quote info
             Promise.all(
@@ -36,7 +36,7 @@ export const getData  = async (searchitem) => {
         //console.log(mappedQuotes);
         return {quotes:mappedQuotes, news};
     } catch (error) {
-        console.log('Error fetching symbol data:', error);
+        //console.log('Error fetching symbol data:', error);
         return null;
     }
 };

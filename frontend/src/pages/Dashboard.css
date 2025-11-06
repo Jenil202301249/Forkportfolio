@@ -1,47 +1,75 @@
 * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 .dashboard-container {
-    background-color: black;
-    
-    position: absolute;
-    min-width: 100%;
-    min-height: 100vh;
-    overflow-x: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
+  background-color: black;
+  position: absolute;
+  min-width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
 }
+
 .section-wrapper {
   width: 100%;
   margin-top: 145px;
 }
 
 
-.dashboard-content {
-    margin-top: 140px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.sectorai {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 85%;
+  gap: 30px;
+  margin: 0 auto;
+  align-items: stretch;
+
 }
 
-.footer-div{
-    width: 100%;
-    margin-top: auto;
+
+.sectorai > :first-child {
+  flex: 0 0 40%;
+  border: 2px solid #00C853;
+  border-radius: 12px;
+  padding: 10px;
+  background-color: #0c1014;
+  box-shadow: 0 0 10px rgba(0, 200, 83, 0.25);
 }
-.welcomediv{
-    width: 100vw;
-    height: 823px;
-    background-color: black;
+
+
+.sectorai > :last-child {
+  flex: 0 0 60%;
 }
-.portfoliodiv{
-    width: 100vw;
-    height: 1855px;
-    background-color: #1E1E1E;
+
+.dashboard-content {
+  margin-top: 140px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-div {
+  width: 100%;
+  margin-top: auto;
+}
+
+.welcomediv {
+  width: 100vw;
+  height: 823px;
+  background-color: black;
+}
+
+.portfoliodiv {
+  width: 100vw;
+  height: 1855px;
+  background-color: #1E1E1E;
 }

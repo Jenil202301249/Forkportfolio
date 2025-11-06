@@ -7,6 +7,9 @@ import "aos/dist/aos.css";
 import { Home } from './pages/Home'
 import { Dashboard } from './pages/Dashboard';
 import { MyProfile} from './pages/MyProfile';
+import { StockDetails } from './pages/StockDetails';
+import {HelpSupport} from './pages/HelpSupport';
+import {Preference} from './pages/Preference'
 import AiInsight from './pages/AiInsight';
 import {createBrowserRouter,RouterProvider} from "react-router-dom";
 const router = createBrowserRouter(
@@ -30,6 +33,18 @@ const router = createBrowserRouter(
     ,{
       path:"/aiInsight",
       element:<AiInsight/>
+    },
+    {
+      path:"/stockdetails",
+      element:<StockDetails/>
+    },
+    {
+      path:"/preference",
+      element:<Preference/>
+    },
+    {
+      path:"/helpsupport",
+      element:<HelpSupport/>
     }
   ]
 );
