@@ -1,5 +1,6 @@
 import YahooFinance  from "yahoo-finance2";
 import { getData } from "../../utils/getData.js";
+import { stockPriceStore } from "../../utils/stockPriceStore.js";
 const yahooFinance = new YahooFinance({
   validation: { logWarnings: false, logErrors: false }
 });
@@ -39,10 +40,15 @@ const getSymbols = async(type,count) => {
 };
 export const getMarketGainers = async (req, res) => {
     try {
+        const result = stockPriceStore.get("day_gainers");
+        if(result){
+            return res.status(200).json({ success: true, data: result.gainers });
+        }
         const gainers = await getSymbols('day_gainers',5);
         if (!gainers) {
             return res.status(404).json({ success: false, message: "No gainers found." });
         }
+        stockPriceStore.add("day_gainers",{gainers: gainers,expiresAt: Date.now()+60*1000});
         return res.status(200).json({ success: true, data: gainers });
     } catch (error) {
         //console.log('Market gainers error:', error);
@@ -52,10 +58,15 @@ export const getMarketGainers = async (req, res) => {
 
 export const getMarketLosers = async (req, res) => {
     try {
+        const result = stockPriceStore.get("day_losers");
+        if(result){
+            return res.status(200).json({ success: true, data: result.losers });
+        }
         const losers = await getSymbols('day_losers',5);
         if (!losers) {
             return res.status(404).json({ success: false, message: "No losers found." });
         }
+        stockPriceStore.add("day_losers",{losers:losers,expiresAt: Date.now()+60*1000});
         return res.status(200).json({ success: true, data: losers });
     } catch (error) {
         //console.log('Market losers error:', error);
@@ -64,6 +75,10 @@ export const getMarketLosers = async (req, res) => {
 };
 export const getMarketactiveStocks = async (req, res) => {
     try {
+        const result = stockPriceStore.get("most_actives");
+        if(result){
+            return res.status(200).json({ success: true, data: result.activeStocks,news: result.news });
+        }
         const activeStocks = await getSymbols('most_actives',5);
         if (!activeStocks) {
             return res.status(404).json({ success: false, message: "No active stocks found." });
@@ -74,6 +89,7 @@ export const getMarketactiveStocks = async (req, res) => {
             return res.status(401).json({ success: true, data: activeStocks,news:[] });
         }
         const news = newsResults.news;
+        stockPriceStore.add("most_actives",{activeStocks:activeStocks,news:news,expiresAt: Date.now()+60*1000});
         return res.status(200).json({ success: true, data: activeStocks,news:news });
     } catch (error) {
         //console.log('Market active stocks error:', error);

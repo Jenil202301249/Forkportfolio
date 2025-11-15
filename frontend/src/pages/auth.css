@@ -2,13 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Montserrat:wght@500;600;700&display=swap');
 
-
-* {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-}
-
+/* -------------------------------------------------Loading spinner css-------------------------------------- */
 .spin {
     font-size: 1.5rem;
     color: black;
@@ -28,57 +22,47 @@
     gap: 10px;
 }
 
-.container {
-    min-width: 100vw;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
+/* -------------------------------------------------Auth page main container-------------------------------------- */
 .auth_main_div {
+    position:absolute;
     width: 100%;
-    height: 100vh;
-    display: grid;
-    grid-template-columns: 0fr 1fr 1fr;
-    overflow: hidden;
-}
-
-
-.left_inner_div {
-    width: 100%;
-    height: 100vh;
+    height: 100% !important;
+    min-height: 100vh;
+    overflow-x: hidden;
     display: flex;
-    position: relative;
+    align-items: stretch; /* NEW */
 }
 
+/* -------------------------------------------------Left inner div-------------------------------------- */
+.left_inner_div {
+    position:relative;
+    width: 50%;
+    height: auto;
+    min-height:100vh;
+}
 .back_img_div {
     min-width: 100%;
     height: 100%;
 }
-
 .left_inner_div img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    max-height: 100vh;
+    /* max-height: 100vh; */
     z-index: 1;
 }
-
 .tagline-div {
     position: absolute;
-    bottom: 3rem;
-    left: 3rem;
+    bottom: 10%;
+    left: 5%;
     color: rgba(255, 255, 255, 0.912);
     font-size: 2.5rem;
     font-weight: 600;
-    width: 80%;
     line-height: 1.2;
     z-index: 2;
     font-family: 'Montserrat', Arial, sans-serif;
     font-style: italic;
 }
-
 .backToHome {
     position: absolute;
     top: 20px;
@@ -90,32 +74,40 @@
     border-radius: 5px;
     font-size: 1rem;
     cursor: pointer;
-    transition: box-shadow 0.2s ease-in-out;
+    transition: all 0.3s ease-in-out;
 }
-
 .backToHome:hover {
-    box-shadow: 1px 1px 12px rgb(0, 0, 0);
+    box-shadow: 0 6px 20px rgba(0, 200, 83, 0.6);
+}
+.backToHome:active{
+    transform:  scale(0.9);
+}
+.backToHome i{
+    font-size: 0.8rem;
 }
 
+/* -------------------------------------------------Right inner div-------------------------------------- */
 .right_inner_div {
-    min-width: 100%;
-    height: 100vh;
-    background-color: black;
-    display: grid;
-    grid-template-rows: 0.9fr 2.5fr;
+  width: 50%;
+  min-height: 100vh;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  overflow-y: auto;
+  padding:1px;
 }
-
+/* -------------------------------------------------Auth form container-------------------------------------- */
 .auth_form {
     background-color: black;
     color: white;
-    padding: 2rem;
-    padding-top: 5px;
+    padding: 0 2rem ;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
 }
-
 .auth_form form {
     background-color: black;
     display: flex;
@@ -123,29 +115,35 @@
     justify-content: center;
     width: 100%;
     max-width: 400px;
+    overflow: hidden;
 }
-
-.logo {
-    margin-top: 2rem;
+.authlogo{
     display: flex;
     justify-content: center;
     align-items: center;
+    height:auto !important;
+    margin-top:5px;
+    margin-bottom:3rem;
+    height:120px;
 }
-
-.right_inner_div .logo img {
+.authlogo img{
     height: 120px;
 }
-
+.signuplogo {
+    margin-top:5px;
+    height:85px;
+}
+.signuplogo img{
+    height:85px;
+}
 .auth_form .title-text {
     margin-bottom: 1.5rem;
 }
-
 .title-text h1 {
     font-size: 2rem;
     font-weight: 700;
     font-family: 'Montserrat', sans-serif;
 }
-
 .title-text p {
     margin-top: 10px;
     font-size: 1.5rem;
@@ -154,8 +152,7 @@
     text-align: center;
     font-family: 'Inter', sans-serif;
 }
-
-.auth_form form input {
+.auth_form form input:not([type="checkbox"]) {
     width: 100%;
     padding: 10px;
     border: 1px solid #00C853;
@@ -168,12 +165,10 @@
     outline: none;
     transition: all 0.5s ease-in-out;
 }
-
-.auth_form form input::placeholder {
+.auth_form form input:not([type="checkbox"])::placeholder {
     color: rgba(255, 255, 255, 0.759);
 }
-
-.auth_form form label {
+.auth_form form label{
     color: #00C853;
     margin-bottom: 5px;
     font-size: 1rem;
@@ -181,8 +176,7 @@
     display: block;
     margin-left: 2px;
 }
-
-.auth_form button {
+.auth_form button:not(.privacy-close-btn,.privacy-accept-btn) {
     width: 100%;
     height: 100%;
     padding: 10px;
@@ -194,39 +188,39 @@
     font-family: 'Inter', sans-serif;
     cursor: pointer;
     margin-top: 1.2rem;
-    font-weight: 550;
-    transition: all 0.3s ease-in-out;
+    font-weight: 600;
+    transition: all 0.3s ease-in;
     box-shadow: 0 2px 8px rgba(0, 200, 83, 0.2);
 }
-
 .title-error {
     min-height: 1.5rem;
     text-align: center;
     color: red;
+    overflow-x: hidden;
     font-size: 1rem;
 }
-
-.auth_form form input:focus {
+.auth_form form input:not([type="checkbox"]):focus {
     border-color: white;
     box-shadow: 2px 2px 10px #00ff6a84;
 }
-
-.auth_form button:hover {
+.auth_form button:not(.privacy-close-btn,.privacy-accept-btn):hover {
     background-color: #00a844;
     /* transform: translateY(-1px); */
     box-shadow: 0 2px 8px rgba(0, 200, 83, 0.3);
 }
 
+.auth_form button:active{
+    transform: scale(0.95);
+}
 .auth_form .google-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: white;
+    background-color: white !important;
     font-weight: 500;
     color: black;
     transition: all 0.3s ease-in-out;
 }
-
 .auth_form .resubmit {
     display: flex;
     align-items: center;
@@ -236,43 +230,41 @@
     color: black;
     transition: all 0.3s ease-in-out;
 }
-
 .auth_form .google-btn:hover,
 .auth_form .resubmit:hover {
-    background-color: rgb(180, 178, 178);
+    background-color: rgb(180, 178, 178)  !important;
 }
-
 .error {
-    min-height: 1.1rem;
+    min-height: 1.2rem;
     width: 100%;
     color: white;
     font-weight: 400;
     text-align: left;
     padding-left: 1%;
     font-family: 'Inter', sans-serif;
-    font-size: 0.9rem;
-    line-height: 1.2;
+    font-size: 0.83rem;
+    /* line-height: 1.2; */
     margin-top: 2px;
     word-break: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     margin-top: 0.3rem;
-    min-height: 1.1rem;
 }
-
 .pass-error {
+    font-size: 0.83rem;
+    min-height: 1.2rem;
     display: block;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    /* min-height: 1.1rem; */
 }
-
 .google-btn img {
     width: 24px;
     height: 24px;
     object-fit: contain;
     margin-right: 8px;
 }
-
 .auth-text {
     color: white;
     font-size: 1rem;
@@ -280,13 +272,11 @@
     text-align: center;
     margin-top: 10px;
 }
-
 .forgot-password {
     z-index: 2;
     display: flex;
     justify-content: flex-end;
 }
-
 .forgot-password a {
     color: white;
     font-size: 0.9rem;
@@ -295,12 +285,48 @@
     font-family: 'Inter', sans-serif;
     width: fit-content;
 }
-
 .forgot-password a:hover {
     cursor: pointer;
     text-decoration: underline;
 }
-
+.privacy-policy{
+    display:flex;
+    align-items: center;
+    gap:3px;
+}
+.privacy-policy input{
+    margin-right:6px;
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #00c853;
+    cursor: pointer;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+    vertical-align: middle;
+}
+.policy-link{
+    cursor: pointer;
+    color:#00c853
+}
+.policy-link:hover{
+   text-decoration: underline;
+   text-underline-offset: 2px;
+}
+.privacy-policy input:checked:after{
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 10px;
+  border: solid #00c853;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) translate(-10%,-10%);
+}
 .auth-text a {
     color: #00C853;
     text-decoration: none;
@@ -309,22 +335,18 @@
     text-align: center;
     font-family: 'Inter', sans-serif;
 }
-
 .auth-text a:hover {
     text-decoration: underline;
     color: #00a844;
 }
-
 .passwordinput {
     position: relative;
     width: 100%;
 }
-
 .passwordinput input {
     width: 100%;
     padding-right: 20px;
 }
-
 .passwordinput .password-toggle {
     position: absolute;
     right: 15px;
@@ -334,42 +356,144 @@
     color: #00C853;
     background: none;
 }
-
 .passwordinput .password-toggle:hover {
     background: none;
     box-shadow: none;
     color: #00a844;
 }
-
-@media (max-width: 1200px) {
-    .auth_main_div {
-        grid-template-columns: 0fr 1fr 1.2fr;
+.privacy-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color:transparent;
+    z-index: 1000;
+}
+.privacy-popup-content {
+    position:absolute;
+    z-index:10000;
+    background-color: black;
+    border: 1px solid rgba(0, 200, 83, 0.4);
+    border-radius: 16px;
+    width: 350px;
+    max-height: 75vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    animation: slideIn 0.3s ease-out;
+}
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
-
-@media (max-width: 900px) {
-    .auth_main_div {
-        display: flex;
-        flex-direction: column;
+.privacy-popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0.75rem 0.75rem 1.5rem;
+}
+.privacy-popup-header h2 {
+    color: #00C853;
+    font-size: 1.75rem;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+}
+.privacy-close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px 10px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.privacy-close-btn:hover {
+    color: #00C853;
+    transform: scale(1.1);
+}
+.privacy-popup-body {
+    padding: 25px;
+    overflow-y: auto;
+    flex: 1;
+    color: white;
+    font-family: 'Inter', sans-serif;
+}
+.privacy-popup-body section {
+    margin-bottom: 25px;
+}
+.privacy-popup-body h3 {
+    color: #00C853;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    font-family: 'Montserrat', sans-serif;
+}
+.privacy-popup-body p {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+.privacy-popup-body ul {
+    margin: 10px 0;
+    padding-left: 25px;
+}
+.privacy-popup-body li {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 8px;
+}
+.privacy-popup-footer {
+    padding: 0.75rem 2rem;
+    display: flex;
+    justify-content: center;
+}
+.privacy-accept-btn {
+    background-color: #00C853;
+    color: black;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 200, 83, 0.2);
+}
+.privacy-accept-btn:hover {
+    background-color: #00a844;
+    box-shadow: 0 4px 16px rgba(0, 200, 83, 0.4);
+    transform: translateY(-2px);
+}
+/* Responsive adjustments for privacy popup */
+@media (max-width: 768px) {
+    .privacy-popup-content {
+        max-width: 90%;
     }
-
-    .left_inner_div {
+}
+@media (max-width: 900px) {
+ .left_inner_div {
         display: none;
     }
 
     .right_inner_div {
-        display: flex;
-        flex-direction: column;
-        padding-top: 4rem;
-    }
-
-    .auth_form {
-        padding: 1rem;
-
+        width: 100%;
     }
 
     .backToHome {
-        position: fixed;
         background-color: #00C853;
         color: black;
     }
@@ -377,5 +501,21 @@
     .backToHome:hover {
         box-shadow: 1px 1px 8px #00C853;
     }
+    .right_inner_div {
+        justify-content: flex-start; 
+        padding:2.45rem 0;
+    }
 
+    .auth_form_wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
 }
+ 
+
+
+
+
+

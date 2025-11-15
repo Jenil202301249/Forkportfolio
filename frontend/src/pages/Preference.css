@@ -19,13 +19,13 @@
     width: 100%;
     background-color: #000;
     margin-bottom: 30px;   
-
+    margin-top: 80px;
 }
 
 .PreferenceContainer{
     width: 60%;
     height: 455px;
-    margin-top: 7rem;
+    margin-top: 2rem;
     /* margin-bottom: 30px;    */
     border: 4px solid #28282889;
     background-color: #0f0f0f;

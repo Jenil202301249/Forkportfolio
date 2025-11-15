@@ -2,6 +2,7 @@ import YahooFinance from 'yahoo-finance2';
 const yahooFinance = new YahooFinance();
 export const getHistoricData = async (symbol, period1, period2, interval) => {
   try {
+    console.log(period1)
     const queryOptions = { period1, period2, interval };
     const result = await yahooFinance.historical(symbol, queryOptions);
     return result.map((data) => ({

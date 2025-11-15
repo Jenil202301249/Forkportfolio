@@ -4,8 +4,18 @@
     <meta charset="UTF-8" />
     <!-- add img of logo that is present in assests folder logo is in png suggest me -->
     <link rel="icon" type="image/png" href="src/assets/dark-mode-logo.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>InsightStox</title>
+    <script>
+      // Fix for mobile viewport height with keyboard
+      function setAppHeight() {
+        const doc = document.documentElement;
+        doc.style.setProperty('--app-height', `${window.innerHeight}px`);
+      }
+      window.addEventListener('resize', setAppHeight);
+      window.addEventListener('orientationchange', setAppHeight);
+      setAppHeight();
+    </script>
   </head>
   <body>
     <div id="root"></div>

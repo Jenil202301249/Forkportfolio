@@ -28,6 +28,8 @@
     "duck-duck-scrape": "^2.2.7",
     "express": "^5.1.0",
     "fs": "^0.0.1-security",
+    "fuse": "^0.12.1",
+    "fuse.js": "^7.1.0",
     "google-auth-library": "^10.4.0",
     "jigsawstack": "^0.3.7",
     "jsonwebtoken": "^9.0.2",

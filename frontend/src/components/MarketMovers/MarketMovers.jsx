@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import axios from 'axios';
 import './MarketMovers.css';
 import tata_icon from '../../assets/tata-icon.png';
@@ -19,10 +21,16 @@ const MARKET_ACTIVE_API = `${BASE_URL}/api/v1/dashboard/marketActiveStocks`;
 const MARKET_GAINERS_API = `${BASE_URL}/api/v1/dashboard/marketGainers`;
 const MARKET_LOSERS_API = `${BASE_URL}/api/v1/dashboard/marketLosers`;
 
-const StockListItem = ({ name, exchange, price, change, percentage, isGainer }) => {
+const StockListItem = ({ name,symbol, exchange, price, change, percentage, isGainer }) => {
   const changeColorClass = isGainer ? 'gainer' : 'loser';
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/StockDetails/${symbol}`);
+  };
+
   return (
-    <div className="stock-item">
+    <div className={`stock-item ${isGainer ? "gainer-row" : "loser-row"}`} onClick={handleClick}>
       <div className="stock-info">
         <p className="stock-name">{name}</p>
         <p className="stock-exchange">{exchange}</p>
@@ -45,12 +53,30 @@ const BusinessGroupCard = ({ logo, name, stockCount }) => (
   </div>
 );
 
-export const MarketNewsItem = ({ headline, time }) => (
-  <div className="news-item">
+export const MarketNewsItem = ({ headline, time, link }) => (
+  <a 
+    href={link} 
+    target="_blank" 
+    rel="noopener noreferrer" 
+    className="news-item clickable-news"
+  >
     <p className="news-headline">{headline}</p>
     <p className="news-time">{time}</p>
-  </div>
+  </a>
 );
+function timeAgo(isoTime) {
+  const published = new Date(isoTime);
+  const now = new Date();
+  const diffMs = now - published;
+
+  const diffMins = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffMins < 60) return `${diffMins}m ago`;
+  if (diffHours < 24) return `${diffHours}h ago`;
+  return `${diffDays}d ago`;
+}
 
 const MarketMovers = () => {
   const [marketNewsData, setMarketNewsData] = useState([]);
@@ -72,15 +98,19 @@ const MarketMovers = () => {
         if (Array.isArray(newsRes.data?.news)) {
           const formattedNews = newsRes.data.news.map((news) => ({
             headline: news.title,
-            time: new Date(news.providerPublishTime * 1000).toLocaleString(),
+            time: timeAgo(news.providerPublishTime),
+            link: news.link,
           }));
+
           setMarketNewsData(formattedNews);
         }
+
 
         // Format GAINERS
         if (Array.isArray(gainersRes.data?.data)) {
           const formattedGainers = gainersRes.data.data.map((stock) => ({
             name: stock.shortName,
+            symbol: stock.symbol,
             exchange: stock.exchange || 'NSE',
             price: stock.price,
             change: stock.change,
@@ -93,6 +123,7 @@ const MarketMovers = () => {
         if (Array.isArray(losersRes.data?.data)) {
           const formattedLosers = losersRes.data.data.map((stock) => ({
             name: stock.shortName,
+            symbol: stock.symbol,
             exchange: stock.exchange || 'NSE',
             price: stock.price,
             change: stock.change,
@@ -131,21 +162,24 @@ const MarketMovers = () => {
         <a href="#" className="see-more-link">See More →</a>
       </div>
 
-      <div className="main-grid">
-        <div className="content-card">
-          <h3 className="content-title gainer">Gainers</h3>
-          {gainersData.map((stock, index) => (
-            <StockListItem key={index} {...stock} isGainer />
-          ))}
-        </div>
+      <div className="framed-section">
+  <div className="framed-grid">
+    <div className="content-card">
+      <h3 className="content-title gainer">Gainers</h3>
+      {gainersData.map((stock, index) => (
+        <StockListItem key={index} {...stock} isGainer />
+      ))}
+    </div>
 
-        <div className="content-card">
-          <h3 className="content-title loser">Losers</h3>
-          {losersData.map((stock, index) => (
-            <StockListItem key={index} {...stock} isGainer={false} />
-          ))}
-        </div>
-      </div>
+    <div className="content-card">
+      <h3 className="content-title loser">Losers</h3>
+      {losersData.map((stock, index) => (
+        <StockListItem key={index} {...stock} isGainer={false} />
+      ))}
+    </div>
+  </div>
+</div>
+
 
       <div className="main-grid">
         <div className="content-card">

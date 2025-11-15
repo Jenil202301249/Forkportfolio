@@ -25,11 +25,13 @@ app.use(express.json());
 app.use(cookieParser());
 
 import userRouter from "./src/routes/user.routes.js";
-import dashBoardRouter from "./src/routes/dashBoard.routes.js"
-import aiInsightRouter from "./src/routes/aiInsight.routes.js"
+import dashBoardRouter from "./src/routes/dashBoard.routes.js";
+import aiInsightRouter from "./src/routes/aiInsight.routes.js";
+import portfolioRouter from "./src/routes/portfolio.routes.js";
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/dashboard", dashBoardRouter);
 app.use("/api/v1/ai-insight", aiInsightRouter);
+app.use("/api/v1/portfolio",portfolioRouter);
 app.use((err, req, res, next) => {
     if (err instanceof multer.MulterError) {
         // Handle multer-specific errors

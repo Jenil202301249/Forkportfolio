@@ -4,13 +4,15 @@
   border: 1px solid #7dff9e;
   border-radius: 12px;
   padding: 1.5rem;
-  margin: 20px;
+  /* margin: 20px; */
   box-shadow: 0 0 15px rgba(0,255,128,0.05);
 }
 
 .holdings-card {
- justify-content: center;
-  width: 100%;
+  justify-content: center;
+  width: 82%;
+  margin: 0 auto;
+  margin-top: 40px;
 }
 
 table {

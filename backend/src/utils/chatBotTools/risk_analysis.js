@@ -1,1 +1,0 @@
-export default Risk_analysis_tool;

@@ -17,10 +17,13 @@
 }
 
 .section-wrapper {
+  width: 1280px;     
+  margin: 0 auto;
+  padding: 0;
+  display: block;
   width: 100%;
   margin-top: 145px;
 }
-
 
 .sectorai {
   display: flex;
@@ -30,24 +33,20 @@
   gap: 30px;
   margin: 0 auto;
   align-items: stretch;
-
+  /* padding: 40px; */
 }
-
 
 .sectorai > :first-child {
   flex: 0 0 40%;
   border: 2px solid #00C853;
   border-radius: 12px;
-  padding: 10px;
   background-color: #0c1014;
   box-shadow: 0 0 10px rgba(0, 200, 83, 0.25);
 }
 
-
 .sectorai > :last-child {
   flex: 0 0 60%;
 }
-
 .dashboard-content {
   margin-top: 140px;
   width: 100%;
@@ -72,4 +71,172 @@
   width: 100vw;
   height: 1855px;
   background-color: #1E1E1E;
+}
+
+/* ===== RESPONSIVE STYLES ===== */
+
+/* Large Desktop (1440px and above) */
+@media (min-width: 1440px) {
+  .sectorai {
+    width: 80%;
+    max-width: 1400px;
+  }
+}
+
+/* Desktop (1024px to 1439px) */
+@media (max-width: 1439px) {
+  .section-wrapper {
+    margin-top: 130px;
+  }
+  
+  .sectorai {
+    width: 90%;
+  }
+}
+
+/* Tablet Landscape (768px to 1023px) */
+@media (max-width: 1023px) {
+  .section-wrapper {
+    margin-top: 120px;
+  }
+  
+  .sectorai {
+    width: 90%;
+    gap: 20px;
+  }
+  
+  .sectorai > :first-child {
+    flex: 0 0 45%;
+  }
+  
+  .sectorai > :last-child {
+    flex: 0 0 55%;
+  }
+  
+  .welcomediv {
+    height: auto;
+    min-height: 600px;
+  }
+  
+  .portfoliodiv {
+    height: auto;
+    min-height: 1400px;
+  }
+}
+
+/* Tablet Portrait (600px to 767px) */
+@media (max-width: 767px) {
+  .section-wrapper {
+    margin-top: 100px;
+  }
+  
+  .sectorai {
+    flex-direction: column;
+    width: 90%;
+    gap: 20px;
+  }
+  
+  .sectorai > :first-child,
+  .sectorai > :last-child {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+  
+  .sectorai > :first-child {
+    padding: 15px;
+  }
+  
+  .dashboard-content {
+    margin-top: 100px;
+  }
+  
+  .welcomediv {
+    height: auto;
+    min-height: 500px;
+  }
+  
+  .portfoliodiv {
+    height: auto;
+    min-height: 1200px;
+  }
+}
+
+/* Mobile Landscape (481px to 599px) */
+@media (max-width: 599px) {
+  .section-wrapper {
+    margin-top: 80px;
+  }
+  
+  .sectorai {
+    width: 95%;
+    gap: 15px;
+  }
+  
+  .sectorai > :first-child {
+    padding: 12px;
+    border-radius: 8px;
+  }
+  
+  .dashboard-content {
+    margin-top: 80px;
+  }
+}
+
+/* Mobile Portrait (320px to 480px) */
+@media (max-width: 480px) {
+  .dashboard-container {
+    overflow-x: hidden;
+  }
+  
+  .section-wrapper {
+    margin-top: 70px;
+    padding: 0 10px;
+  }
+  
+  .sectorai {
+    width: 100%;
+    gap: 15px;
+    padding: 0 5px;
+  }
+  
+  .sectorai > :first-child {
+    padding: 10px;
+    border-radius: 8px;
+    border-width: 1.5px;
+  }
+  
+  .dashboard-content {
+    margin-top: 70px;
+  }
+  
+  .footer-div {
+    margin-top: 30px;
+  }
+  
+  .welcomediv {
+    height: auto;
+    min-height: 400px;
+    padding: 15px 10px;
+  }
+  
+  .portfoliodiv {
+    height: auto;
+    min-height: 1000px;
+    padding: 15px 10px;
+  }
+}
+
+/* Extra Small Mobile (below 320px) */
+@media (max-width: 319px) {
+  .section-wrapper {
+    margin-top: 60px;
+  }
+  
+  .sectorai {
+    gap: 10px;
+  }
+  
+  .sectorai > :first-child {
+    padding: 8px;
+  }
 }

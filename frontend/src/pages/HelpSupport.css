@@ -21,13 +21,14 @@
     justify-content: center;
     width: 100%;
     background-color: #000;
+    margin-top: 80px;
 }
 
 
 .HelpSupportContainer{
     width: 60%;
     min-height: 910px;
-    margin-top: 7rem;
+    margin-top: 2rem;
     margin-bottom: 30px;   
     border: 4px solid #28282889;
     background-color: #0f0f0f;
@@ -73,7 +74,7 @@
 }
 
 .quick-help-btn {
-    display: flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   background-color: #1E1E1E;
@@ -175,8 +176,9 @@ font-size: 14px;
 .support-form .btn-primary{
     display:flex;
     align-items: center;
-    padding: 8px 12px 8px 12px;
-    border-radius: 10px;
+    font-size: 0.8rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 6px;
     background-color:  #00C853;
     justify-content: center;
     cursor: pointer;
@@ -184,7 +186,6 @@ font-size: 14px;
     color:#000000;
     font-weight: 300;
     gap:10px;
-    font-size: 1rem;
 }
 
 .support-form .btn-primary:hover{

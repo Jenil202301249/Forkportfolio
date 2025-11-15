@@ -1,38 +1,33 @@
-import { addSymbol, getWatchlist, removeSymbol } from "../../db/watchlist.js";
+import { addSymbol, checkpresent, getWatchlist, removeSymbol } from "../../db/watchlist.js";
 import { getPrice } from "../../utils/getQuotes.js";
-import { stockPriceStore } from "../../utils/stockPriceStore.js";
 
 export const showWatchlist = async (req, res) => {
     const { email } = req.user;
     try {
         let watchlistData = [];
-        let priceData = stockPriceStore;
         const watchlist = await getWatchlist(email);
         if(!watchlist){
             return res.status(500).json({ success: false,message: "Failed to fetch watchlist."})
         }
         if(watchlist.length==0){
-            return res.status(500).json({ success: false,message: "User Doesn't have a watchlist."})
+            return res.status(200).json({ success: true,watchlist: [] })
         }
         for (const symbol of watchlist) {
-            if(!priceData.get(symbol)){
-                const q = await getPrice(symbol);
-                if (!q) {
-                    return res.status(500).json({ success: false, message: "Failed to fetch stock prices." });
-                }
-                priceData.add(symbol,{...q,expiresAt: Date.now()+60*1000});
-            }
-            const data = priceData.get(symbol);
-            if (!data) continue;
+            const data = await getPrice(symbol.symbol);
+            if (!data) return res.status(500).json({ success: false, message: "Failed to fetch stock prices." });
             watchlistData.push({
-                symbol: symbol,
-                currentPrice: data.MarketPrice,
+                symbol: symbol.symbol,
+                currentPrice: data.current,
                 currency: data.currency,
                 percentageChange: data.percentageChange,
+                currentchange: data.change,
                 shortName: data.shortname,
                 longName: data.longname,
+                marketcap: data.marketcap,
+                sector: data.sector||"others",
             });
         }
+        watchlistData.sort((a, b) => b.currentPrice - a.currentPrice);
         return res.status(200).json({ success: true, watchlist: watchlistData });
     } catch (error) {
         console.log('Show watchlist error:', error);
@@ -58,10 +53,17 @@ export const addToWatchlist = async (req, res) => {
 };
 export const removeFromWatchlist = async (req, res) => {
     const { email } = req.user;
-    const { symbol } = req.body;
+    const { symbol } = req.query;
     try {
         if (!symbol) {
             return res.status(400).json({ success: false, message: "Stock symbol is required." });
+        }
+        const available = await checkpresent(email,symbol);
+        if(available===undefined){
+            return res.status(500).json({success:false,message: "Database Error"});
+        }
+        if(available<=0){
+            return res.status(400).json({success:false,meaasage: "The stock is not present to be removeed."});
         }
         const success = await removeSymbol(email, symbol);
         if (!success) {

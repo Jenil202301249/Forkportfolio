@@ -3,206 +3,521 @@ import axios from "axios";
 import Navbar from "../components/Navbar.jsx";
 import DashboardHeader from '../components/Dashboard-Header.jsx';
 import Footer from '../components/Footer.jsx';
-import tataIcon from '../assets/tata-icon.png';
 import { FieldValue } from "../components/FieldValue.jsx";
 import { MarketNewsItem } from "../components/MarketMovers/MarketMovers.jsx";
 import './StockDetails.css';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useAppContext } from "../context/AppContext.jsx";
 
 export const StockDetails = () => {
+    const BASE_URL = import.meta.env.VITE_BACKEND_LINK;
     const [darkMode, setDarkMode] = useState(true);
+    const {userDetails} = useAppContext();
     const [buyStock, handleBuyStock] = useState("");
     const [sellStock, handleSellStock] = useState("");
     const [addedStock, handleAdd] = useState("");
-    const marketNewsData = [
-        { headline: 'RBI keeps repo rate unchanged, GDP forecast raised.', time: '1 hour ago' },
-        { headline: 'RBI keeps repo rate unchanged, GDP forecast raised.', time: '1 hour ago' },
-    ];
+    const { symbol } = useParams();
+    const [stockData, setStockData] = useState({
+        priceInfo: {},
+        fundamentals: {},
+        financials: {},
+        balenceSheet: {},
+        profitability: {},
+        cashFlow: {},
+        fiscalInformation: {},
+        Company: {},
+    });
+    const [newsData, setMarketData] = useState([]);
+
+    console.log(symbol);
+
+    const roundTo = (num, decimals = 2) => {
+        if (num === null || num === undefined || isNaN(Number(num))) return "--";
+        return Number.parseFloat(num).toFixed(decimals);
+    };
+
+    const formatPercentage = (num, decimals = 2) => {
+        if (num === null || num === undefined || isNaN(Number(num))) return "--";
+        const val = Number(num);
+        const percent = Math.abs(val) < 1 ? val * 100 : val;
+        return percent.toFixed(decimals);
+    };
+
+    const formatLargeNumber = (num) => {
+        if (num === null || num === undefined || isNaN(Number(num))) return "--";
+
+        const val = Number(num);
+        const absNum = Math.abs(val);
+        if (absNum >= 1e12) return (val / 1e12).toFixed(2) + "T";
+        if (absNum >= 1e9) return (val / 1e9).toFixed(2) + "B";
+        if (absNum >= 1e6) return (val / 1e6).toFixed(2) + "M";
+        if (absNum >= 1e3) return (val / 1e3).toFixed(2) + "K";
+        return val.toFixed(2);
+    };
+
+    const formatSmallNumber = (num) => {
+        if (num === null || num === undefined || isNaN(Number(num))) return "--";
+        const val = Number.parseFloat(num);
+        if (Math.abs(val) < 1e-3) return "0.00";
+        return val.toFixed(2);
+    };
+
+    const formatDate = (isoString) => {
+        if (!isoString) return "--";
+        try {
+            const date = new Date(isoString);
+            return date.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric"
+            });
+        } catch {
+            return "--";
+        }
+    };
+
+
+    useEffect(() => {
+        const getStockDetails = async () => {
+            try {
+                const res = await axios.get(`${BASE_URL}/api/v1/dashBoard/stockDetails?ticker=${symbol}`,
+                    { withCredentials: true });
+
+                const raw = res?.data.data || res.data;
+
+                setStockData({
+                    priceInfo: {
+                        currentPrice: roundTo(raw.priceInfo?.currentPrice),
+                        previousClose: roundTo(raw.priceInfo?.previousClose),
+                        open: roundTo(raw.priceInfo?.open),
+                        dayHigh: roundTo(raw.priceInfo?.dayHigh),
+                        dayLow: roundTo(raw.priceInfo?.dayLow),
+                        volume: formatLargeNumber(raw.priceInfo?.volume),
+                        fiftytwoWeekHigh: roundTo(raw.priceInfo?.fiftytwoWeekHigh),
+                        fiftyTwoWeekLow: roundTo(raw.priceInfo?.fiftyTwoWeekLow),
+                        marketCap: formatLargeNumber(raw.priceInfo?.marketCap),
+                        change: roundTo(raw.priceInfo?.change),
+                        changePercentage: formatPercentage(raw.priceInfo?.changePercentage),
+                    },
+                    fundamentals: {
+                        roceTTM: formatPercentage(raw.fundamentals?.roceTTM),
+                        peRatioTTM: formatSmallNumber(raw.fundamentals?.peRatioTTM),
+                        pbRatio: formatSmallNumber(raw.fundamentals?.pbRatio),
+                        industryPE: formatSmallNumber(raw.fundamentals?.industryPE),
+                        debtToEquity: formatSmallNumber(raw.fundamentals?.debtToEquity),
+                        roeTTM: formatPercentage(raw.fundamentals?.roeTTM),
+                        epsTTM: formatSmallNumber(raw.fundamentals?.epsTTM),
+                        dividendYield: formatPercentage(raw.fundamentals?.dividendYield),
+                        bookValue: formatSmallNumber(raw.fundamentals?.bookValue),
+                        faceValue: formatSmallNumber(raw.fundamentals?.faceValue),
+                    },
+                    financials: {
+                        revenueTTM: formatLargeNumber(raw.financials?.revenueTTM),
+                        revenuePerShare: formatSmallNumber(raw.financials?.revenuePerShare),
+                        earningGrowthQuater: formatPercentage(raw.financials?.earningGrowthQuater),
+                        grossProfitTTM: formatLargeNumber(raw.financials?.grossProfitTTM),
+                        ebitda: formatLargeNumber(raw.financials?.ebitda),
+                        netIncome: formatLargeNumber(raw.financials?.netIncome),
+                        dilutedEPS: formatSmallNumber(raw.financials?.dilutedEPS),
+                    },
+                    balenceSheet: {
+                        totalCash: formatLargeNumber(raw.balenceSheet?.totalCash),
+                        totalCashPerShare: formatSmallNumber(raw.balenceSheet?.totalCashPerShare),
+                        totalDebt: formatLargeNumber(raw.balenceSheet?.totalDebt),
+                        deptToEquity: formatSmallNumber(raw.balenceSheet?.deptToEquity),
+                        currentRatioMRQ: formatSmallNumber(raw.balenceSheet?.currentRatioMRQ),
+                        bookValuePerShare: formatSmallNumber(raw.balenceSheet?.bookValuePerShare),
+                    },
+                    profitability: {
+                        profitMargin: formatPercentage(raw.profitability?.profitMargin),
+                        operatingMargin: formatPercentage(raw.profitability?.operatingMargin),
+                        returnOnAssets: formatPercentage(raw.profitability?.returnOnAssets),
+                        returnOnEquity: formatPercentage(raw.profitability?.returnOnEquity),
+                    },
+                    cashFlow: {
+                        operatingCashFlow: formatLargeNumber(raw.cashFlow?.operatingCashFlow),
+                        freeCashFlow: formatLargeNumber(raw.cashFlow?.freeCashFlow),
+                    },
+                    fiscalInformation: {
+                        fiscalYearEnd: formatDate(raw.fiscalInformation?.fiscalYearEnd),
+                        MRQ: formatDate(raw.fiscalInformation?.MRQ),
+                    },
+                    Company: {
+                        longname: raw.Company?.longname || "--",
+                        shortname: raw.Company?.shortname || "--",
+                        fulltimeemployees: raw.Company?.fulltimeemployees || "--",
+                        sector: raw.Company?.sector || "--",
+                        industry: raw.Company?.industry || "--",
+                        longdescription: raw.Company?.longdescription || "--",
+                        website: raw.Company?.website || "--",
+                    },
+                });
+
+            }
+            catch (error) {
+                console.error("Error fetching stock details:", error);
+            }
+
+        };
+        getStockDetails();
+    }, [symbol]);
+
+    useEffect(() => {
+        const getNews = async () => {
+            try {
+                const news = await axios.get(`${BASE_URL}/api/v1/dashBoard/news/${symbol}`, { withCredentials: true });
+                setMarketData(news?.data || news);
+            }
+            catch (error) {
+                console.error("Error fetching news:", error);
+            }
+        };
+        getNews();
+    }, [symbol]);
 
     return (
-        <div className="main-page-for-stock">
-            <Navbar darkMode={darkMode} setDarkMode={setDarkMode} pageType="dashboard"
-                profileData={{ name: "Ayush Dhamecha", email: "ma**@gmail.com", }} />
+        <div className="stk-main-page-for-stock">
+            <Navbar darkMode={darkMode} setDarkMode={setDarkMode} pageType="stock-details"
+                profileData={{ name: userDetails?.name , email: userDetails?.email }} />
             <DashboardHeader darkMode={darkMode} />
-            <div className="empty"></div>
-            <div className="stock-info-page">
+            <div className="stk-empty"></div>
+            <div className="stk-stock-info-page">
 
-                <div className="stock-head">
-                    <img className="stock-icon" src={tataIcon} alt="Stock image" />
-                    <button className="buy" val="Buy" onClick={handleBuyStock}>Buy</button>
-                    <button className="sell" val="Sell" onClick={handleSellStock}>Sell</button>
-                    <button className="add-watchlist" val="Add" onClick={handleAdd}>Add to watchlist</button>
+                <div className="stk-stock-head">
+                    <div className="stk-stock-name">{symbol}</div>
+                    <button className="stk-add" value="Add" onClick={handleBuyStock}>Add</button>
+                    <button className="stk-rmv" value="Remove" onClick={handleSellStock}>Remove</button>
+                    <button className="stk-add-watchlist" val="Add-w" onClick={handleAdd}>Add to watchlist</button>
                 </div>
 
-                <div className="stock-name">TATA Motors Passenger Vehicles Limited (TATAMOTORS.NS)</div>
-
-                <div className="stock-price">
-                    <div className="abs">418.30</div>
-                    <div className="percentage">+4.35(+0.83%)</div>
+                <div className="stk-stock-price">
+                    <div className="stk-abs">{stockData.priceInfo?.currentPrice ?? stockData.priceInfo?.previousClose}</div>
+                    <div
+                        className="stk-percentage"
+                        style={{
+                            color:
+                                stockData?.priceInfo?.change > 0
+                                    ? "#00C853"
+                                    : stockData?.priceInfo?.change < 0
+                                    ? "#C81B00"
+                                    : "#FFF",   
+                        }}
+                    >
+                        {stockData?.priceInfo?.change > 0 ? `+${stockData?.priceInfo?.change}` : stockData?.priceInfo?.change} (
+                        {stockData?.priceInfo?.changePercentage > 0 ? `+${stockData?.priceInfo?.changePercentage}%` : `${stockData?.priceInfo?.changePercentage}%`})
+                    </div>
+                </div>
+                <div className="stk-stock-detail-navbar">
+                    <a className="stk-detail-button" href="#heads1">Performance</a>
+                    <a className="stk-detail-button" href="#heads2">Fundamentals</a>
+                    <a className="stk-detail-button" href="#heads3">Financials</a>
+                    <a className="stk-detail-button" href="#heads4">News</a>
+                    <a className="stk-detail-button" href="#heads5">About Company</a>
                 </div>
 
-                <div className="stock-detail-navbar">
-                    <a className="detail-button" href="#heads1">Performance</a>
-                    <a className="detail-button" href="#heads2">Fundamentals</a>
-                    <a className="detail-button" href="#heads3">Financials</a>
-                    <a className="detail-button" href="#heads4">News</a>
-                    <a className="detail-button" href="#heads5">About Company</a>
-                </div>
-
-                <div className="stock-chart">{/*to put*/}</div>
+                <div className="stk-stock-chart">{/*to put*/}</div>
 
                 <div id="heads1">Performance</div>
-                <div className="performance">
-                    <div className="day-range">Day's range</div>
+                <div className="stk-performance">
+                    <div className="stk-day-range">Day's range</div>
 
-                    <div className="price-range">
-                        <div className="range-field">
-                            <span className="low-f">Today's low:</span>
-                            <span className="low-v">403.60</span>
+                    <div className="stk-price-range">
+                        <div className="stk-range-field">
+                            <span className="stk-low-f">Today's low:</span>
+                            <span className="stk-low-v">{stockData.priceInfo?.dayLow}</span>
                         </div>
 
                         <hr />
-                        <div className="range-val">
-                            <span className="high-f">Today's high:</span>
-                            <span className="high-v">408.90</span>
+                        <div className="stk-range-val">
+                            <span className="stk-high-f">Today's high:</span>
+                            <span className="stk-high-v">{stockData.priceInfo?.dayHigh}</span>
                         </div>
 
                     </div>
                 </div>
-                <div className="more-info">
-                    <div className="info-left">
-                        <FieldValue className="stk-info" fieldname="Previous Close" value="405.85" />
-                        <FieldValue className="stk-info" fieldname="Open" value="407.85" />
-                        <FieldValue className="stk-info" fieldname="Volume" value="14,120,004" />
+                <div className="stk-more-info">
+                    <div className="stk-info-left">
+                        <FieldValue
+                            className="stk-info"
+                            fieldname="Previous Close"
+                            value={stockData.priceInfo?.previousClose}
+                        />
+                        <FieldValue
+                            className="stk-info"
+                            fieldname="Open"
+                            value={stockData.priceInfo?.open}
+                        />
+                        <FieldValue
+                            className="stk-info"
+                            fieldname="Volume"
+                            value={stockData.priceInfo?.volume}
+                        />
                     </div>
-                    <div className="info-right">
-                        <FieldValue className="stk-info" fieldname="Day's range" value="403.60" />
-                        <FieldValue className="stk-info" fieldname="52 week range" value="408.9" />
-                        <FieldValue className="stk-info" fieldname="Market Cap (intraday)" value="1.494T" />
+                    <div className="stk-info-right">
+                        <FieldValue
+                            className="stk-info"
+                            fieldname={`Day's range`}
+                            value={(stockData.priceInfo?.dayLow && stockData.priceInfo?.dayHigh) ? `${stockData.priceInfo.dayLow} - ${stockData.priceInfo.dayHigh}` : (stockData.priceInfo?.dayLow ?? stockData.priceInfo?.dayHigh)}
+                        />
+                        <FieldValue
+                            className="stk-info"
+                            fieldname="52 week range"
+                            value={stockData.priceInfo?.fiftyTwoWeekLow && stockData.priceInfo?.fiftytwoWeekHigh
+                                ? `${stockData.priceInfo.fiftyTwoWeekLow} - ${stockData.priceInfo.fiftytwoWeekHigh}`
+                                : (stockData.priceInfo?.fiftytwoWeekHigh)}
+                        />
+                        <FieldValue
+                            className="stk-info"
+                            fieldname="Market Cap (intraday)"
+                            value={stockData.priceInfo?.marketCap}
+                        />
                     </div>
                 </div>
 
                 <div id="heads2">Fundamentals</div>
-                <div className="fundamentals">
-                    <div className="info-left">
-                        <FieldValue className="stk-info" fieldname="ROCE (TTM)" value="8.61" />
-                        <FieldValue className="stk-info" fieldname="P/E Ratio (TTM)" value="32.9" />
-                        <FieldValue className="stk-info" fieldname="P/B Ratio" value="3.21" />
-                        <FieldValue className="stk-info" fieldname="Industry P/E" value="22.00" />
-                        <FieldValue className="stk-info" fieldname="Debt to Equity" value="5.88" />
+                <div className="stk-fundamentals">
+                    <div className="stk-info-left">
+                        <FieldValue
+                            className="stk-info"
+                            fieldname="ROCE (TTM)"
+                            value={stockData.fundamentals?.roceTTM}
+                        />
+                        <FieldValue
+                            className="stk-info"
+                            fieldname="P/E Ratio (TTM)"
+                            value={stockData.fundamentals?.peRatioTTM}
+                        />
+                        <FieldValue
+                            className="stk-info"
+                            fieldname="P/B Ratio"
+                            value={stockData.fundamentals?.pbRatio}
+                        />
+                        <FieldValue
+                            className="stk-info"
+                            fieldname="Industry P/E"
+                            value={stockData.fundamentals?.industryPE}
+                        />
+                        <FieldValue
+                            className="stk-info"
+                            fieldname="Debt to Equity"
+                            value={stockData.fundamentals?.debtToEquity}
+                        />
 
                     </div>
-                    <div className="info-right">
-                        <FieldValue className="stk-info" fieldname="ROE" value="11.62" />
-                        <FieldValue className="stk-info" fieldname="EPS (TTM)" value="9.93" />
-                        <FieldValue className="stk-info" fieldname="Dividend Yield" value="0.12" />
-                        <FieldValue className="stk-info" fieldname="Book Value" value="101.67" />
-                        <FieldValue className="stk-info" fieldname="Face Value" value="10" />
+                    <div className="stk-info-right">
+                        <FieldValue
+                            className="stk-info"
+                            fieldname="ROE"
+                            value={stockData.fundamentals?.roeTTM}
+                        />
+                        <FieldValue
+                            className="stk-info"
+                            fieldname="EPS (TTM)"
+                            value={stockData.fundamentals?.epsTTM}
+                        />
+                        <FieldValue
+                            className="stk-info"
+                            fieldname="Dividend Yield"
+                            value={stockData.fundamentals?.dividendYield}
+                        />
+                        <FieldValue
+                            className="stk-info"
+                            fieldname="Book Value"
+                            value={stockData.fundamentals?.bookValue}
+                        />
+                        <FieldValue
+                            className="stk-info"
+                            fieldname="Face Value"
+                            value={stockData.fundamentals?.faceValue ?? "--"}
+                        />
 
                     </div>
                 </div>
 
                 <div id="heads3">Financials</div>
-                <div className="financials">
-                    <div className="info-left">
-                        <div className="info-left-upper">
-                            <div className="inc-stat">Income Statement</div>
+                <div className="stk-financials">
+                    <div className="stk-info-left">
+                        <div className="stk-info-left-upper">
+                            <div className="stk-inc-stat">Income Statement</div>
 
-                            <FieldValue className="stk-info" fieldname="Revenue (TTM)" value="4.37 T" />
-                            <FieldValue className="stk-info" fieldname="Revenue Per Share (TTM)" value="1,187.16" />
-                            <FieldValue className="stk-info" fieldname="Quarterly Revenue Growth (YOY)" value="-3.40%" />
-                            <FieldValue className="stk-info" fieldname="Gross Profit (TTM)" value="1.95 T" />
-                            <FieldValue className="stk-info" fieldname="EBITDA" value="421.66 B" />
-                            <FieldValue className="stk-info" fieldname="Net Income Available to Common (TTM)" value="212.4 B" />
-                            <FieldValue className="stk-info" fieldname="Diluted EPS (TTM)" value="60.92" />
-                            <FieldValue className="stk-info" fieldname="Quarterly Earnings Growth (YOY)" value="-29.50%" />
+                            <FieldValue
+                                className="stk-info"
+                                fieldname="Revenue (TTM)"
+                                value={stockData.financials?.revenueTTM}
+                            />
+                            <FieldValue
+                                className="stk-info"
+                                fieldname="Revenue Per Share (TTM)"
+                                value={stockData.financials?.revenuePerShare}
+                            />
+                            <FieldValue
+                                className="stk-info"
+                                fieldname="Quarterly Revenue Growth (YOY)"
+                                value={stockData.financials?.earningGrowthQuater}
+                            />
+                            <FieldValue
+                                className="stk-info"
+                                fieldname="Gross Profit (TTM)"
+                                value={stockData.financials?.grossProfitTTM}
+                            />
+                            <FieldValue
+                                className="stk-info"
+                                fieldname="EBITDA"
+                                value={stockData.financials?.ebitda}
+                            />
+                            <FieldValue
+                                className="stk-info"
+                                fieldname="Net Income Available to Common (TTM)"
+                                value={stockData.financials?.netIncome}
+                            />
+                            <FieldValue
+                                className="stk-info"
+                                fieldname="Diluted EPS (TTM)"
+                                value={stockData.financials?.dilutedEPS}
+                            />
+                            <FieldValue
+                                className="stk-info"
+                                fieldname="Quarterly Earnings Growth (YOY)"
+                                value={stockData.financials?.earningGrowthQuater}
+                            />
 
                         </div>
-                        <div className="info-left-lower">
-                            <div className="prof-eff-metrics">Profitability & Efficiency Metrics</div>
+                        <div className="stk-info-left-lower">
+                            <div className="stk-prof-eff-metrics">Profitability & Efficiency Metrics</div>
 
-                            <FieldValue className="stk-info" fieldname="Profit Margin" value="4.86%" />
-                            <FieldValue className="stk-info" fieldname="Operating Margin (TTM)" value="5.67%" />
-                            <FieldValue className="stk-info" fieldname="Return on Assets (TTM)" value="--" />
-                            <FieldValue className="stk-info" fieldname="Return on Equity (TTM)" value="--" />
+                            <FieldValue
+                                className="stk-info"
+                                fieldname="Profit Margin"
+                                value={stockData.profitability.profitMargin} />
+                            <FieldValue
+                                className="stk-info"
+                                fieldname="Operating Margin (TTM)"
+                                value={stockData.profitability.operatingMargin} />
+                            <FieldValue
+                                className="stk-info"
+                                fieldname="Return on Assets (TTM)"
+                                value={stockData.profitability.returnOnAssets} />
+                            <FieldValue
+                                className="stk-info"
+                                fieldname="Return on Equity (TTM)"
+                                value={stockData.profitability.returnOnEquity} />
                         </div>
                     </div>
-                    <div className="info-right">
-                        <div className="info-right-upper">
-                            <div className="bal-sheet">Balance Sheet</div>
+                    <div className="stk-info-right">
+                        <div className="stk-info-right-upper">
+                            <div className="stk-bal-sheet">Balance Sheet</div>
 
-                            <FieldValue className="stk-info" fieldname="Total Cash (MRQ)" value="647.28 B" />
-                            <FieldValue className="stk-info" fieldname="Total Cash Per Share (MRQ)" value="183.16" />
-                            <FieldValue className="stk-info" fieldname="Total Debt (MRQ)" value="770.7 B" />
-                            <FieldValue className="stk-info" fieldname="Total Debt / Equity (MRQ)" value="61.55 %" />
-                            <FieldValue className="stk-info" fieldname="Current Ratio (MRQ)" value="--" />
-                            <FieldValue className="stk-info" fieldname="Book Value Per Share (MRQ)" value="315.49" />
+                            <FieldValue
+                                className="stk-info"
+                                fieldname="Total Cash (MRQ)"
+                                value={stockData.balenceSheet?.totalCash}
+                            />
+                            <FieldValue
+                                className="stk-info"
+                                fieldname="Total Cash Per Share (MRQ)"
+                                value={stockData.balenceSheet?.totalCashPerShare}
+                            />
+                            <FieldValue
+                                className="stk-info"
+                                fieldname="Total Debt (MRQ)"
+                                value={stockData.balenceSheet?.totalDebt}
+                            />
+                            <FieldValue
+                                className="stk-info"
+                                fieldname="Total Debt / Equity (MRQ)"
+                                value={stockData.balenceSheet?.deptToEquity}
+                            />
+                            <FieldValue
+                                className="stk-info"
+                                fieldname="Current Ratio (MRQ)"
+                                value={stockData.balenceSheet?.currentRatioMRQ}
+                            />
+                            <FieldValue
+                                className="stk-info"
+                                fieldname="Book Value Per Share (MRQ)"
+                                value={stockData.balenceSheet?.bookValuePerShare}
+                            />
                         </div>
-                        <div className="info-right-middle">
-                            <div className="cash-flow-stat">Cash Flow Statement</div>
+                        <div className="stk-info-right-middle">
+                            <div className="stk-cash-flow-stat">Cash Flow Statement</div>
 
-                            <FieldValue className="stk-info" fieldname="Operating Cash Flow (TTM)" value="--" />
-                            <FieldValue className="stk-info" fieldname="Levered Free Cash Flow (TTM)" value="--" />
+                            <FieldValue
+                                className="stk-info"
+                                fieldname="Operating Cash Flow (TTM)"
+                                value={stockData.cashFlow?.operatingCashFlow}
+                            />
+                            <FieldValue
+                                className="stk-info"
+                                fieldname="Levered Free Cash Flow (TTM)"
+                                value={stockData.cashFlow?.freeCashFlow}
+                            />
                         </div>
-                        <div className="info-right-lower">
-                            <div className="fisc-info">Fiscal Information</div>
+                        <div className="stk-info-right-lower">
+                            <div className="stk-fisc-info">Fiscal Information</div>
 
-                            <FieldValue className="stk-info" fieldname="Fiscal Year Ends" value="3/31/2025" />
-                            <FieldValue className="stk-info" fieldname="Most Recent Quarter (MRQ)" value="6/30/2025" />
+                            <FieldValue
+                                className="stk-info"
+                                fieldname="Fiscal Year Ends"
+                                value={stockData.fiscalInformation?.fiscalYearEnd}
+                            />
+                            <FieldValue
+                                className="stk-info"
+                                fieldname="Most Recent Quarter (MRQ)"
+                                value={stockData.fiscalInformation?.MRQ}
+                            />
                         </div>
                     </div>
                 </div>
 
                 <div id="heads4">News</div>
-                <div className="news">
-                    <div className="news-head">
-                        <div className="rec-news">Recent News: TATAMOTORS.NS</div>
-                        <a className="see-more">See more →</a>
+                <div className="stk-news">
+                    <div className="stk-news-head">
+                        <div className="stk-rec-news">Recent News: {symbol}</div>
+                        <a className="stk-see-more">See more →</a>
                     </div>
 
-                    <div className="news-container">
-                        <div className="market-data">
-                            {marketNewsData.map((news, index) => (
-                                <MarketNewsItem key={index} {...news} />
-                            ))}
-                        </div>
-                        <div className="market-data">
-                            {marketNewsData.map((news, index) => (
-                                <MarketNewsItem key={index} {...news} />
-                            ))}
-                        </div>
+                    <div className="stk-news-container">
+                        {newsData.length > 0 ? (
+                            <div className="stk-market-data">
+                                {newsData.map((news, index) => (
+                                    <MarketNewsItem
+                                        key={index}
+                                        headline={news.title}
+                                        time={news.providerPublishTime}
+                                        link={news.link} />
+                                ))}
+                            </div>
+
+                        ) : (
+                            <div className="stk-market-data">No news available for {symbol}.</div>
+                        )
+                        }
                     </div>
                 </div>
 
                 <div id="heads5">About Company</div>
-                <div className="about-company">
-                    <h3>TATA Motors Passenger Vehicles Limited (TATAMOTORS.NS) </h3>
-                    <div className="sub-about">
-                        <div className="sub-info">
-                            <span id="span1">86259</span>
-                            <span id="span2">Full-time employees</span>
+                <div className="stk-about-company">
+                    <h3>{stockData.Company?.longname} ({symbol}) </h3>
+                    <div className="stk-sub-about">
+                        <div className="stk-sub-info">
+                            <span id="stk-span1">{stockData.Company.fulltimeemployees}</span>
+                            <span id="stk-span2">Full-time employees</span>
                         </div>
-                        <div className="sub-info">
-                            <span id="span1">March 31</span>
-                            <span id="span2">Fiscal year ends</span>
+                        <div className="stk-sub-info">
+                            <span id="stk-span1">{stockData.fiscalInformation?.fiscalYearEnd}</span>
+                            <span id="stk-span2">Fiscal year ends</span>
                         </div>
-                        <div className="sub-info">
-                            <span id="span1">Consumer Cyclical</span>
-                            <span id="span2">Sector</span>
+                        <div className="stk-sub-info">
+                            <span id="stk-span1">{stockData.Company.sector}</span>
+                            <span id="stk-span2">Sector</span>
                         </div>
-                        <div className="sub-info">
-                            <span id="span1">Auto manufecturers</span>
-                            <span id="span2">Industry</span>
+                        <div className="stk-sub-info">
+                            <span id="stk-span1">{stockData.Company?.industry}</span>
+                            <span id="stk-span2">Industry</span>
                         </div>
                     </div>
-                    <span className="about-desc">Tata Motors Passenger Vehicles Limited designs,
-                        develops, manufactures, and sells various automotive vehicles. The company
-                        offers passenger cars; sports utility vehicles; and electric vehicles, as
-                        well as related spare parts and accessories. It also manufactures engines
-                        for industrial applications; and factory automation equipment, as well as
-                        provides information technology,...
-                    </span>
-                    <a className="company-link" href="https://www.tatamotors.com/">www.tatamotors.com</a>
+                    <span className="stk-about-desc">{stockData.Company?.longdescription}</span>
+                    <a className="stk-company-link" href={stockData.Company.website}>{stockData.Company.website}</a>
                 </div>
 
 

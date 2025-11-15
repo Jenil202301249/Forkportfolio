@@ -1,42 +1,45 @@
 import YahooFinance from "yahoo-finance2";
-import { z } from "zod";
+import { number, z } from "zod";
 import { tool } from "@langchain/core/tools";
+import { getStockSummary } from "../../db/stockSummary.js"
 const yahooFinance = new YahooFinance();
-// import { getUserPortfolio } from "../db/portfolioModel.js"; // your DB function
 
 export const Portfolio_analysis_tool = tool(
-  // function
-  async (context) => {
-    const portfolio = [ {"symbol": "RELIANCE.NS", "quantity": 120}, {"symbol": "TCS.NS", "quantity": 45}, {"symbol": "INFY.NS", "quantity": 30} ];
-    console.log("Portfolio_analysis_tool used with ", context);
+  // Portfolio analysis tool
+  async (input,context) => {
 
-
-    // ✅ Fetch portfolio automatically from DB (for current user)
-    // const userId = context?.user?.id; // you get this from auth/session middleware
-    // const portfolio = await getUserPortfolio(userId);
-
-    // if (!portfolio || portfolio.length === 0) {
-    //   throw new Error("No portfolio found for the current user.");
-    // }
-    // Convert JSON string into object
-
-    let parsedPortfolio = typeof portfolio === "string" ? JSON.parse(portfolio) : portfolio;
-    const stocks = Array.isArray(parsedPortfolio)
-      ? parsedPortfolio
-      : parsedPortfolio?.portfolio;
-
-    if (!Array.isArray(stocks)) {
-      throw new Error("Invalid portfolio format. Must be an array or { portfolio: [...] }");
+    //fetch user portfolio from db
+    const userDetails = context.configurable.userDetails || {};
+    const email_Id = userDetails.emailId || context.configurable.thread_id;
+    const name = userDetails.name || "User";
+    
+    console.log("User Details:", userDetails);
+    console.log("Email ID:", email_Id);
+    
+    const portfolio = await getStockSummary(email_Id);
+    console.log("portfolio of user with email id", email_Id, "and name", name, "is", portfolio);
+    if (!portfolio || portfolio.length === 0) {
+      console.log("No portfolio found for user with email id", email_Id);
+      throw new Error("No portfolio found for the current user.");
     }
 
-    console.log("Parsed Portfolio:", parsedPortfolio);
+    // Extract user details once (outside the loop)
+    const financialGoals = userDetails.financialGoals || "not specified";
+    const investmentHorizon = userDetails.investmentHorizon || "not specified";
 
     const result = [];
-    for (const stock of stocks) {
-      const { symbol, quantity } = stock;
-      console.log(`Fetching data for ${symbol} with quantity ${quantity}`);
+    for (const stock of portfolio) {
+      const { symbol, current_holding ,avg_price,spended_amount} = stock;
+      console.log(`Fetching data for ${symbol} with quantity ${current_holding}, avg_price: ${avg_price}, spended_amount: ${spended_amount}`);
       try {
         const quote = await yahooFinance.quote(symbol);
+        const end = new Date(); // current date
+        const start = new Date();
+        start.setFullYear(end.getFullYear() - 1); // exactly 1 year ago
+
+        
+        console.log(`Fetched annual report data for ${symbol}:`, quote);
+
         const name = quote?.shortName || quote?.longName || "Unknown Company";
         const price = quote?.regularMarketPrice ?? 0;
         const changeValue = quote?.regularMarketChange ?? 0;
@@ -47,10 +50,21 @@ export const Portfolio_analysis_tool = tool(
         const divYield = quote?.dividendYield ?? null;
         const fiftyTwoWeekHigh = quote?.fiftyTwoWeekHigh ?? null;
         const fiftyTwoWeekLow = quote?.fiftyTwoWeekLow ?? null;
+        const profitLoss = (price - avg_price) * current_holding;
+        const exchange = quote?.exchangeName || "NSE";
+        const regularMarketPreviousClose = quote?.regularMarketPreviousClose ?? price;
+        const epsTrailingTwelveMonths = quote?.epsTrailingTwelveMonths ?? null;
+        const dividendRate = quote?.dividendRate ?? null;
+        const bookValue = quote?.bookValue ?? null;
+        const priceToBook = quote?.priceToBook ?? null;
+
+        // Debug logging
+        console.log(`${symbol} - Price: ${price}, Avg Price: ${avg_price}, Quantity: ${current_holding}, P/L: ${profitLoss}`);
+        
         result.push({
           symbol,
           name,
-          quantity,
+          quantity: current_holding,
           price,
           changeValue,
           changePercent,
@@ -60,90 +74,157 @@ export const Portfolio_analysis_tool = tool(
           divYield,
           fiftyTwoWeekHigh,
           fiftyTwoWeekLow,
+          avg_price,
+          spended_amount,
+          profitLoss,
+          exchange,
+          regularMarketPreviousClose,
+          epsTrailingTwelveMonths,
+          dividendRate,
+          bookValue,
+          priceToBook
         });
       } catch (err) {
         console.error(`Error fetching data for ${symbol}:`, err.message);
         result.push({
           symbol,
           name: "Error fetching data",
-          quantity,
+          quantity: current_holding,
           price: 0,
           changeValue: 0,
           changePercent: 0,
           currency: "INR",
+          marketCap: null,
+          pe: null,
+          divYield: null,
+          fiftyTwoWeekHigh: null,
+          fiftyTwoWeekLow: null,
+          avg_price,
+          spended_amount,
+          profitLoss : 0,
+          exchange: "NSE",
+          regularMarketPreviousClose: 0,
+          epsTrailingTwelveMonths: null,
+          dividendRate: null,
+          bookValue: null,
+          priceToBook: null,
+          userName : name,
+          investmentexperience,
+          financialGoals,
+          investmentHorizon
         });
       }
     }
 
     let totalValue = 0;
-    for (const stock of result) {
+    let totalInvested = 0;
+    let totalProfitLoss = 0;
+    let totalDivYield = 0;
+    let weightedPE = 0;
+    let weightedDivYield = 0;
+    
+    for(const stock of result){
       totalValue += stock.price * stock.quantity;
+      totalInvested += stock.spended_amount || (stock.avg_price * stock.quantity);
+      totalProfitLoss += stock.profitLoss || (stock.price - stock.avg_price) * stock.quantity;
+      totalDivYield += stock.divYield || 0;
     }
 
-    const resultWithAllocation = result.map((stock) => ({
-      ...stock,
-      total: stock.price * stock.quantity,
-      allocationPercent:
-        totalValue > 0 ? ((stock.price * stock.quantity) / totalValue) * 100 : 0,
-    }));
+const resultWithAllocation = result.map((stock) => {
+  const stockValue = stock.price * stock.quantity;
+  const allocation = totalValue > 0 ? (stockValue / totalValue) * 100 : 0;
 
-    const gainers = resultWithAllocation.filter((s) => s.changePercent > 0);
-    const losers = resultWithAllocation.filter((s) => s.changePercent < 0);
-    const largestHolding = resultWithAllocation.sort(
-      (a, b) => b.allocationPercent - a.allocationPercent
-    )[0];
+  return {
+    ...stock,
+    total: stockValue,
+    allocation,
+  };
+});
 
-    const report = `# 📊 Portfolio Analysis Report (India)
----
-## 💰 Overview  
-You currently hold **${resultWithAllocation.length} stocks**  
-**Total Portfolio Value:** ₹${totalValue.toFixed(2)}
+// Now compute weighted metrics cleanly
+for (const stock of resultWithAllocation) {
+  if (stock.pe) weightedPE += (stock.pe * stock.allocation) / 100;
+  if (stock.divYield) weightedDivYield += (stock.divYield * stock.allocation) / 100;
+}
 
----
-## 🏦 Holdings Breakdown
-${resultWithAllocation
-  .map(
-    (s) => `
-### **${s.name} (${s.symbol})**
-- **Quantity:** ${s.quantity}  
-- **Price:** ₹${s.price.toFixed(2)}  
-- **Change:** ${s.changePercent.toFixed(2)}%  
-- **Market Cap:** ${s.marketCap ? `₹${(s.marketCap / 1e9).toFixed(2)}B` : "N/A"}  
-- **P/E Ratio:** ${s.pe ?? "N/A"}  
-- **Dividend Yield:** ${
-      s.divYield ? (s.divYield * 100).toFixed(2) + "%" : "N/A"
-    }  
-- **52W Range:** ₹${s.fiftyTwoWeekLow} – ₹${s.fiftyTwoWeekHigh}  
-- **Value:** ₹${(s.price * s.quantity).toFixed(2)}  
-- **Allocation:** ${s.allocationPercent.toFixed(2)}%
-`
-  )
-  .join("")}
+    // Aggregate stats
+    const gainers = resultWithAllocation.filter(s => s.changePercent  > 0);
+    const losers = resultWithAllocation.filter(s => s.changePercent < 0);
+    const largestAllocation = [...resultWithAllocation].sort((a, b) => b.allocation - a.allocation)[0];
+    const totalGainPercent = totalInvested > 0 ? (totalProfitLoss / totalInvested) * 100 : 0;
 
----
-## 📈 Performance Summary  
-- **Gainers:** ${gainers.length ? gainers.map((g) => g.symbol).join(", ") : "None"}  
-- **Losers:** ${losers.length ? losers.map((l) => l.symbol).join(", ") : "None"}
+    const portfolioReport = {
+      user : {
+        name: userDetails.name || "User",
+        investmentexperience: userDetails.investmentExperience || "not specified",
+        financialGoals: userDetails.financialGoals || "not specified",
+        investmentHorizon: userDetails.investmentHorizon || "not specified"
+      },
+      summary : {
+        totalStocks : resultWithAllocation.length,
+        totalValue : totalValue,
+        totalInvested : totalInvested,
+        totalProfitLoss : totalProfitLoss,
+        totalGainPercent : totalGainPercent,
+        weightedPE : weightedPE,
+        weightedDivYield : weightedDivYield,
+        largestHolding : {
+          symbol: largestAllocation?.symbol || "N/A",
+          name : largestAllocation?.name || "N/A",
+          allocation : Number(largestAllocation?.allocation || 0),
+          value : Number((largestAllocation?.price * largestAllocation?.quantity)) || 0,
+        },
+        },
+        holding : resultWithAllocation.map((s) => ({
+          symbol: s.symbol,
+          name: s.name,
+          quantity: s.quantity,
+          exchange: s.exchange,
+          price: s.price,
+          avg_price: s.avg_price,
+          spended_amount: s.spended_amount,
+          total: s.total,
+          profitLoss: s.profitLoss,
+          changePercent : s.changePercent,
+          allocation : (s.allocation) || 0,
+          pe: s.pe,
+          divYield: s.divYield,
+          fiftyTwoWeekHigh: s.fiftyTwoWeekHigh,
+          fiftyTwoWeekLow: s.fiftyTwoWeekLow,
+          epsTrailingTwelveMonths: s.epsTrailingTwelveMonths,
+          dividendRate: s.dividendRate,
+          bookValue: s.bookValue,
+          priceToBook: s.priceToBook,
+          marketCap: s.marketCap,
+          currency: s.currency,
+        })),
 
----
-## 💡 Insights  
-- **Largest Holding:** ${largestHolding?.symbol ?? 'N/A'} (${largestHolding?.allocationPercent?.toFixed(
-      2
-    ) ?? 'N/A'}% of portfolio)  
-- **Diversification Tip:** Try to keep no more than 40% allocation in a single stock.  
-- **Dividend Insight:** Consider high-yield stocks for stable returns.
+        performance : {
+          gainers : gainers.map((g)=>g.symbol),
+          losers : losers.map((l)=>l.symbol),
+          insights : [
+            totalGainPercent > 0 ? `Your portfolio is overall in profit with a gain of ${totalGainPercent}%.` :
+            totalGainPercent < 0 ? `Your portfolio is overall at a loss of ${totalGainPercent}%.` :
+            `Your portfolio is currently breaking even.`,
+            `Weighted P/E ratio of your portfolio is ${weightedPE}.`,
+            `Weighted Dividend Yield of your portfolio is ${weightedDivYield}%.`,
+            `Largest holding is ${largestAllocation?.symbol || "N/A"} with an allocation of ${largestAllocation ? largestAllocation.allocation : 0}%.`
+          ],
+      },
+      metaData : {
+        generateAt : new Date().toISOString(),
+        generatedBy : "Portfolio_analysis_tool v1.0",
+        dataSource : "Yahoo Finance"
+      }
 
----
-### ⚠️ Disclaimer  
-This analysis is AI-generated and for informational purposes only. Always verify data and consult a certified financial advisor.
-`;
-    return report;
+    }
+    console.log("Generated portfolio report: ", portfolioReport);
+    return JSON.stringify(portfolioReport);
   },
-  // options
   {
     name: "portfolio_analysis",
     description:
-      "Analyzes the current logged-in user's stock portfolio using live Yahoo Finance data. Provides valuation, gainers/losers, allocation, and insights.",
-    schema: z.object({}) // ✅ No input needed
+      "Analyzes the user's stock portfolio. If no input is provided, automatically uses the portfolio from the logged-in user database. Optionally accepts manual stock tickers, quantities, and prices.",
+    schema: z.object({}) 
   }
 );

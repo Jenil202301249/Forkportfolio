@@ -9,10 +9,10 @@ import cron from "node-cron";
 connectDB();
 await connectmongoDB();
 
-app.listen(process.env.PORT || 8000, async()=>{
+app.listen(process.env.PORT || 8000, '0.0.0.0',async()=>{
         console.log(`Server is running at port : ${process.env.PORT||8000}`);
         await updateAllUsers()
-        setInterval(updateAllUsers,60*60*1000)
+        setInterval(updateAllUsers,12*60*60*1000)
         let lastrun = await JobMeta.findOne({jobName:"Update yestarday"});
         const lastRunTime = lastrun?.lastRun ? new Date(lastrun.lastRun).getTime() : 0;
         if (Date.now() - lastRunTime > 24 * 60 * 60 * 1000) {

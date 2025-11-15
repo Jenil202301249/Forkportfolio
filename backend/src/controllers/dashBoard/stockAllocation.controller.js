@@ -1,26 +1,20 @@
 import { getStocksSector } from "../../db/stockSector.js";
 import { getPrice } from "../../utils/getQuotes.js";
-import { stockPriceStore } from "../../utils/stockPriceStore.js";
 
 export const getStockAllocation = async (req, res) => {
     const { email } = req.user;
     try {
         const stocksSector = await getStocksSector(email);
-        if (!stocksSector || stocksSector.length === 0) {
-            return res.status(404).json({ success: false, message: "No stocks found for the user." });
+        if (!stocksSector ) {
+            return res.status(500).json({ success: false, message: "Failed to get stock from db." });
         }
-        let priceData = stockPriceStore;
+        if(stocksSector.length === 0){
+            return res.status(200).json({ success: false, labels: [], values: []});
+        }
         let sectorAllocation = {};
         let totalPortfolioValue = 0;
         for (const stock of stocksSector) {
-            if(!priceData.get(stock.symbol)){
-                const q = await getPrice(stock.symbol);
-                if (!q) {
-                    continue;
-                }
-                priceData.add(stock.symbol,{...q,expiresAt: Date.now()+60*1000});
-            }
-            const data = priceData.get(stock.symbol);
+            const data = await getPrice(stock.symbol);
             if (!data) continue;
             const currentValue = stock.current_holding * data.current;
             totalPortfolioValue += currentValue;

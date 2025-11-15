@@ -4,3 +4,24 @@
 html{
     scroll-behavior: smooth;
 }
+/* *:not(input):not(textarea) {
+  caret-color: transparent; 
+} */
+::-webkit-scrollbar {
+    width: 7px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1a1a1a;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #00C853;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #00a844;
+}

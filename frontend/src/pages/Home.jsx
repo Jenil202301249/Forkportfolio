@@ -1,10 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Home.css";
 import home_background from "../assets/home-page-bg.jpg";
 import dashboard_background from "../assets/desh_board.png";
-import ImgDiv from "../components/ImgDiv.jsx";
-import ButtonDiv from "../components/ButtonDiv.jsx";
-import TextDiv from "../components/TextDiv.jsx";
 import Footer from "../components/Footer.jsx";
 import upArrow from "../assets/upArrow.png"
 import optimize_act from "../assets/Optimize_Act.png";
@@ -16,108 +13,191 @@ import featurelogo1 from "../assets/featuredivlogo1.png"
 import featurelogo2 from "../assets/featuredivlogo2.png"
 import featurelogo3 from "../assets/featuredivlogo3.png"
 import featurelogo4 from "../assets/featuredivlogo4.png"
-import {Link} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import Navbar from "../components/Navbar.jsx";
 import { useAppContext } from "../context/AppContext";
 
 export const Home = () => {
+
+  /*-----------------------------------State Varibles ------------------------------------------------------ */
   const [openIndex, setOpenIndex] = useState(0);
   const { darkMode, setDarkMode } = useAppContext();
   const [expandedCard, setExpandedCard] = useState(null);
+
+  /*-----------------------------------Functions ------------------------------------------------------ */
+  // Function to toggle the arrow direction and show/hide answer
   function toggleArrow(index) { 
     setOpenIndex(openIndex === index ? 0 : index)
   }
-  
   function CardClick(cardNumber) {
+    if (window.innerWidth <= 768) return; 
     setExpandedCard(cardNumber);
   }
-  
-  function SeeLess() {
-    setExpandedCard(null);
+  async function checkToken() {
+    try {
+      console.log("Checking token validity...");
+      const res = await axios.get(import.meta.env.VITE_BACKEND_LINK+"/api/v1/users/checkToken");
+      return Boolean(res?.data?.success);
+    } catch (err) {
+      console.error("Error checking token:", err);
+      return false;
+    }
   }
+  /*----------------------------------------useEffect----------------------------------------------------------*/
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    (async () => {
+      const valid = await checkToken();
+      if (valid) navigate("/dashboard");
+    })();
+  }, []);
   return (
+
       <div className="home-main">
-        <Navbar darkMode={darkMode} setDarkMode={setDarkMode} pageType="home" />
+        <Navbar darkMode={darkMode} setDarkMode={setDarkMode} pageType="/" />
 
         <div className="main_page">
 
+          {/* ---------------------------------------------------------Home-page-starting-page-------------------------------------------------------------------------- */}
           <div className="home-body">
-            <ImgDiv className="home_img" src={home_background} alt="Home Background" />
-            
-            <div className="middle_text_part">
-              <TextDiv tagName="h1" className="title" data_aos="fade-down" val={<>Go Beyond Guesswork.<br />Invest with <span style={{color : "#00C853"}}>Insight</span>.</>}/>
-              <TextDiv tagName="p" className="subtitle" data_aos="fade-up" val={<>Empower your financial decisions with our platform's <br /> advanced analytics and intelligent forecasting.</>}/>
-              <Link to="/auth" onClick={() => {sessionStorage.setItem("isLogin", "true");
-                                              sessionStorage.setItem("forgotpassword", "false");}}>
-                <ButtonDiv className="get_started_btn" data_aos="zoom-in" val="Get Started"/>
-              </Link>
+
+            {/* Home-background Image */}
+            <div className="home_img">
+              <img src={home_background} alt="Home Background" />
             </div>
 
+            {/* Home-middle Text Part */}
+            <div className="middle_text_part">
+
+              {/* Title */}
+              <div className="title"  data-aos="zoom-in">
+                <h1><>Go Beyond Guesswork.<br />Invest with <span style={{color : "#00C853"}}>Insight</span>.</></h1>
+              </div>
+              
+              {/* Subtitle */}
+              <div className="subtitle" data-aos="zoom-in">
+                <p><>Empower your financial decisions with our platform's <br /> advanced analytics and intelligent forecasting.</></p>
+              </div>
+
+              {/* Get Started Button */}
+              <Link to="/auth" onClick={() => {sessionStorage.setItem("isLogin", "true");sessionStorage.setItem("forgotpassword", "false");}}>
+                <div className="get_started_btn" data-aos="zoom-in">
+                  <button>Get Started</button>
+                </div>
+              </Link>
+            </div>
           </div>
       
 
+
+          {/* ---------------------------------------------------------Home-page-DashboardImage-section-------------------------------------------------------------------------- */}
+        
           <div className="dash_board_template" data-aos="fade-up">
-            <h1>Your entire portfolio, beautifully visualized.</h1>
+            <h1>Your entire portfolio,beautifully visualized.</h1>
             <img src={dashboard_background} alt="Dashboard Background" />
           </div>
 
+          {/* ---------------------------------------------------------Home-page-Features-section-------------------------------------------------------------------------- */}
+          
           <div className="features_div" id="feature" data-aos="fade-up">
-            <TextDiv tagName="h1" className="features_title_div" val={<>Everything You Need to Invest <br /> Smarter</>}/>
+
+            {/* feature section title Div */}
+            <div className="features_title_div">
+              <h1><>Everything You Need to Invest <br /> Smarter</></h1>
+            </div>
+
             <div className={`features_section ${expandedCard ? 'expanded' : ''}`} >
 
-           <div className={`features_card ${expandedCard === 1 ? 'expanded' : expandedCard && expandedCard !== 1 ? 'hidden' : ''}`} 
-                onClick={() =>CardClick(1)}>
-                <div className="logo-title">
-                <ImgDiv className="feature_img" src={featurelogo1} alt="logo" />
-                <TextDiv className="feature_title" tagName="h2" val="Dynamic Portfolio Tools" />
+            {/* Feature card 1 div */}
+           <div className={`features_card ${expandedCard === 1 ? 'expanded' : expandedCard && expandedCard !== 1 ? 'hidden' : ''}`} onClick={() =>CardClick(1)}>
+              {/* feature card 1 title div*/}
+              <div className="logo-title">
+                <div className="feature_img">
+                  <img src={featurelogo1} alt="logo" />
                 </div>
-                <TextDiv tagName="p" className="feature_para" val="Your portfolio isn't static, and your tools shouldn't be either. Model potential changes, analyze your diversification, and rebalance your assets with powerful, easy-to-use tools that help you stay in control."/>
+                <div className="feature_title">
+                  <h2>Dynamic Portfolio Tools</h2>
+                </div>
+              </div>
+              {/* feature card 1 text */}
+              <div className="feature_para">
+                <p>Your portfolio isn't static, and your tools shouldn't be either. Model potential changes, analyze your diversification, and rebalance your assets with powerful, easy-to-use tools that help you stay in control.</p>
+              </div>
                 {expandedCard === 1 && (
-                  <div className="see_less">
-                      <button onClick={(e) => {e.stopPropagation(); SeeLess();}}>See less</button>
-                  </div>
+              <div className="see_less">
+                      <button onClick={(e) => {e.stopPropagation(); setExpandedCard(null);}}>See less</button>
+              </div>
                 )}
             </div>
 
-              <div className={`features_card ${expandedCard === 2 ? 'expanded' : expandedCard && expandedCard !== 2 ? 'hidden' : ''}`} 
-                onClick={() =>CardClick(2)}>
-                <div className="logo-title">
-                <ImgDiv className="feature_img" src={featurelogo2} alt="logo" />
-                <TextDiv className="feature_title" tagName="h2" val="Unified Dashboard" />
+          {/* Feature card 2 div  */}
+           <div className={`features_card ${expandedCard === 2 ? 'expanded' : expandedCard && expandedCard !== 2 ? 'hidden' : ''}`} onClick={() =>CardClick(2)}>
+              {/* feature card 2 title div*/}
+              <div className="logo-title">
+                <div className="feature_img">
+                  <img src={featurelogo2} alt="logo" />
                 </div>
-                <TextDiv tagName="p" className="feature_para" val="Stop juggling spreadsheets and multiple apps. See your entire financial picture, across all assets, in one clean, real time view. Track your net worth and performance effortlessly."/>
+                <div className="feature_title">
+                  <h2>Unified Dashboard</h2>
+                </div>
+              </div>
+              {/* feature card 2 text */}
+              <div className="feature_para">
+                <p>Stop juggling spreadsheets and multiple apps. See your entire financial picture, across all assets, in one clean, real time view. Track your net worth and performance effortlessly.</p>
+              </div>
                 {expandedCard === 2 && (
                   <div className="see_less">
-                      <button onClick={(e) => {e.stopPropagation(); SeeLess();}}>See less</button>
+                      <button onClick={(e) => {e.stopPropagation(); setExpandedCard(null);}}>See less</button>
                   </div>
                 )}
               </div>
 
-              <div className={`features_card ${expandedCard === 3 ? 'expanded' : expandedCard && expandedCard !== 3 ? 'hidden' : ''}`} 
-              onClick={() =>CardClick(3)}>
-                <div className="logo-title">
-                <ImgDiv className="feature_img" src={featurelogo3} alt="log" />
-                <TextDiv className="feature_title" tagName="h2" val="Smart Watchlist" />
+
+              {/* Feature card 3 div  */}
+            <div className={`features_card ${expandedCard === 3 ? 'expanded' : expandedCard && expandedCard !== 3 ? 'hidden' : ''}`} onClick={() =>CardClick(3)}>
+              {/* Feature card 3 title*/}
+              <div className="logo-title">
+                <div className="feature_img">
+                  <img src={featurelogo3} alt="log"/>
                 </div>
-                <TextDiv tagName="p" className="feature_para" val="Keep potential investments organized and ready for analysis. Track key metrics for stocks you're interested in, all in one place, so you can act with confidence when the time is right."/>
+                <div className="feature_title">
+                  <h2>Smart Watchlist</h2>
+                </div>
+              </div>
+
+                {/* Feature card 3 text */}
+                <div className="feature_para">
+                  <p>Keep potential investments organized and ready for analysis. Track key metrics for stocks you're interested in, all in one place, so you can act with confidence when the time is right.</p>
+                </div>
                 {expandedCard === 3 && (
                   <div className="see_less">
-                      <button onClick={(e) => {e.stopPropagation(); SeeLess();}}>See less</button>
+                      <button onClick={(e) => {e.stopPropagation(); setExpandedCard(null);}}>See less</button>
                   </div>
                 )}
               </div>
 
 
-              <div className={`features_card ${expandedCard === 4 ? 'expanded' : expandedCard && expandedCard !== 4 ? 'hidden' : ''}`}
-               onClick={() =>CardClick(4)}>
-                <div className="logo-title">
-                <ImgDiv className="feature_img" src={featurelogo4} alt="logo" />
-                <TextDiv className="feature_title" tagName="h2"  val="Intelligent Insights"/>
+              {/* Feature card 4 div  */}
+            <div className={`features_card ${expandedCard === 4 ? 'expanded' : expandedCard && expandedCard !== 4 ? 'hidden' : ''}`} onClick={() =>CardClick(4)}>
+              {/* Feature card 4 Title div */}
+              <div className="logo-title">
+                <div className="feature_img">
+                  <img src={featurelogo4} alt="logo" />
                 </div>
-                <TextDiv tagName="p" className="feature_para" val='Go beyond raw data. Our AI-powered "Intellisense" analyzes your portfolio to highlight hidden risks, uncover new opportunities, and provide actionable suggestions so you can invest with confidence, not guesswork.'/>
+                <div className="feature_title">
+                  <h2>Intelligent Insights</h2>
+                </div>
+              </div>
+
+              {/* Feature card 4 text */}
+              <div className="feature_para">
+                  <p>Go beyond raw data. Our AI-powered "Intellisense" analyzes your portfolio to highlight hidden risks, uncover new opportunities, and provide actionable suggestions so you can invest with confidence, not guesswork.</p>
+              </div>
                 {expandedCard === 4 && (
                   <div className="see_less">
-                      <button onClick={(e) => {e.stopPropagation(); SeeLess();}}>See less</button>
+                      <button onClick={(e) => {e.stopPropagation(); setExpandedCard(null);}}>See less</button>
                   </div>
                 )}
               </div>
@@ -125,87 +205,158 @@ export const Home = () => {
             </div>
           </div>
 
+
+          {/* ---------------------------------------------------------Home-page-How-it-works-section-------------------------------------------------------------------------- */}
           <div id="HowItWorks" className="powerful_features" data-aos="fade-up">
-            <TextDiv tagName="h1" className="p_features_title_div" data_aos="fade-up" val={<>Unlock powerful insights in four <br/> simple steps.</>}/>
+
+            {/* How it works title Div */}
+            <div className="p_features_title_div">
+              <h1><>Unlock powerful insights in four <br/> simple steps.</></h1>
+            </div>
+
+            {/* How it works section divs */}
             <div className="powerful_features_section" data-aos="fade-up">
 
+              {/* Div 1 */}
               <div className="p_features_card_1 p_features_card">
-                <ImgDiv className="p_feature_img" src={creatACC} alt="Creat account img" />
-                <TextDiv tagName="h2" tagName2="p" className="p_feature_text_div" val="1. Create Your Account" val2="Create your secure account to access your personalized dashboard."/>
+                <div className="p_feature_img">
+                  <img src={creatACC} alt="Creat account img"/>
+                </div>
+                <div className="p_feature_text_div">
+                  <h2>1. Create Your Account</h2>
+                  <p>Create your secure account to access your personalized dashboard.</p>
+                </div>
               </div>
 
+              {/* Div 2 */}
               <div className="p_features_card_2 p_features_card">
-                <ImgDiv className="p_feature_img" src={addPortfolio} alt="add portfolio logo" />
-                <TextDiv className="p_feature_text_div" tagName="h2" tagName2="p" val="2. Add Portfolio" val2="Connect your brokerage or manually add assets to build your portfolio"/>
+                <div className="p_feature_img">
+                  <img src={addPortfolio} alt="add portfolio logo"/>
+                </div>
+                <div className="p_feature_text_div">
+                  <h2>2. Add Portfolio</h2>
+                  <p>Connect your brokerage or manually add assets to build your portfolio</p>
+                </div>
               </div>
 
+              {/* Div 3 */}
               <div className="p_features_card_3 p_features_card">
-                <ImgDiv className="p_feature_img" src={trackPerformace} alt="portfolio Tracking log" />
-                <TextDiv className="p_feature_text_div" tagName="h2" tagName2="p" val="3. Track Performance" val2="Monitor real-time performance with clear charts and key metrics."/>
+                <div className="p_feature_img">
+                  <img src={trackPerformace} alt="portfolio Tracking log"/>
+                </div>
+                <div className="p_feature_text_div">
+                  <h2>3. Track Performance</h2>
+                  <p>Monitor real-time performance with clear charts and key metrics.</p>
+                </div>
               </div>
 
+              {/* Div 4 */}
               <div className="p_features_card_4 p_features_card">
-                <ImgDiv className="p_feature_img" src={optimize_act} alt="optimize & act logo" />
-                <TextDiv className="p_feature_text_div" tagName="h2" tagName2="p" val="4. Optimize & Act" val2="Use insights to optimize your portfolioaand make informed trades."/>
+                <div className="p_feature_img">
+                  <img src={optimize_act} alt="optimize & act logo" />
+                </div>
+                <div className="p_feature_text_div">
+                  <h2>4. Optimize & Act</h2>
+                  <p>Use insights to optimize your portfolio and make informed trades.</p>
+                </div>
               </div>
-                
+  
             </div>
           </div>
 
+
+          {/* ---------------------------------------------------------Home-page-FAQs-section-------------------------------------------------------------------------- */}
           <div id="FAQs" className="FAQs_div" data-aos="fade-up" data-aos-duration="1000" data-aos-offset="100">
-            <TextDiv className="FAQ_title" tagName="h1" val="Frequently Asked Questions"/>
+
+            {/* FAQ Section Title Div */}
+            <div className="FAQ_title">
+              <h1>Frequently Asked Questions</h1>
+            </div>
+
+            {/* FAQ Questions and Answers Div */}
             <div className="question_div">
+
+              {/* Div 1 */}
               <div className="que1 que">
+                {/* Question */}
                 <div className="innerBoxOfQue">
                   <h2>Q : Is my financial data secure?</h2>
-                  <ImgDiv className="arrow_img_div" src={openIndex==1 ? upArrow : downArrow} alt=" Arrow logo" onClick={() => toggleArrow(1)}/>
+                  <div className="arrow_img_div" onClick={() => toggleArrow(1)}>
+                    <img  src={openIndex==1 ? upArrow : downArrow} alt=" Arrow logo"/>
+                  </div>
                 </div>
+                {/* Answer */}
                 <p className="answer_text" style={{display : openIndex==1 ? "block" : "none"}}>Absolutely. We use bank-level encryption and follow industry best practices to ensure your data is always protected. We will never share your personal or financial data without your explicit consent.</p>
               </div>
 
+              {/* Div 2 */}
               <div className="que2 que">
+                {/* Question */}
                 <div className="innerBoxOfQue">
                   <h2>Q : Is InsightStox a financial advisor?</h2>
-                  <ImgDiv className="arrow_img_div" src={openIndex==2 ? upArrow : downArrow} alt=" Arrow logo" onClick={() => toggleArrow(2)}/>
+                  <div className="arrow_img_div" onClick={() => toggleArrow(2)}>
+                    <img  src={openIndex==2 ? upArrow : downArrow} alt=" Arrow logo"/>
+                  </div>
                 </div>
+                {/* Answer */}
                 <p className="answer_text" style={{display : openIndex==2 ? "block" : "none"}}>InsightStox offers a powerful free plan that includes a dashboard, portfolio tracking, and a limited number of AI insights per month. For unlimited insights, advanced analytics, and priority support, you can upgrade to our Pro plan. You can find detailed information on our pricing page.</p>
               </div>
 
+              {/* Div 3 */}
               <div className="que3 que">
+                {/* Question */}
                 <div className="innerBoxOfQue">
                   <h2>Q : What is the pricing for InsightFolio?</h2>
-                  <ImgDiv className="arrow_img_div" src={openIndex==3 ? upArrow : downArrow} alt=" Arrow logo" onClick={() => toggleArrow(3)}/>
+                  <div className="arrow_img_div" onClick={() => toggleArrow(3)}>
+                    <img  src={openIndex==3 ? upArrow : downArrow} alt=" Arrow logo"/>
+                  </div>
                 </div>
+                {/* Answer */}
                 <p className="answer_text" style={{display : openIndex==3 ? "block" : "none"}}>Our AI analyzes market data from trusted sources, including real-time price feeds, historical performance, and key financial metrics. It uses this data to identify trends and patterns, generating insights based on established investment principles to help you optimize your portfolio.</p>
               </div>
 
+              {/* Div 4 */}
               <div className="que4 que">
+                {/* Question */}
                 <div className="innerBoxOfQue">
                   <h2>Q : Which brokerages can I connect?</h2>
-                  <ImgDiv className="arrow_img_div" src={openIndex==4 ? upArrow : downArrow} alt=" Arrow logo" onClick={() => toggleArrow(4)}/>
+                  <div className="arrow_img_div" onClick={() => toggleArrow(4)}>
+                    <img  src={openIndex==4 ? upArrow : downArrow} alt=" Arrow logo"/>
+                  </div>
                 </div>
+                {/* answer */}
                 <p className="answer_text" style={{display : openIndex==4 ? "block" : "none"}}>We are constantly expanding our integrations. Currently, we support connections with major brokerages like Zerodha, Groww, and Upstox, with more coming soon. You can also add your holdings manually.</p>
               </div>
 
+              {/* Div 5 */}
               <div className="que5 que">
+                {/* Question */}
                 <div className="innerBoxOfQue">
                   <h2>Q : How does the AI generate its suggestions?</h2>
-                  <ImgDiv className="arrow_img_div" src={openIndex==4 ? upArrow : downArrow} alt=" Arrow logo" onClick={() => toggleArrow(5)}/>
+                  <div className="arrow_img_div" onClick={() => toggleArrow(5)}>
+                    <img  src={openIndex==5 ? upArrow : downArrow} alt=" Arrow logo"/>
+                  </div>
                 </div>
-              <p className="answer_text" style={{display : openIndex==5 ? "block" : "none"}}>Absolutely. We use bank-level encryption and follow industry best practices to ensure your data is always protected. We will never share your personal or financial data without your explicit consent.</p>
-              </div>
-                
+                {/* answer */}
+                <p className="answer_text" style={{display : openIndex==5 ? "block" : "none"}}>The AI analyzes market data from trusted sources, including real-time price feeds, historical performance, and key financial metrics. It uses this data to identify trends and patterns, generating insights based on established investment principles to help you optimize your portfolio.</p>
+              </div>  
             </div>
           </div>
 
-
+          {/* ---------------------------------------------------------Home-page-Signup------------------------------------------------------------------------- */}
           <div className="signup_div" data-aos="fade-up">
-            <TextDiv className="_text" tagName="h1" tagName2="p" val={<>Ready to Take Control of Your <br/>Investments ?</>} val2="Sign up for free and start making smarter, data-backed decisions today."/>
-            <Link to ={`/auth`} onClick={() => {sessionStorage.setItem("isLogin", "false");
-                                              sessionStorage.setItem("forgotpassword", "false");}}>
-            <ButtonDiv className="signup_btn" val="Sign Up Now" />
+            <div className="title_signup_Title">
+              <h1><>Ready to Take Control of Your <br/>Investments ?</></h1>
+              <p>Sign up for free and start making smarter, data-backed decisions today.</p>
+            </div>
+            <Link to ={`/auth`} onClick={() => {sessionStorage.setItem("isLogin", "false"); sessionStorage.setItem("forgotpassword", "false");}}>
+            <div className="signup_btn">
+              <button>Sign Up Now</button>
+            </div>           
             </Link>
           </div>
+
+        {/* ---------------------------------------------------------Home-page-Footer------------------------------------------------------------------------- */}
         <Footer darkMode={darkMode}  
                 navigationLinks={[
                     { text: "Features", href: "#feature" },

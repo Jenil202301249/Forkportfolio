@@ -60,7 +60,7 @@ const MyHoldings = () => {
   return (
     <div>
       <div className="card holdings-card">
-        <h2>My Holdings</h2>
+        <h2 className="header-title">My Holdings</h2>
         <table>
           <thead>
             <tr>
@@ -74,7 +74,7 @@ const MyHoldings = () => {
           <tbody>
             {holdings.map((item, index) => (
               <tr key={index}>
-                <td>{item.stock}</td>
+                <td>{item.shortName}</td>
                 <td>{item.quantity}</td>
                 <td>{Number(item.avg_price).toLocaleString()}</td>
                 <td>{Number(item.current_price).toLocaleString()}</td>

@@ -1,23 +1,21 @@
 import { ChatGroq } from "@langchain/groq";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
-
 import {StateGraph,MessagesAnnotation } from "@langchain/langgraph";
 import {ToolNode } from "@langchain/langgraph/prebuilt";
 import { PromptTemplate } from "@langchain/core/prompts";
 // import { ai_stock_suggestion_tool } from "./chatBotTools/ai_stock_suggestion.js";
 import { Market_news_tool } from "./chatBotTools/market_news.js";
-// import { Risk_analysis_tool } from "./chatBotTools/risk_analysis.js";
+import { risk_analysis_tool } from "./chatBotTools/riskAnalysis.js";
 import  {Portfolio_analysis_tool}  from "./chatBotTools/portfolio_analysis.js";
 import { MemorySaver } from "@langchain/langgraph";
 
 import dotenv from "dotenv";
-import { ca } from "zod/v4/locales";
 dotenv.config();
 const checkPointer = new MemorySaver();
 
 
 //Tool list
-const tools = [Portfolio_analysis_tool,Market_news_tool];
+const tools = [Portfolio_analysis_tool,Market_news_tool,risk_analysis_tool];
 const toolNode = new ToolNode(tools);
 
 /** ---------------------------------------------------------LLM initialization------------------------------------------------------------------------------------- */
@@ -28,7 +26,7 @@ const llm = new ChatGroq({
   }).bindTools(tools);
 ///initialize smaller llm for relevance checking and greeting response
 const smallLLm = new ChatGroq({
-    model: "llama-3.3-70b-versatile",
+    model: "llama-3.1-8b-instant",
     temperature: 0, 
   });
 
@@ -44,96 +42,145 @@ const smallLLm = new ChatGroq({
 
 /** ---------------------------------------------------------Prompt to check relevance of user query------------------------------------------------------------------------------------- */
 // Prompt template for output formatting
-const promptForOutputFormatting = PromptTemplate.fromTemplate(`
+const promptForOutput = PromptTemplate.fromTemplate(`
 You are a Financial Report Formatter AI trained to convert raw financial or analytical text into a professionally formatted Markdown report ready for presentation.
 
-Follow the rules below exactly — your output must be visually clear, concise, and neatly structured for viewers.
+First, greet the user warmly by their name: "Hi {name}," or "Hello {name},"  
+Then format the following text into a well-organized financial report:  
+{text}
 
-You should generate final output  strictly in Markdown format only.
+The output format depends on the user's screen width.
 
+---
 
-🪙 Formatting Rules
+🪙 **Formatting Mode Logic**
 
-1. Section Titles
+If **screenWidth ≥ 768**, assume **desktop mode** (large screens).  
+If **screenWidth < 768**, assume **mobile mode** (small screens).
 
-Automatically detect sections (e.g., Overview, Key Metrics, Performance, Analysis, Risks, Conclusion).
+---
 
-Add appropriate emojis to each:
+### 🖥️ Desktop Mode (screenWidth ≥ 768)
+For large screens:
+- Use **Markdown tables** for numerical data.
+- Keep report sections structured, spaced, and visually rich.
+- Use emojis in section titles:
+  - 📊 **Overview / Summary**
+  - 💡 **Key Insights**
+  - 📈 **Financial Performance**
+  - 🔍 **Detailed Analysis**
+  - ⚠️ **Risks & Warnings**
+  - 🧾 **Conclusion**
 
-📊 Overview / Summary
-
-💡 Key Insights
-
-📈 Financial Performance
-
-🔍 Detailed Analysis
-
-⚠️ Risks & Warnings
-
-🧾 Conclusion
-
-Make all section titles bold and ensure blank lines before and after.
-
-2. Tables
-
-Convert any data that appears tabular or numeric into clean Markdown tables.
-
-Use headers and alignment properly:
+Example table format:
 
 | Metric | Q1 2025 | Q2 2025 | Change |
 |--------|----------|----------|---------|
 | Revenue | $2.3M | $2.8M | +21% |
 | Profit | $450K | $520K | +15% |
 
-
-Never use tabs or manual spacing.
-
-3. Text Beautification
-
-Bold important financial metrics, company names, or keywords.
-
-Use bullet points or numbered lists for multi-point data or comparisons.
-
-Add blank lines between sections for readability.
-
-Highlight trends or notable metrics using:
-
-Insight: Revenue increased by 12% compared to last quarter.
-
-4. Visual Enhancements
-
-Use --- (horizontal lines) between major sections.
-
-Keep alignment neat and consistent.
-
-Avoid raw numbers without context — e.g., use $1.2M (↑10% YoY) instead of just 1.2M.
-
-Maintain formal financial tone (no casual phrases).
-
-5. Disclaimer
-
-Always end with the following note:
+Other rules:
+- Bold key metrics, company names, and terms.
+- Use bullet lists for comparisons.
+- Use "---" between sections.
+- Maintain professional tone.
 
 ---
+
+### 📱 Mobile Mode (screenWidth < 768)
+For small screens:
+- **Do not use tables.**
+- Use vertical stacked data blocks:
+  **Metric:** Revenue  
+  **Q1 2025:** $2.3M  
+  **Q2 2025:** $2.8M  
+  **Change:** +21%
+
+For multiple metrics:
+- **Revenue:** $2.8M (↑21%)  
+- **Profit:** $520K (↑15%)  
+- **Expenses:** $1.1M (↓5%)
+
+Other rules:
+- Keep paragraphs short and spaced.
+- Bold key terms and add blank lines between sections.
+- Use concise bullet lists for readability.
+- Always add section emojis as above.
+- Keep lines short and mobile-friendly.
+
+---
+
+### ⚙️ Common Rules (Both Modes)
+
+- Detect and format sections automatically.  
+- Add blank lines between sections.  
+- Highlight trends with:
+  **Insight:** Revenue increased by 12% compared to last quarter.
+- Convert any HTML tags to Markdown.
+- Maintain formal financial tone.
+
+---
+
+### ⚠️ Disclaimer (Always include)
+---
 🧠 *This report was generated by AI and may contain inaccuracies. Please verify critical financial data before use.*
-*if any html tag is present then convert it into markdown*
 
-6. Output Rules
+---
 
-Return only formatted Markdown — no explanations, commentary, or code blocks.
-
-The output must be presentation-ready, balanced, and visually appealing.
+**Output Rules**
+- Return only formatted Markdown — no explanations or code blocks.
+- The result must be presentation-ready and visually clear.
+- Apply formatting mode based on this variable: **screenWidth = {screenWidth}**.
 `);
+
+
 
 
 // Prompt template to check if user query is finance related, greeting, or non-finance
 const promptToCheckRelevance = PromptTemplate.fromTemplate(`
-You are a helpful and knowledgeable financial assistant. 
-Your job is to classify the user's query into one of the following categories:
+ou are InsightStox, a highly accurate financial query classifier.
 
-1. If the query is a casual greeting (e.g., "hi", "hello", "how are you"), respond only with "greeting".
-2. If the query is related to finance, the stock market, portfolios, companies, or investments, respond only with "finance".
-3. If the query is unrelated to finance or greetings, respond only with "non-finance".
+Your task is to classify the user's latest message into one of the three categories below.
+Carefully consider context — especially if the message is a short command like "repeat", "continue", or "explain more".
+
+Classification Rules:
+1. greeting
+
+Use this label if the message is a casual greeting, farewell, or well-being inquiry.
+Examples:
+
+"hi", "hello", "good morning", "how are you?", "hey there", "yo", "bye"
+
+2. finance
+
+Use this label if the message:
+
+Mentions stocks, investing, portfolios, companies, markets, crypto, trading, etc.
+
+Requests financial calculations, analysis, metrics, or data
+
+Is a follow-up command referring to a previous finance-related topic
+(e.g., "continue", "give example", "calculate it", "explain more", "next step")
+
+3. non-finance
+
+Use this label if the message:
+
+Is not about finance or greetings
+
+Asks about coding, math, schoolwork, health, recipes, AI, personal opinions, etc.
+
+Is a follow-up command referring to a non-finance topic
+
+Output Format:
+
+Respond only with one of the three lowercase words:
+
+greeting
+finance
+non-finance
+
+No explanation. No extra text.
 
 User Query: {user_query}
 `);
@@ -141,7 +188,9 @@ User Query: {user_query}
 // Prompt template for greeting response
 const promptToResponsedForGreet = PromptTemplate.fromTemplate(`
 You are a friendly and engaging financial assistant. 
-When the user sends a greeting, respond with a warm welcome message that encourages them to ask finance-related questions.
+When the user with name {name} sends a greeting, respond with a warm welcome message that encourages them to ask finance-related questions.
+Message should be concise and professional.add some emojis to make it more engaging.
+
 
 User Query: {user_query}
 `);
@@ -153,9 +202,14 @@ User Query: {user_query}
 async function formatOutput(state){
   try{
     const reply  = state.messages.at(-1).content;
-    const formattedPrompt = await promptForOutputFormatting.format({ text: reply });
-    console.log("Formatting output with prompt:", formattedPrompt);
-    const res = await llm.invoke([
+    const userDetails = state.messages.at(0).additional_kwargs?.userDetails || {};
+    const userName = userDetails.name || "User";
+    const screenWidth = state.messages.at(0).additional_kwargs?.screenWidth || 800;
+    console.log("Screen width and user name retrieved:", screenWidth, userName);
+    
+    formattedPrompt = await promptForOutput.format({ text: reply ,name: userName || "User"});
+    console.log("Formatted prompt for output formatting:", formattedPrompt);
+    const res = await smallLLm.invoke([
       { role: "system", content: formattedPrompt },
     ]);
     return res;
@@ -174,7 +228,29 @@ async function formatOutput(state){
 async function callModel(state) {
   try{
     console.log("Invoking LLM with state:");
-    const reply = await llm.invoke(state.messages);
+    const screenWidth =  state.messages.at(0).additional_kwargs?.screenWidth || 800;
+    console.log("User screen width in callModel:", screenWidth);
+    let systemMessage = "";
+    if (screenWidth < 600) {
+      systemMessage = 
+      `
+      You are responding for a mobile device user.
+      ⚠️ Never use Markdown tables or multi-column formatting.
+      Use stacked key-value lines or bullet lists instead.
+      Keep the output compact and readable on small screens.
+      `;
+    } else {
+      systemMessage = `
+      You are responding for a desktop user.
+      You may use Markdown tables for clarity.
+      `;
+    }
+     const updatedMessages = [
+      { role: "system", content: systemMessage },
+      ...state.messages,
+    ]; 
+
+      const reply = await llm.invoke(updatedMessages);
     return { messages: [...state.messages, reply] };
   }catch(err){
     console.error("Error in callModel:", err);
@@ -201,8 +277,9 @@ function defaultResponse(state) {
 async function greetingResponse(state) {
   try{
   const userMessage = state.messages.at(-1).content;
-  console.log("Greeting detected:", userMessage);
-  const formattedPrompt = await promptToResponsedForGreet.format({ user_query: userMessage });
+  const userDetails = state.messages.at(0).additional_kwargs?.userDetails || {};
+  console.log("Greeting detected: ");
+  const formattedPrompt = await promptToResponsedForGreet.format({ user_query: userMessage,name: userDetails.name || "User" });
   const res = await smallLLm.invoke([
     { role: "system", content: formattedPrompt },
   ]);
@@ -222,7 +299,7 @@ async function greetingResponse(state) {
 async function isRelevant(state) {
   try{
   const userMessage = state.messages.at(-1).content;
-  console.log("Checking relevance of user message:", userMessage);
+  console.log("Checking relevance of user message:");
   const formattedPrompt = await promptToCheckRelevance.format({ user_query: userMessage });
   const res = await smallLLm.invoke([
     { role: "system", content: formattedPrompt },
@@ -256,7 +333,7 @@ async function isRelevant(state) {
 
 // function to decide if tools should be used
 function shouldUseTools(state) {
-  console.log("Inside shouldUseTools with state:", state);
+  console.log("Inside shouldUseTools with state:");
   const lastMessage = state.messages[state.messages.length - 1];
   if(lastMessage.tool_calls && lastMessage.tool_calls.length > 0){
     console.log("Deciding to call tools...",);

@@ -5,12 +5,14 @@ import './AiInsight.css'
 import Navbar from '../components/Navbar'
 import { useAppContext } from "../context/AppContext";
 const Home = () => {
-  const { darkMode, setDarkMode } = useAppContext();
+  const { darkMode, setDarkMode ,userDetails} = useAppContext();
   return (
     <div className="home">
-      <Navbar darkMode={darkMode} setDarkMode={setDarkMode} pageType="dashboard"
-        profileData={{ name: "Ayush Dhamecha", email: "ma**@gmail.com", }} />
-
+      <Navbar darkMode={darkMode} setDarkMode={setDarkMode} pageType="ai-insight"
+        profileData={{
+          name: userDetails?.name?.split(" ")[0] || "Guest",
+          email: userDetails?.email || "N/A",
+        }} />
       <BotSidebar />
       <div className="main-content">
         <ChatWindow />

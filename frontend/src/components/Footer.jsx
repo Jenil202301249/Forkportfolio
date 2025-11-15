@@ -1,7 +1,5 @@
 import React from "react";
 import github_logo from "../assets/github_logo.png";
-import TextDiv from "./TextDiv.jsx";
-import ImgDiv from "./ImgDiv.jsx";
 import "./Footer.css";
 import logofooter from "../assets/logofooter.svg";
 import logotext from "../assets/logotext.svg";
@@ -16,33 +14,45 @@ const Footer = ({ darkMode ,navigationLinks=[],legalLinks=[] }) => {
                 <img src={logofooter} alt="Website logo" />
             </div>
             <div className="textcolumn">
-              <ImgDiv className="logotext" src={logotext} alt="InsightStox text logo"/>
-              <TextDiv tagName="p" className="tagline_text" val={<>Analyze Smarter,<br/>Invest Better</>} />
+              <div className="logotext">
+                <img src={logotext} alt="InsightStox text logo" />
+              </div>
+              <div className="tagline_text">
+                <p><>Analyze Smarter,<br/>Invest Better</></p>
+              </div>
              
-              <ImgDiv className="github_logo" src={github_logo} alt="Github logo"/>
+              <div className="github_logo">
+                <img src={github_logo} alt="Github logo" />
+              </div>
           </div>
           </div>
 
           <div className="footer_second_column column_div">
-            <TextDiv tagName="h2" className="navigation_text" val="NAVIGATION" />
-            {navigationLinks.map((link, index) => (
-              <TextDiv key={index} tagName="a"className={`${link.className || "nav_link"}`} val={link.text}href={link.href}/>
+            <div className="navigation_text">
+              <h2>NAVIGATION</h2>
+            </div>
+            {navigationLinks.map((link) => (
+              <div className={`${link.className || "nav_link"}`}>
+                <a key={link.text} href={link.href}>{link.text}</a>
+              </div>
             ))}
           </div>
 
           <div className="footer_third_column column_div">
-            <TextDiv tagName="h2" className="legal_text" val="LEGAL" />
-             {legalLinks.map((link, index) => (
-              <TextDiv key={index} tagName="a"className={`${link.className || "nav_link"}`} val={link.text}href={link.href}/>
+            <div className="legal_text">
+              <h2>LEGAL</h2>
+            </div>
+             {legalLinks.map((link) => (
+              <div className={`${link.className || "nav_link"}`}>
+                <a key={link.text} href={link.href}>{link.text}</a>
+              </div>
             ))}
           </div>
         </div>
         <div className="footer_below_text_part">
-          <TextDiv 
-            tagName="p" 
-            className="rights_text"  
-            val={<>© 2025 InsightStox. All Rights Reserved. This platform is for demonstration purposes only. All financial data and <br/>AI-powered suggestions are for informational purposes and should not be considered financial advice.</>}
-          />
+          <div className="rights_text">
+            <p><>© 2025 InsightStox. All Rights Reserved. This platform is for demonstration purposes only. All financial data and <br/>AI-powered suggestions are for informational purposes and should not be considered financial advice.</></p>
+          </div>
         </div>
       </div>
     </div>

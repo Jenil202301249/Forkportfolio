@@ -6,6 +6,7 @@
   top: 0;
   left: 0;
   width: 100%;
+  min-width:350px;
   height: 80px;
   display: flex;
   justify-content: space-between;
@@ -201,15 +202,35 @@
   align-items: center;
   gap: 0.5rem;
 }
+.popupheading > img{
+  width: 42px;                   /* consistent circular size */
+  height: 42px;
+  border-radius: 50%;            /* makes image circular */
+  object-fit: cover;             /* prevents squishing/stretching */
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+}
 .menuoptions a {
   font-weight: 500;
 }
 .right_btn{
+  transition: all 0.3s ease;
   gap : 1rem;
+}
+.right_btn:active{
+  transform: scale(0.95);
 }
 .profile_btn{
   display: flex;
   align-items: center;
+}
+.profile_btn img{
+  width: 42px;                   /* consistent circular size */
+  height: 42px;
+  border-radius: 50%;            /* makes image circular */
+  object-fit: cover;             /* prevents squishing/stretching */
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
 }
 /* XXL (very large screens) */
 @media (min-width:1600px) {

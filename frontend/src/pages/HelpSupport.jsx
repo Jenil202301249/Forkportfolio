@@ -236,7 +236,7 @@ export const HelpSupport = () => {
   const [darkMode, setDarkMode] = useState(true); 
   return (
     <div className="HelpSupportLayout">
-       <Navbar darkMode={darkMode} setDarkMode={setDarkMode} pageType="myprofile"
+       <Navbar darkMode={darkMode} setDarkMode={setDarkMode} pageType="help-support"
                 profileData={{ name: "Ayush Dhamecha", email: "ma**@gmail.com" }} />
       
       <div className="HelpSupportBody">

@@ -1,23 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap');
 
-* {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-}
-
-.main-page-for-stock {
+.stk-main-page-for-stock {
     height: 100%;
     width: 100%;
     background-color: #000;
     overflow-x: hidden;
 }
 
-.empty {
+.stk-empty {
     height: 142px;
 }
 
-.stock-info-page {
+.stk-stock-info-page {
     height: 100%;
     width: 80%;
     align-items: center;
@@ -31,36 +25,36 @@
     overflow: hidden;
 }
 
-.stock-info-page * {
+.stk-stock-info-page * {
     font-family: inherit;
 }
 
-.stock-head {
+.stk-stock-head {
     display: flex;
     align-items: center;
     margin-top: 1rem;
 }
 
-.stock-icon {
+.stk-stock-icon {
     width: 100px;
     padding: 0.3rem 0.3rem;
     border-radius: 12%;
 }
 
-.buy {
-    margin-left: 5rem;
+.stk-add {
+    margin-left: 3rem;
 }
 
-.sell {
+.stk-rmv {
     margin-left: 1rem;
 }
 
-.add-watchlist {
+.stk-add-watchlist {
     white-space: nowrap;
     margin-left: auto;
 }
 
-.buy {
+.stk-add {
     font-weight: 600;
     height: 30px;
     color: #fff;
@@ -72,7 +66,7 @@
     border-radius: 6px;
 }
 
-.sell {
+.stk-rmv {
     font-weight: 600;
     height: 30px;
     color: #fff;
@@ -84,7 +78,7 @@
     border-radius: 6px;
 }
 
-.add-watchlist {
+.stk-add-watchlist {
     height: 40px;
     color: #0f0f0f;
     border: 2px solid #1e1e1e;
@@ -96,48 +90,48 @@
     border-radius: 8px;
 }
 
-.buy:hover {
+.stk-add:hover {
     color: #fff;
     background-color: transparent;
     transition: 0.3s;
 }
 
-.sell:hover {
+.stk-rmv:hover {
     color: #fff;
     background-color: transparent;
     transition: 0.3s;
 }
 
-.add-watchlist:hover {
+.stk-add-watchlist:hover {
     color: #fff;
     background-color: #1e1e1e;
     border-color: #1e1e1e;
     transition: 0.3s;
 }
 
-.stock-name {
-    margin-top: 0.5rem;
-    font-size: 1.8rem;
-    font-weight: 500;
+.stk-stock-name {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #fff
 }
 
-.stock-price {
+.stk-stock-price {
     display: flex;
     align-items: baseline;
 }
 
-.abs {
+.stk-abs {
     font-size: 1.6rem;
 }
 
-.percentage {
+.stk-percentage {
     font-size: 1.1rem;
     color: #00c853;
     font-weight: 200;
     margin-left: 0.6rem;
 }
 
-.stock-detail-navbar {
+.stk-stock-detail-navbar {
     display: flex;
     margin-top: 2rem;
     justify-content: space-between;
@@ -147,17 +141,17 @@
     border-bottom: 1.5px solid #fff;
 }
 
-.detail-button {
+.stk-detail-button {
     font-weight: 500;
     padding: 0.4rem 0.8rem;
 }
 
-.detail-button:hover {
+.stk-detail-button:hover {
     color: #999999;
     transition: 0.3s;
 }
 
-.performance {
+.stk-performance {
     display: flex;
     flex-direction: column;
     margin-top: 1.5rem;
@@ -180,7 +174,7 @@
     scroll-margin-top: 170px;
 }
 
-.performance .day-range {
+.stk-performance .stk-day-range {
     display: block;
     padding-left: 0.3rem;
     margin-top: 0.7rem;
@@ -188,7 +182,7 @@
     font-weight: 500;
 }
 
-.price-range {
+.stk-price-range {
     display: flex;
     margin-top: 0.1rem;
     padding: 0.3rem;
@@ -196,7 +190,7 @@
     align-items: center;
 }
 
-.price-range hr {
+.stk-price-range hr {
     height: 2.5px;
     border: none;
     border-radius: 3px;
@@ -204,28 +198,28 @@
     width: 72%;
 }
 
-.price-range .low-f {
+.stk-price-range .stk-low-f {
     font-size: 0.8rem;
     opacity: 0.8;
 }
 
-.price-range .high-f {
+.stk-price-range .stk-high-f {
     font-size: 0.8rem;
     opacity: 0.8;
     margin-right: 8px;
 }
 
-.price-range .low-v {
+.stk-price-range .stk-low-v {
     font-size: 0.85rem;
     margin-left: 8px;
 }
 
-.price-range .high-v {
+.stk-price-range .stk-high-v {
     font-size: 0.85rem;
 }
 
-.more-info,
-.fundamentals {
+.stk-more-info,
+.stk-fundamentals {
     display: flex;
     width: 96%;
     margin-left: 2%;
@@ -237,15 +231,15 @@
     padding: 1rem 1rem;
 }
 
-.info-left,
-.info-right {
+.stk-info-left,
+.stk-info-right {
     display: flex;
     flex-direction: column;
     width: 49%;
     height: 100%;
 }
 
-.financials {
+.stk-financials {
     display: flex;
     margin-top: 1rem;
     justify-content: space-between;
@@ -253,7 +247,7 @@
     margin-left: 2%;
 }
 
-.info-left-upper {
+.stk-info-left-upper {
     display: flex;
     flex-direction: column;
     background-color: #0e0e0e;
@@ -263,7 +257,7 @@
     height: 100%;
 }
 
-.info-left-lower {
+.stk-info-left-lower {
     display: flex;
     flex-direction: column;
     background-color: #0e0e0e;
@@ -272,8 +266,8 @@
     height: 100%;
 }
 
-.info-right-upper,
-.info-right-middle {
+.stk-info-right-upper,
+.stk-info-right-middle {
     display: flex;
     flex-direction: column;
     background-color: #0e0e0e;
@@ -283,7 +277,7 @@
     height: 100%;
 }
 
-.info-right-lower {
+.stk-info-right-lower {
     display: flex;
     flex-direction: column;
     background-color: #0e0e0e;
@@ -292,18 +286,18 @@
     height: 100%;
 }
 
-.inc-stat,
-.prof-eff-metrics,
-.bal-sheet,
-.cash-flow-stat,
-.fisc-info {
+.stk-inc-stat,
+.stk-prof-eff-metrics,
+.stk-bal-sheet,
+.stk-cash-flow-stat,
+.stk-fisc-info {
     margin-left: 1rem;
     margin-bottom: 1rem;
     font-size: 1.4rem;
     font-weight: 600;
 }
 
-.news {
+.stk-news {
     display: flex;
     flex-direction: column;
     width: 96%;
@@ -316,39 +310,39 @@
     padding: 1rem 1rem;
 }
 
-.news .news-head {
+.stk-news .stk-news-head {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.rec-news {
+.stk-rec-news {
     font-size: 1.5rem;
     font-weight: 500;
 }
 
-.see-more {
+.stk-see-more {
     font-weight: 500;
 }
 
-.see-more:hover {
+.stk-see-more:hover {
     color: #999999;
     transition: 0.3s;
 }
 
-.news-container {
+.stk-news-container {
     display: flex;
     justify-content: space-between;
     padding: 1rem 1rem;
 }
 
-.market-data {
+.stk-market-data {
     margin-top: 1rem;
     font-weight: 300;
     font-size: 1.2rem;
 }
 
-.about-company {
+.stk-about-company {
     display: flex;
     flex-direction: column;
     width: 96%;
@@ -361,42 +355,42 @@
     padding: 1rem 1.5rem;
 }
 
-.about-company h3 {
+.stk-about-company h3 {
     margin-top: 0.5rem;
     font-size: 1.7rem;
     font-weight: 500;
 }
 
-.sub-about {
+.stk-sub-about {
     display: flex;
     justify-content: space-between;
     margin-top: 1rem;
     padding: 1rem;
 }
 
-.sub-info {
+.stk-sub-info {
     display: flex;
     flex-direction: column;
 }
 
-#span1 {
+#stk-span1 {
     font-weight: 500;
     font-size: 1.1rem;
 }
 
-#span2 {
+#stk-span2 {
     font-size: 0.9rem;
     opacity: 0.8;
 }
 
-.about-company .about-desc {
+.stk-about-company .stk-about-desc {
     flex-wrap: wrap;
     flex: 1;
     padding: 1rem;
     font-size: 1.1rem;
 }
 
-.about-company .company-link {
+.stk-about-company .stk-company-link {
     margin-top: 0.5rem;
     margin-left: 1rem;
     font-size: 1.2rem;
@@ -404,7 +398,7 @@
     font-weight: 500;
 }
 
-.about-company .company-link:hover {
+.stk-about-company .stk-company-link:hover {
     transition: 0.3s;
     color: #00a645;
 }

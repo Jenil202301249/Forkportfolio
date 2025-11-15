@@ -146,7 +146,7 @@ export const MyProfile = () => {
 
     return (
         <div className="myPage">
-            <Navbar darkMode={darkMode} setDarkMode={setDarkMode} pageType="myprofile"
+            <Navbar darkMode={darkMode} setDarkMode={setDarkMode} pageType="my-profile"
                 profileData={{ name: userInfo.name, email: userInfo.email, profileImage: userInfo.profimg }} />
 
             <div className="myPage_Container">

@@ -1,33 +1,25 @@
-// import YahooFinance from "yahoo-finance2";
 import { z } from "zod";
 import { tool } from "@langchain/core/tools";
 import { JigsawStack } from "jigsawstack";
 import dotenv from "dotenv";
+import { getStockSummary } from "../../db/stockSummary.js"
 dotenv.config();
 
 
-// const yahooFinance = new YahooFinance();
 const jigsaw = JigsawStack({ apiKey: process.env.JIGSAWSTACK_API_KEY });
 
 
 export const Market_news_tool = tool(
     async (input,context) => {
-        console.log("JigsawStack API Key loaded:", !!process.env.JIGSAWSTACK_API_KEY);
-
-        console.log("Market_news_tool used with input and context:", input, context);
         const { queryType,stockSymbol,sectors,country,dateRange,keywords,includePortfolio } = input;
-
-
-        //step 1 : take stock symbols from portfolio if includePortfolio is true
+        const userDetails = context.configurable.userDetails;
+        const email_Id = userDetails.emailId;
         let allStocks = stockSymbol || [];
-
         if(includePortfolio || queryType==="portfolio" || queryType==="auto"){
             try{
-                const userId = context?.user?.id; // you get this from auth/session middleware
-                console.log("Fetching portfolio for user:", userId);
-
-                if(userId){
-                    const userPortfolio = await fetchUserPortfolioFromDB(userId); // mock fn
+                if(email_Id){
+                    const userPortfolio = await getStockSummary(email_Id); // mock fn
+                    console.log("query type is portfolio/auto, fetching user portfolio for userId:", email_Id , "with portfolio:", userPortfolio);
                     const portfolioSymbols = userPortfolio.map((s) => s.symbol);
                     allStocks = [...new Set([...allStocks, ...portfolioSymbols])]
                 }
@@ -41,64 +33,61 @@ export const Market_news_tool = tool(
         let newsResults = [];
 
         if(queryType === "stock" && allStocks.length > 0){
-            console.log("JigsawStack tool for stock news");
+            console.log("queryType is stock, for userId :",email_Id);
             for(const symbol of allStocks){
                 try{
                 const news = await jigsaw.web.search({
                     query: `Latest news on ${symbol} stock ${country || ""} ${dateRange ? `from:${dateRange.from} to:${dateRange.to}` : "" }`
                 });
                 newsResults.push({ source: "JigsawStack", symbol, news: news.ai_overview});
-                console.log("JigsawStack results for stock:", news.ai_overview);
+                // console.log("JigsawStack results for stock:", news.ai_overview);
                 }catch(err){
                     console.error(`Error fetching news for stock ${symbol}:`, err.message);
                 }
             }
-
         }
             if(queryType === "sector" && sectors && sectors.length > 0){
-                console.log("JigsawStack  tool for sector news");
+                console.log("queryType is sector, for userId :",email_Id);
                 for(const sector of sectors){
                     try{
                         const searchToolRes = await jigsaw.web.search({ 
                             query: `${sector} sector stock market news ${country || ""} ${dateRange ? `from:${dateRange.from} to:${dateRange.to}` : "" }`
                          });
                         newsResults.push({source: "JigsawStack", sector, news: searchToolRes.ai_overview}); 
-                        console.log("JigsawStack results for sector:", searchToolRes.ai_overview);
+                        // console.log("JigsawStack results for sector:", searchToolRes.ai_overview);
                     }catch(err){
                         console.log(`Error fetching news for sector ${sector}:`, err.message);
                     }
                 }
         
             }
-
          if(queryType === "market")
-            console.log("JigsawStack tool for market news");
+            console.log("queryType is market, for userId :",email_Id);
             try{
                 const marketNews = await jigsaw.web.search({
                     query: `Latest stock market news ${country || ""} ${dateRange ? `from:${dateRange.from} to:${dateRange.to}` : "" }`
                 });
                 newsResults.push({ source: "JigsawStack", news: marketNews.ai_overview});
-                console.log("JigsawStack results for market news:", marketNews.ai_overview);
+                // console.log("JigsawStack results for market news:", marketNews.ai_overview);
             }
             catch(err){
                 console.error("Error fetching market news:", err.message);
             }
 
             if(queryType === "keyword" && keywords && keywords.length > 0){
-                console.log("JigsawStack tool for keyword news");
+                console.log("queryType is keyword, for userId :",email_Id);
                 for(const keyword of keywords){
                     try{
                         const keywordNews = await jigsaw.web.search({
                             query: `Latest news on ${keyword} ${country || ""} ${dateRange ? `from:${dateRange.from} to:${dateRange.to}` : "" }`
                         });
                         newsResults.push({ source: "JigsawStack", keyword, news: keywordNews.ai_overview});
-                        console.log("JigsawStack results for keyword:", keywordNews.ai_overview);
+                        // console.log("JigsawStack results for keyword:", keywordNews.ai_overview);
                     }catch(err){
                         console.error(`Error fetching news for keyword ${keyword}:`, err.message);
                     }
                 }
             }
-
             if(newsResults.length === 0){
                 console.log("JigsawStack tool fallback for general finance news");
                 try{
@@ -106,7 +95,7 @@ export const Market_news_tool = tool(
                         query: `Top finance news ${country || ""} ${dateRange ? `from:${dateRange.from} to:${dateRange.to}` : "" }`
                     });
                     newsResults.push({ source: "JigsawStack", news: generalNews.ai_overview});
-                    console.log("JigsawStack results for general finance news:", generalNews.ai_overview);
+                    // console.log("JigsawStack results for general finance news:", generalNews.ai_overview);
                 }catch(err){
                     console.error("Error fetching general finance news:", err.message);
                 }

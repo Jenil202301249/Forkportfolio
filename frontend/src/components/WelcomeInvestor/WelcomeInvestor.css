@@ -1,20 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
 body {
-  background-color: #0c1014;
+  background-color: #000000;
   color: #e0e0e0;
   font-family: 'Inter', sans-serif;
 }
 
 .page-container {
-  max-width: 85%;
+  max-width:85%;
   margin: 0 auto;
   padding: 40px;
 }
 
 .text-positive { color: #00C853 !important;}
-.text-negative { color: #ff4d4d !important;} 
-.text-neutral { color: #ffc107 !important;}  
+.text-negative { color: #c81b00 !important;} 
+.text-neutral { color: #fBBC04 !important;}  
 
 .see-more-link {
   color: #b0b0b0;
@@ -44,7 +44,7 @@ body {
   margin: 0;
 }
 .welcome-header h1 strong {
-   color: #00C853; 
+   color: #00c853; 
 }
 .welcome-header p {
   font-size: 1rem;
@@ -108,6 +108,13 @@ body {
   align-items: center;
   padding: 12px 0;
   border-bottom: 1px solid #2a323c;
+  transition: 0.25s ease;
+  cursor: pointer;
+}
+.trending-stock-item:hover {
+  transform: translateY(-3px);
+  background: rgba(0, 255, 120, 0.08);
+  box-shadow: 0 4px 14px rgba(0, 255, 120, 0.12);
 }
 .trending-stock-item:last-of-type { border-bottom: none; }
 
@@ -135,6 +142,82 @@ body {
   margin: 4px 0 0; 
 }
 
+@media (max-width: 1200px) {
+  .dashboard-wrapper {
+    gap: 25px;
+  }
+
+  .portfolio-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Tablets */
+@media (max-width: 900px) {
+  .page-container {
+    padding: 24px;
+  }
+
+  .dashboard-wrapper {
+    flex-direction: column;
+  }
+
+  .main-content, 
+  .sidebar {
+    flex: unset;
+    width: 100%;
+  }
+
+  .portfolio-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .welcome-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .portfolio-card {
+    padding: 18px;
+  }
+
+  .card-value {
+    font-size: 1.5rem;
+  }
+
+  .trending-stocks-container {
+    padding: 18px;
+  }
+
+  .trending-stock-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .stock-details {
+    text-align: left;
+    margin-top: 6px;
+  }
+
+  .page-container {
+    max-width: 95%;
+  }
+}
+
+/* Ultra-small devices */
+@media (max-width: 400px) {
+  .welcome-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .portfolio-card,
+  .trending-stocks-container {
+    padding: 14px;
+  }
+}
 
 
 

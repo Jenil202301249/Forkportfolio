@@ -4,6 +4,6 @@ import { sendMessage } from "../controllers/aiInsight/chatbox.controller.js";
 
 const router = Router();
 
-router.route("/sendMessage").post(sendMessage);
+router.route("/sendMessage").post(verifyToken,sendMessage);
 
 export default router;
