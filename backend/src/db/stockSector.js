@@ -15,7 +15,7 @@ WHERE
     ss.email = ${email}`;
         return result;
     } catch (error) {
-        console.log('Stock sector fetch error:', error);
+        console.error('Stock sector fetch error:', error);
         return null;
     }
 };

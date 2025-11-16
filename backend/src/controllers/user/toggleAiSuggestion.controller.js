@@ -3,15 +3,15 @@ import { addActivityHistory } from "../../mongoModels/user.model.js";
 
 const toggleAiSuggestionController = async (req, res) => {
     try {
-        const result = toggleAiSuggestion(req.user.email);
+        const result = await toggleAiSuggestion(req.user.email);
         if (!result) {
             return res
-                .status(500)
-                .json({ success: false, message: "Database error" });
+                .status(503)
+                .json({ success: false, message: "Database error while toggling ai suggestion" });
         }
         if (result.length == 0) {
             return res
-                .status(400)
+                .status(410)
                 .json({ success: false, message: "User not found" });
         }
         req.user.aisuggestion = !req.user.aisuggestion;
@@ -28,10 +28,10 @@ const toggleAiSuggestionController = async (req, res) => {
 
         return res
             .status(200)
-            .json({ success: true, message: "ai suggestion toggled" });
+            .json({ success: true, message: "ai suggestion toggled,current value: " + req.user.aisuggestion });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: false, message: error.message });
+        console.error("toggle ai suggestion error", error);
+        return res.status(500).json({ success: false, message: "Failed to toggle ai suggestion, please try again" });
     }
 };
 

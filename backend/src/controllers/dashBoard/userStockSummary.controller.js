@@ -5,7 +5,7 @@ export const userStockSummary = async (req, res) => {
     try {
         const stockSummary = await getStockSummary(email);
         if (!stockSummary) {
-            return res.status(500).json({ success: false, message: "Failed to retrieve stock summary" });
+            return res.status(503).json({ success: false, message: "Failed to retrieve stock summary" });
         }
         const userStockSummary = await Promise.all(
     stockSummary.map(async ({ symbol, current_holding, avg_price }) => {
@@ -25,7 +25,7 @@ export const userStockSummary = async (req, res) => {
     }));
     return res.status(200).json({ success: true, data: userStockSummary });
     } catch (error) {
-        console.log('User stock summary error:', error);
+        console.error('User stock summary error:', error);
         return res.status(500).json({ success: false, message: "Internal server error" });
     }
 };

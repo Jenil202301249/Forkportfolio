@@ -81,7 +81,7 @@ export const getPortfolioHoldings = async (req, res) => {
       };
     });
 
-    res.json({ success: true, count: holdings.length, data: holdings });
+    res.status(200).json({ success: true, count: holdings.length, data: holdings });
   } catch (error) {
     console.error("Error fetching portfolio holdings:", error);
     res.status(500).json({

@@ -14,7 +14,7 @@ export const calculatePortfolio = async (req, res) => {
         const stockSummary = await getStockSummary(email);
         
         if (!stockSummary) {
-            return res.status(404).json({ success: false, message: "No stock summary found for the user." });
+            return res.status(503).json({ success: false, message: "Database Error in getting stock summary." });
         }
         if( stockSummary.length === 0 ){
             return res.status(200).json({
@@ -38,7 +38,7 @@ export const calculatePortfolio = async (req, res) => {
             let data = await getPrice(symbol);
             
             if(!data){
-                return res.status(500).json({success:true,message: "Failed to get stock data"});
+                return res.status(504).json({success:true,message: "Failed to get stock data"});
             }
             if (data.current === undefined || data.close === undefined) continue;
             const currentValue = current_holding * data.current;
@@ -63,7 +63,6 @@ export const calculatePortfolio = async (req, res) => {
         );
         
         
-        console.log({totalValuation, overallPL, todayPL, totalspending,totalInvestment});
         
         const todayPLPercentage = safeDivision(todayPL, totalValuation);
         const overallPLPercentage = safeDivision(overallPL, totalspending);
@@ -79,7 +78,7 @@ export const calculatePortfolio = async (req, res) => {
         });
 
     } catch (error) {
-        console.log('Portfolio calculation error:', error);
+        console.error('Portfolio calculation error:', error);
         return res.status(500).json({ success: false, message: "An error occurred while calculating the portfolio." });
     }
 };

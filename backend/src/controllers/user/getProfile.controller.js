@@ -12,8 +12,8 @@ const getProfile = async (req, res) => {
         };
         return res.status(200).json({ success: true, data: user });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: false, message: error.message });
+        console.error("get profile error",error);
+        return res.status(500).json({ success: false, message: "Failed to fetch user profile, please try again" });
     }
 };
 

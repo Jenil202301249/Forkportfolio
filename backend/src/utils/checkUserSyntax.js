@@ -20,33 +20,33 @@ export function checkUserSyntax(user) {
         email: emailSchema.shape.email,
         password: passwordSchema.shape.password
     }).safeParse(user);
-    if(!result.success){
-        return {success: false,message: result.error.flatten().fieldErrors};
-    }else{
+    if(result.success){
         return {success: true,message: 'Valid User format'};
+    }else{
+        return {success: false,message: result.error.flatten().fieldErrors};
     }
 }
 export function checkPasswordSyntax(password) {
     const result = passwordSchema.safeParse({password});
-    if(!result.success){
-        return {success: false,message: result.error.flatten().fieldErrors};
-    }else{
+    if(result.success){
         return {success: true,message: 'Valid User format'};
+    }else{
+        return {success: false,message: result.error.flatten().fieldErrors};
     }
 }
 export function checkEmailSyntax(email) {
     const result = emailSchema.safeParse({email});
-    if(!result.success){
-        return {success: false,message: result.error.flatten().fieldErrors};
-    }else{
+    if(result.success){
         return {success: true,message: 'Valid User format'};
+    }else{
+        return {success: false,message: result.error.flatten().fieldErrors};
     }
 }
 export function checkNameSyntax(name) {
     const result = nameSchema.safeParse({name});
-    if(!result.success){
-        return {success: false,message: result.error.flatten().fieldErrors};
-    }else{
+    if(result.success){
         return {success: true,message: 'Valid User format'};
+    }else{
+        return {success: false,message: result.error.flatten().fieldErrors};
     }
 }

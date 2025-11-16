@@ -3,7 +3,6 @@ const yahooFinance = new YahooFinance();
 export const getNews = async (symbol) => {
   try {
     const result = await yahooFinance.news(symbol);
-    //console.log(result);
     return result.map((news) => ({
         title: news.title,
         link: news.link,

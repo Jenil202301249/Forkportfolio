@@ -5,7 +5,7 @@ const updatePassword = async (email, hashedPassword) => {
         const result = await sql`UPDATE "user" SET password=${hashedPassword} WHERE email=${email} RETURNING id, email`;
         return result;
     } catch (error) {
-        console.log('Error updating password:', error);
+        console.error('Error updating password:', error);
         return null;
     }
 }

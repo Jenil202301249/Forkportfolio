@@ -5,7 +5,7 @@ const deleteUserByEmail = async (email) => {
         const row = await sql`Delete FROM "user" WHERE email = ${email}`;
         return row;
     } catch (error) {
-        console.log('Database error - deleteUserByEmail');
+        console.error('Database error - deleteUserByEmail');
         return null;
     }
 };

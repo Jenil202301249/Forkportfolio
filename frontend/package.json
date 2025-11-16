@@ -7,14 +7,17 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "mocha ./test/**/*.spec.mjs --timeout 30000"
   },
   "dependencies": {
     "@react-oauth/google": "^0.12.2",
     "@tailwindcss/vite": "^4.1.13",
     "aos": "^2.3.4",
     "axios": "^1.12.2",
+    "chai": "^6.2.1",
     "chart.js": "^4.5.1",
+    "chromedriver": "^142.0.2",
     "dotenv": "^17.2.3",
     "google-auth-library": "^10.4.1",
     "i": "^0.3.7",
@@ -28,7 +31,8 @@
     "react-router-dom": "^7.9.1",
     "react-spinners": "^0.17.0",
     "remark-emoji": "^5.0.2",
-    "remark-gfm": "^4.0.1"
+    "remark-gfm": "^4.0.1",
+    "selenium-webdriver": "^4.38.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.35.0",
@@ -40,7 +44,9 @@
     "eslint": "^9.35.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
+    "geckodriver": "^6.0.2",
     "globals": "^16.4.0",
+    "mocha": "^11.7.5",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.16",
     "vite": "^7.1.6"

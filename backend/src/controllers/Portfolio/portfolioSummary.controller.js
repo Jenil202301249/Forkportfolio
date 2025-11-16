@@ -8,7 +8,7 @@ export const getSummaryTable = async (req,res) => {
   try {
     const { email } = req.user;
     const userHoldings = await getStockSummary(email);
-    if(!userHoldings) return res.status(500).json({success: false,message: "Failed to fetch stock Summary"});
+    if(!userHoldings) return res.status(503).json({success: false,message: "Failed to fetch stock Summary"});
     if (userHoldings.length === 0) return res.status(200).json({success: false,summary: []});
     const results = await Promise.allSettled(
       userHoldings.map((holding) =>
@@ -23,10 +23,10 @@ export const getSummaryTable = async (req,res) => {
         if (res.status !== "fulfilled") return null;
         const currencychange = PriceStore.get(res.value.price.currency)||1;
         const price = res.value.price;
-        const lastPrice = price.regularMarketPrice/currencychange ?? 0;
-        const previousClose = price.regularMarketPreviousClose/currencychange ?? 0;
-        const change = price.regularMarketChange/currencychange ?? 0;
-        const changePercent = price.regularMarketChangePercent ?? 0;
+        const lastPrice = price.regularMarketPrice/currencychange || 0;
+        const previousClose = price.regularMarketPreviousClose/currencychange || 0;
+        const change = price.regularMarketChange/currencychange || 0;
+        const changePercent = price.regularMarketChangePercent || 0;
         const currency = price.currency ?? "INR";
         const longname = price.longName ?? null;
         const shortname= price.shortName ?? null;
@@ -78,13 +78,13 @@ export const getSummaryTable = async (req,res) => {
 
     return res.status(200).json({success: true,summary: tableData});
   } catch (error) {
-    console.log("Error generating holdings table:", error);
+    console.error("Error generating holdings table:", error);
     return res.status(500).json({success:false,meaasge: error.meaasge})
   }
 };
 
 function formatNumber(value) {
-  if (!value || isNaN(value)) return "-";
+  if (!value || Number.isNaN(value)) return "-";
   const abs = Math.abs(Number(value));
   if (abs >= 1e12) return (value / 1e12).toFixed(2) + "T";
   if (abs >= 1e9) return (value / 1e9).toFixed(2) + "B";

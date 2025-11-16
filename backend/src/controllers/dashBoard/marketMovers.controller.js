@@ -46,12 +46,12 @@ export const getMarketGainers = async (req, res) => {
         }
         const gainers = await getSymbols('day_gainers',5);
         if (!gainers) {
-            return res.status(404).json({ success: false, message: "No gainers found." });
+            return res.status(504).json({ success: false, message: "No gainers found." });
         }
         stockPriceStore.add("day_gainers",{gainers: gainers,expiresAt: Date.now()+60*1000});
         return res.status(200).json({ success: true, data: gainers });
     } catch (error) {
-        //console.log('Market gainers error:', error);
+        console.error('Market gainers error:', error);
         return res.status(500).json({ success: false, message: "An error occurred while fetching market gainers." });
     }  
 };
@@ -64,12 +64,12 @@ export const getMarketLosers = async (req, res) => {
         }
         const losers = await getSymbols('day_losers',5);
         if (!losers) {
-            return res.status(404).json({ success: false, message: "No losers found." });
+            return res.status(504).json({ success: false, message: "No losers found." });
         }
         stockPriceStore.add("day_losers",{losers:losers,expiresAt: Date.now()+60*1000});
         return res.status(200).json({ success: true, data: losers });
     } catch (error) {
-        //console.log('Market losers error:', error);
+        console.error('Market losers error: ', error);
         return res.status(500).json({ success: false, message: "An error occurred while fetching market losers." });
     }
 };
@@ -81,7 +81,7 @@ export const getMarketactiveStocks = async (req, res) => {
         }
         const activeStocks = await getSymbols('most_actives',5);
         if (!activeStocks) {
-            return res.status(404).json({ success: false, message: "No active stocks found." });
+            return res.status(504).json({ success: false, message: "No active stocks found." });
         }
         let symbols = activeStocks.map(stock => stock.symbol);
         const newsResults = await getData(symbols);
@@ -92,7 +92,7 @@ export const getMarketactiveStocks = async (req, res) => {
         stockPriceStore.add("most_actives",{activeStocks:activeStocks,news:news,expiresAt: Date.now()+60*1000});
         return res.status(200).json({ success: true, data: activeStocks,news:news });
     } catch (error) {
-        //console.log('Market active stocks error:', error);
+        console.error('Market active stocks error: ', error);
         return res.status(500).json({ success: false, message: "An error occurred while fetching market active stocks." });
     }
 };

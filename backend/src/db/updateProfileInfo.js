@@ -6,7 +6,7 @@ const updateProfileName = async (email, name) => {
             await sql`UPDATE "user" SET name=${name} WHERE email=${email} RETURNING id`;
         return result;
     } catch (error) {
-        console.log("Error updating profile name:", error);
+        console.error("Error updating profile name:", error);
         return null;
     }
 };
@@ -20,7 +20,7 @@ const updateProfileInvestmentExperience = async (
             await sql`UPDATE "user" SET investmentExperience=${investmentExperience} WHERE email=${email} RETURNING id`;
         return result;
     } catch (error) {
-        console.log("Error updating profile investment experience:", error);
+        console.error("Error updating profile investment experience:", error);
         return null;
     }
 };
@@ -31,7 +31,7 @@ const updateProfileRiskProfile = async (email, riskProfile) => {
             await sql`UPDATE "user" SET riskProfile=${riskProfile} WHERE email=${email} RETURNING id`;
         return result;
     } catch (error) {
-        console.log("Error updating profile risk profile:", error);
+        console.error("Error updating profile risk profile:", error);
         return null;
     }
 };
@@ -42,7 +42,7 @@ const updateProfileFinancialGoals = async (email, financialGoals) => {
             await sql`UPDATE "user" SET financialGoals=${financialGoals} WHERE email=${email} RETURNING id`;
         return result;
     } catch (error) {
-        console.log("Error updating profile financial goals:", error);
+        console.error("Error updating profile financial goals:", error);
         return null;
     }
 };
@@ -53,7 +53,7 @@ const updateProfileInvestmentHorizon = async (email, investmentHorizon) => {
             await sql`UPDATE "user" SET investmentHorizon=${investmentHorizon} WHERE email=${email} RETURNING id`;
         return result;
     } catch (error) {
-        console.log("Error updating profile investment horizon:", error);
+        console.error("Error updating profile investment horizon:", error);
         return null;
     }
 };

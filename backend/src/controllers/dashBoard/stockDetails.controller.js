@@ -21,7 +21,9 @@ export const stockDetails = async (req, res) => {
 
     try {
         const results = await yahooFinance.quoteSummary(ticker, { modules });
-
+        if(!results){
+            return res.status(504).json({success:false,message:"Failed to fetch data"});
+        }
         const stockData = {
             priceInfo: {
                 currentPrice: results.price.regularMarketPrice,

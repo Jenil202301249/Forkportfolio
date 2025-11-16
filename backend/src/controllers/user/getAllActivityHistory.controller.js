@@ -12,7 +12,8 @@ const getAllActivityHistoryController = async (req, res) => {
 
         return res.status(200).json({ success: true, history: history });
     } catch (error) {
-        return res.status(500).json({ success: false, message: error.message });
+        console.error("get all activity history error",error);
+        return res.status(500).json({ success: false, message: "Failed to fetch activity history, please try again" });
     }
 };
 

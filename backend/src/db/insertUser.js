@@ -5,7 +5,7 @@ const insertUser = async ({ name, email, Password, method}) => {
         const result = await sql`INSERT INTO "user" (name,email,password,registrationmethod) VALUES (${name},${email},${Password},${method})RETURNING id, email`;
         return result; 
     } catch (error) {
-        console.log('Error inserting user:', error);
+        console.error('Error inserting user:', error);
         return null;
     }
 }

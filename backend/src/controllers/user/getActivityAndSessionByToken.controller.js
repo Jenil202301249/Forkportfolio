@@ -18,8 +18,8 @@ const getActivityAndSessionByToken = async (req, res) => {
             .json({ success: true, activityHistory, securityAlerts });
 
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: false, message: error.message });
+        console.error("get activity and session error",error);
+        return res.status(500).json({ success: false, message: "failed to fetch activity and session, please try again" });
     }
 };
 

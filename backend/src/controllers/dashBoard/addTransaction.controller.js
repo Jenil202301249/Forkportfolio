@@ -1,11 +1,12 @@
 import { insertTransaction } from "../../db/insertTransaction.js";
+import { addActivityHistory } from "../../mongoModels/user.model.js";
 
 
 export const addTransaction = async (req, res) => {
     let { symbol, quantity,transaction_type } = req.body;
     const email = req.user.email;
     if (!email || !symbol || !quantity || !transaction_type) {
-        return res.status(401).json({ success: false, message: "All fields are required" });
+        return res.status(400).json({ success: false, message: "All fields are required" });
     }
     transaction_type = transaction_type.toUpperCase();
     let check_transaction_type = ['BUY','SELL'];
@@ -19,11 +20,19 @@ export const addTransaction = async (req, res) => {
         const now = new Date();
         const insertResult = await insertTransaction(email, symbol, quantity, transaction_type, now);
         if (!insertResult) {
-            return res.status(500).json({ success: false, message: "Failed to add transaction" });
+            return res.status(503).json({ success: false, message: "Failed to add transaction" });
         }
         if(insertResult.success === false){
-            return res.status(400).json({ success: false, message: insertResult.message });
+            return res.status(504).json({ success: false, message: insertResult.message });
         }
+        const newActivity = {
+            os_type: req.activeSession.osType,
+            browser_type: req.activeSession.browserType,
+            type: `${transaction_type} ${symbol} in portfolio`,
+            message: "Made a Transaction by user",
+            token: req.cookies.token,
+        };
+        await addActivityHistory(email, newActivity);
         return res.status(200).json({ success: true, message: "Transaction added successfully" });
     }
     catch (error) {

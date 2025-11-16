@@ -7,7 +7,7 @@ const checkToken = async (req, res, next) => {
         if (!token) {
             return res
                 .status(401)
-                .json({ success: false, message: "Unauthorized request" });
+                .json({ success: false, message: "token is not present" });
         }
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
@@ -15,8 +15,8 @@ const checkToken = async (req, res, next) => {
 
         if (user.length == 0) {
             return res
-                .status(401)
-                .json({ success: false, message: "invalid token" });
+                .status(409)
+                .json({ success: false, message: "user not found" });
         }
         req.user = {
             id:user[0].id,
@@ -34,8 +34,8 @@ const checkToken = async (req, res, next) => {
         }
         return res.status(200).json({success: true,message:"already logged in"})
     } catch (error) {
-        console.log('Check token error:', error);
-        return res.status(401).json({ success: false, message: error.message });
+        console.error('Check token error:', error);
+        return res.status(500).json({ success: false, message: "failed to check token, please try again" });
     }
 };
 

@@ -11,7 +11,7 @@ const activityAndSessionHistory = async (req, res) => {
         const activeSessions = await getAllActiveSessionOfUser(email);
         if (!activeSessions) {
             return res
-                .status(500)
+                .status(503)
                 .json({
                     success: false,
                     message:
@@ -60,8 +60,8 @@ const activityAndSessionHistory = async (req, res) => {
                 activityHistory,
             });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: false, message: error.message });
+        console.error("activityAndSessionHistory controller",error);
+        return res.status(500).json({ success: false, message: "failed to get activity and session history. Please try again" });
     }
 };
 

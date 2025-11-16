@@ -4,10 +4,10 @@ import bg_img from "../assets/dark-mode-login-bg.png";
 import {Link} from "react-router-dom";
 import LoginForm from "../components/LoginForm.jsx";
 import SignupForm from "../components/SignupForm.jsx";
-
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export const Auth = () => {
-
   /*-----------------------------------------------state-Variables----------------------------------------------- */
   const [isLogin, setIsLogin] = useState(() => {
     return sessionStorage.getItem("isLogin") === "false" ? false : true;
@@ -27,7 +27,33 @@ export const Auth = () => {
       return newVal;
     });
   };
+  async function checkToken() {
+    try {
+      console.log("Checking token validity...");
+      const res = await axios.get(import.meta.env.VITE_BACKEND_LINK+"/api/v1/users/checkToken");
+      return Boolean(res?.data?.success);
+    } catch (err) {
+      console.error("Error checking token:", err);
+      return false;
+    }
+  }
+  const navigate = useNavigate();
+  useEffect(() => {
+      (async () => {
+        const valid = await checkToken();
+        if (valid) navigate("/dashboard");
+      })();
 
+      // When user navigates back (browser back button / swipe-back), run the same
+      // cleanup that the Back button does (clear session flags / reset forms).
+      const handlePop = () => {
+        sessionStorage.removeItem("isLogin");
+        sessionStorage.removeItem("forgotpassword");
+        resetFormStates();
+      };
+      window.addEventListener('popstate', handlePop);
+      return () => window.removeEventListener('popstate', handlePop);
+    }, []);
   /*-----------------------------------------------JSX-Return-Statement----------------------------------------------- */
   return (
       <div className="auth_main_div px-0 py-0">

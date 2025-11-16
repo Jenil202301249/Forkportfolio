@@ -5,7 +5,7 @@ const searchUserByEmail = async (email) => {
         const row = await sql`SELECT * FROM "user" WHERE email = ${email}`;
         return row;
     } catch (error) {
-        console.log('Database error - searchUserByEmail');
+        console.error('Database error - searchUserByEmail',error);
         return null;
     }
 };

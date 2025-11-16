@@ -7,8 +7,8 @@ const getPreferencesAndPersonalisation = async (req, res) => {
         };
         return res.status(200).json({ success: true, data: data });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: false, message: error.message });
+        console.error("get preferences and personalisation error",error);
+        return res.status(500).json({ success: false, message: "failed to fetch data, please try again" });
     }
 };
 

@@ -11,7 +11,11 @@ export const starter = async(req,res)=>{
         }
         let result = [];
         for(const symbol of starterStocks){
-            result.push(await yahooFinance.quoteSummary(symbol, { modules: ["price"] }))
+            const data = await yahooFinance.quoteSummary(symbol, { modules: ["price"] });
+            if(!data){
+                return res.status(504).json({success:false,message: "Failed to fetch data from yahoo Finance"});
+            }
+            result.push(data);
         }
         result = result.map(stock=>{
             return {
@@ -28,6 +32,6 @@ export const starter = async(req,res)=>{
         return res.status(200).json({success:true,data:result});
     }catch(error){
         console.log('Starter stocks fetch error:',error);
-        return res.status(500).json({success:false,message:"Internal server error"})
+        return res.status(500).json({success:false,message:"Internal server error"});
     }
 }

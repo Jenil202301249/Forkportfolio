@@ -11,7 +11,7 @@ const verifyUserLoginStatus = async (req, res, next) => {
         //array of active sessions(object)
         const activeSessions = await getAllActiveSessionOfUser(email);
         if(!activeSessions) {
-            return res.status(500).json({ success: false, message: "Database error while getting active session count" });
+            return res.status(503).json({ success: false, message: "Database error while getting active session count" });
         }
 
         // remove expired sessions manually
@@ -30,7 +30,7 @@ const verifyUserLoginStatus = async (req, res, next) => {
         {
             if(activeSessions.length>=5)
             {
-                return res.status(401).json({ success: false, message: "You have reached your limit of 5 active sessions. Please close one of your active sessions to continue." });
+                return res.status(409).json({ success: false, message: "You have reached your limit of 5 active sessions. Please close one of your active sessions to continue." });
             }
             return next();
         }
@@ -41,7 +41,7 @@ const verifyUserLoginStatus = async (req, res, next) => {
             {
                 const updateActiveSessionTimeStatus = await updateActiveTime(token);
                 if(!updateActiveSessionTimeStatus) {
-                    return res.status(500).json({ success: false, message: "Database error while updating active session time" });
+                    return res.status(503).json({ success: false, message: "Database error while updating active session time" });
                 }
                 return res.status(200).json({ success: true, message: "User is already logged in" });
             }
@@ -49,7 +49,8 @@ const verifyUserLoginStatus = async (req, res, next) => {
         return next();
     }
     catch (error) {
-        return res.status(500).json({ success: false, message: error.message });
+        console.error(error);
+        return res.status(500).json({ success: false, message: "error while verifying user login status" });
     }
 };
 

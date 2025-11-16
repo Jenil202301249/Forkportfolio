@@ -25,7 +25,7 @@ const graphFormetData = async (req, res) => {
     // Check if rawData is an array before processing
     if (!Array.isArray(rawData)) {
         console.log("getHistoricData did not return an array:", rawData);
-        return res.status(500).json({ success: false, message: "Failed to fetch valid data." });
+        return res.status(504).json({ success: false, message: "Failed to fetch valid data." });
     }
 
     const dates = [];

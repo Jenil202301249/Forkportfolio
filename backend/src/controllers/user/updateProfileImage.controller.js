@@ -19,15 +19,15 @@ const updateProfileImageController = async (req, res) => {
 
         const profileImage = await uploadOnCloudinary(profileImageLocalPath);
 
-        if (profileImage === null || !profileImage.url)
-            return res.status(500).json({
+        if (profileImage?.secure_url === null)
+            return res.status(503).json({
                 success: false,
                 message: "Failed to upload profile image.",
             });
 
         const email = req.user.email;
 
-        const success = await updateProfileImage(email, profileImage.url);
+        const success = await updateProfileImage(email, profileImage.secure_url);
 
         if (!success || success.length === 0) {
             const deleteProfileImage = await deleteFromCloudinary(
@@ -44,8 +44,8 @@ const updateProfileImageController = async (req, res) => {
                 message: "Failed to update profile image.",
             });
         }
-
-        if (oldProfileImage !== defaultProfileImage) {
+        
+        if (oldProfileImage !== defaultProfileImage && oldProfileImage.startsWith("https://res.cloudinary.com")) {
             const parts = oldProfileImage.split("/");
             const filename = parts[parts.length - 1];
             const publicId = filename.split(".")[0];
@@ -72,10 +72,10 @@ const updateProfileImageController = async (req, res) => {
             message: "Profile image updated successfully.",
         });
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return res.status(500).json({
             success: false,
-            message: error.message,
+            message: "Failed to update profile image. Please try again later.",
         });
     }
 };

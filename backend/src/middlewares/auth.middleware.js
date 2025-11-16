@@ -17,7 +17,7 @@ const verifyToken = async (req, res, next) => {
 
         if (!activeSession) {
             return res
-                .status(500)
+                .status(503)
                 .json({
                     success: false,
                     message: "Database error while verifying token",
@@ -27,7 +27,7 @@ const verifyToken = async (req, res, next) => {
         if (activeSession.length == 0) {
             return res
                 .clearCookie("token")
-                .status(400)
+                .status(401)
                 .json({ success: false, message: "unauthorized request" });
         }
 
@@ -37,7 +37,7 @@ const verifyToken = async (req, res, next) => {
 
         if (!user) {
             return res
-                .status(500)
+                .status(503)
                 .json({
                     success: false,
                     message: "Database error while verifying token",
@@ -47,7 +47,7 @@ const verifyToken = async (req, res, next) => {
         if (user.length == 0) {
             return res
                 .clearCookie("token")
-                .status(400)
+                .status(410)
                 .json({ success: false, message: "invalid token" });
         }
 
@@ -80,7 +80,8 @@ const verifyToken = async (req, res, next) => {
                 .status(401)
                 .json({ success: false, message: "Token expired" });
         }
-        return res.status(401).json({ success: false, message: error.message });
+        console.error("auth middleware error:",error);
+        return res.status(401).json({ success: false, message: "error verifying token" });
     }
 };
 

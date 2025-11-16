@@ -6,7 +6,7 @@ const getAllActiveSessionOfUser = async (email) => {
             await sql`SELECT token,browser_type,os_type,last_active_time FROM "active_session" WHERE email = ${email}`;
         return result;
     } catch (error) {
-        console.log("Database Error - getAllActiveSessionOfUser");
+        console.error("Database Error - getAllActiveSessionOfUser",error);
         return null;
     }
 };
@@ -17,7 +17,7 @@ const getActiveSessionByToken = async (token) => {
             await sql`SELECT email,browser_type,os_type,last_active_time FROM "active_session" WHERE token = ${token}`;
         return result;
     } catch (error) {
-        console.log("Database Error - getActiveSessionByToken");
+        console.error("Database Error - getActiveSessionByToken",error);
         return null;
     }
 };

@@ -2,9 +2,8 @@ const createOtpStore = () => {
     const pendingRegistrations = {};
     const cleanupExpiredRegistrations = () => {
         const now = Date.now();
-        // console.log('Running cleanup for expired registrations...');
         for (const email in pendingRegistrations) {
-            if (pendingRegistrations[email].expiresAt+2*60*1000 < now) {
+            if (pendingRegistrations[email].expiresAt+2*60*1000 < now||pendingRegistrations[email].attempt<=0) {
                 delete pendingRegistrations[email];
                 console.log(`Cleaned up expired registration for: ${email}`);
             }

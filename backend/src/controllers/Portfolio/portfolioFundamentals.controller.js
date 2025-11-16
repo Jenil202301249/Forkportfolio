@@ -35,7 +35,7 @@ export const getPortfolioFundamentals = async (req, res) => {
     const data = results.map((res, i) => {
       const symbol = symbols[i];
       if (res.status !== "fulfilled") {
-        console.warn(`⚠️ Failed to fetch ${symbol}`, res.reason?.message);
+        console.warn(`Failed to fetch ${symbol}`, res.reason?.message);
         return {
           symbol,
           error: "Data not available"
@@ -67,7 +67,7 @@ export const getPortfolioFundamentals = async (req, res) => {
       };
     });
 
-    res.json({ success: true, count: data.length, data });
+    res.status(200).json({ success: true, count: data.length, data });
   } catch (error) {
     console.error("Error fetching portfolio financial details:", error);
     res.status(500).json({

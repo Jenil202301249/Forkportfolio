@@ -15,13 +15,13 @@ export const getPrice = async (symbols) => {
             const currencychange = PriceStore.get(result.price.currency) || 1;
             const price = {
                 symbol: result.price.symbol ?? null,
-                current: (result.price.regularMarketPrice/currencychange) ?? 0,
+                current: (result.price.regularMarketPrice/currencychange) || 0,
                 currency: result.price.currency ?? null,
-                close: (result.price.regularMarketPreviousClose/currencychange) ?? 0,
+                close: (result.price.regularMarketPreviousClose/currencychange) || 0,
                 percentageChange:result.price.regularMarketChangePercent ?? 0,
                 shortname: result.price.shortName ?? null,
                 longname: result.price.longName ?? null,
-                change: (result.price.regularMarketChange/currencychange)?? 0,
+                change: (result.price.regularMarketChange/currencychange)|| 0,
                 marketstate: result.price.marketState?? "unknown",
                 marketcap: result.price.marketCap?? 0,
                 sector: result.assetProfile?.sector ?? null,

@@ -5,7 +5,7 @@ const logoutUser = async(req, res) => {
         const deleteActiveSessionStatus = await deleteActiveSessionByToken(req.cookies.token);
 
         if (!deleteActiveSessionStatus) {
-            return res.status(500).json({ success: false, message: "Database error while logging out user" });
+            return res.status(503).json({ success: false, message: "Database error while logging out user" });
         }
 
         return res
@@ -13,8 +13,8 @@ const logoutUser = async(req, res) => {
             .status(200)
             .json({ success: true, message: "User logged out successfully" });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: false, message: error.message });
+        console.error("logout user error",error);
+        return res.status(500).json({ success: false, message: "Failed to log out user, please try again" });
     }
 };
 
@@ -24,7 +24,7 @@ const logoutUserSession = async(req, res) => {
         const deleteActiveSessionStatus = await deleteActiveSessionByToken(token);
 
         if (!deleteActiveSessionStatus) {
-            return res.status(500).json({ success: false, message: "Database error while logging out user" });
+            return res.status(503).json({ success: false, message: "Database error while logging out user" });
         }
 
         return res
@@ -32,8 +32,8 @@ const logoutUserSession = async(req, res) => {
             .json({ success: true, message: "session logged out successfully" });
 
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: false, message: error.message });
+        console.error("logout user session error",error);
+        return res.status(500).json({ success: false, message: "Failed to log out user session, please try again" });
     }
 };
 
@@ -42,7 +42,7 @@ const logoutAllUserSessions = async(req, res) => {
         const deleteAllSessionStatus = await deleteActiveSessionByEmail(req.user.email);
 
         if (!deleteAllSessionStatus) {
-            return res.status(500).json({ success: false, message: "Database error while logging out user" });
+            return res.status(503).json({ success: false, message: "Database error while logging out user" });
         }
 
         return res
@@ -51,8 +51,8 @@ const logoutAllUserSessions = async(req, res) => {
             .json({ success: true, message: "all session logged out successfully" });
 
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: false, message: error.message });
+        console.error("logout all user sessions error",error);
+        return res.status(500).json({ success: false, message: "Failed to log out all user sessions, please try again" });
     }
 };
 

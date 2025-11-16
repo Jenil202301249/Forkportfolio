@@ -11,6 +11,14 @@ const sendUserQuery = async (req, res) => {
                 success: false,
                 message: "query required",
             });
+
+        if(query.length>1000){
+            return res.status(422).json({
+                success: false,
+                message: "query should be less than 1000 characters",
+            });
+        }
+
         await UserQuery.create({ email, query });
 
         const newActivity = {
@@ -38,10 +46,10 @@ const sendUserQuery = async (req, res) => {
                 success: false,
                 message: "You have already submitted this query before.",
             });
-        console.log(error);
+        console.error("send user query error",error);
         return res
             .status(500)
-            .json({ success: false, message: "Internal server error" });
+            .json({ success: false, message: "failed to send query, please try again" });
     }
 };
 

@@ -26,30 +26,18 @@ const createExcel = async (req, res) => {
             },
         ];
 
-        if (!userData) {
-            return res
-                .status(500)
-                .json({ success: false, message: "Internal server error" });
-        }
-
-        if (userData.length === 0) {
-            return res
-                .status(400)
-                .json({ success: false, message: "unauthorized request" });
-        }
-
         const userStockSummary = await getPortfolioStockSummary(email);
         if (!userStockSummary) {
             return res
-                .status(500)
-                .json({ success: false, message: "Database error" });
+                .status(503)
+                .json({ success: false, message: "Database error while getting stock summary" });
         }
 
         const userTransactions = await getPortfolioTransactions(email);
         if (!userTransactions) {
             return res
-                .status(500)
-                .json({ success: false, message: "Database error" });
+                .status(503)
+                .json({ success: false, message: "Database error while getting transactions" });
         }
 
         const length = 8;
@@ -163,10 +151,11 @@ const createExcel = async (req, res) => {
             message: "Excel file sent to your email successfully",
         });
     } catch (error) {
+        console.error("downloadPortfolioData error",error);
         if (fs.existsSync(filePath)) {
             fs.unlinkSync(filePath);
         }
-        return res.status(500).json({ success: false, message: error.message });
+        return res.status(500).json({ success: false, message: "failed to download portfolio data, please try again" });
     }
 };
 

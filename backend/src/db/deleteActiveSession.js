@@ -5,7 +5,7 @@ const deleteActiveSessionByToken = async (token) => {
         const row = await sql`Delete FROM "active_session" WHERE token = ${token}`;
         return row;
     } catch (error) {
-        console.log('Database error - deleteAcriveSessionByToken');
+        console.error('Database error - deleteAcriveSessionByToken',error);
         return null;
     }
 };
@@ -15,7 +15,7 @@ const deleteActiveSessionByEmail = async (email) => {
         const row = await sql`Delete FROM "active_session" WHERE email = ${email}`;
         return row;
     } catch (error) {
-        console.log('Database error - deleteAcriveSessionByEmail');
+        console.error('Database error - deleteAcriveSessionByEmail',error);
         return null;
     }
 };

@@ -12,7 +12,8 @@ const getAllSecurityAlertsController = async (req, res) => {
 
         return res.status(200).json({ success: true, alerts: alerts });
     } catch (error) {
-        return res.status(500).json({ success: false, message: error.message });
+        console.error("get all security alerts error",error);
+        return res.status(500).json({ success: false, message: "Failed to fetch security alerts, please try again" });
     }
 };
 

@@ -6,7 +6,7 @@ export const getStockAllocation = async (req, res) => {
     try {
         const stocksSector = await getStocksSector(email);
         if (!stocksSector ) {
-            return res.status(500).json({ success: false, message: "Failed to get stock from db." });
+            return res.status(503).json({ success: false, message: "Failed to get stock from db." });
         }
         if(stocksSector.length === 0){
             return res.status(200).json({ success: false, labels: [], values: []});

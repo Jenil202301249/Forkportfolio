@@ -29,7 +29,7 @@ export const addSymbol = async (email, symbol) => {
         }
         return true;
     } catch (error) {
-        console.log('Add to watchlist DB error:', error);
+        console.error('Add to watchlist DB error:', error);
         return false;
     }
 };
@@ -41,7 +41,7 @@ export const removeSymbol = async (email, symbol) => {
         }
         return true;
     } catch (error) {
-        console.log('Remove from watchlist DB error:', error);
+        console.error('Remove from watchlist DB error:', error);
         return false;
     }
 };
@@ -53,7 +53,7 @@ export const getWatchlist = async (email) => {
         }
         return result;
     } catch (error) {
-        console.log('get watchlist DB error:', error);
+        console.error('get watchlist DB error:', error);
         return null;
     }
 }
@@ -65,7 +65,7 @@ export const checkpresent = async (email, symbol) => {
         }
         return result.length;
     } catch (error) {
-        console.log('get watchlist DB error:', error);
+        console.error('get watchlist DB error:', error);
         return null;
     }
 }

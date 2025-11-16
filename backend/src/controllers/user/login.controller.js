@@ -2,8 +2,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { UAParser } from "ua-parser-js";
 import { searchUserByEmail } from "../../db/findUser.js";
-import { checkEmailSyntax } from "../../utils/checkUserSyntax.js";
-import { checkPasswordSyntax } from "../../utils/checkUserSyntax.js";
+import { checkEmailSyntax,checkPasswordSyntax } from "../../utils/checkUserSyntax.js";
 import { insertActiveSession } from "../../db/insertActiveSession.js";
 import { addSecurityAlert } from "../../mongoModels/user.model.js";
 
@@ -24,18 +23,19 @@ const loginUser = async (req, res) => {
             });
         }
 
-        if (!checkEmailSyntax(email)) {
-            return res.status(400).json({
+        const emailValidity = checkEmailSyntax(email);
+        if (!emailValidity.success) {
+            return res.status(422).json({
                 success: false,
-                message: "Please provide a valid email address",
+                message: emailValidity.message,
             });
         }
 
-        if (!checkPasswordSyntax(password)) {
-            return res.status(400).json({
+        const passwordValidity = checkPasswordSyntax(password);
+        if (!passwordValidity.success) {
+            return res.status(422).json({
                 success: false,
-                message:
-                    "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one special character and one number",
+                message: passwordValidity.message,
             });
         }
 
@@ -43,14 +43,18 @@ const loginUser = async (req, res) => {
 
         if (!user) {
             return res
-                .status(500)
-                .json({ success: false, message: "Database error" });
+                .status(503)
+                .json({ success: false, message: "Database error occured while getting user info" });
         }
 
         if (user.length == 0) {
             return res
-                .status(400)
+                .status(410)
                 .json({ success: false, message: "User is not registered" });
+        }
+
+        if(user[0].registrationmethod === "google") {
+            return res.status(401).json({ success: false, message: "Please login using google" });
         }
 
         const isMatch = await bcrypt.compare(password, user[0].password);
@@ -69,11 +73,11 @@ const loginUser = async (req, res) => {
             }
         );
 
-        let browser = browserDetails?.name + " " + browserDetails?.version;
-        if (!browser || browser === "undefined undefined") browser = "Unknown";
+        let browser = browserDetails?.name;
+        if (!browser || browser === "undefined") browser = "Unknown";
 
-        let os = osDetails?.name + " " + osDetails?.version;
-        if (!os || os === "undefined undefined") os = "Unknown";
+        let os = osDetails?.name;
+        if (!os || os === "undefined") os = "Unknown";
 
         const addActiveSessionStatus = await insertActiveSession({
             token: token,
@@ -84,7 +88,17 @@ const loginUser = async (req, res) => {
 
         if (!addActiveSessionStatus) {
             return res
-                .status(500)
+                .status(503)
+                .json({
+                    success: false,
+                    message:
+                        "Database error while storing current session details",
+                });
+        }
+
+        if (addActiveSessionStatus === 0) {
+            return res
+                .status(410)
                 .json({
                     success: false,
                     message:
@@ -112,8 +126,8 @@ const loginUser = async (req, res) => {
             })
             .json({ success: true, message: "User logged in successfully" });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: false, message: error.message });
+        console.error("login user error",error);
+        return res.status(500).json({ success: false, message: "failed to login, please try again" });
     }
 };
 

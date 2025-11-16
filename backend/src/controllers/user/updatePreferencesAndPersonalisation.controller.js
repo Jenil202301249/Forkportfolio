@@ -1,5 +1,4 @@
-import { updateTheme } from "../../db/updatePreferencesAndPersonalisation.js";
-import { updateDashboardLayout } from "../../db/updatePreferencesAndPersonalisation.js";
+import { updateTheme,updateDashboardLayout } from "../../db/updatePreferencesAndPersonalisation.js";
 
 const updateThemeController = async (req, res) => {
     try {
@@ -16,16 +15,22 @@ const updateThemeController = async (req, res) => {
         if (theme === prevTheme) {
             return res
                 .status(200)
-                .json({ success: false, message: "Nothing to update" });
+                .json({ success: true, message: "Nothing to update" });
         }
 
         const result = await updateTheme(email, theme);
 
-        if (!result || result.length === 0) {
-            return res.status(500).json({
+        if (!result) {
+            return res.status(503).json({
                 success: false,
                 message: "Database error while updating theme",
             });
+        }
+
+        if (result.length === 0) {
+            return res
+                .status(410)
+                .json({ success: false, message: "User not found" });
         }
 
         req.user.theme = theme;
@@ -34,8 +39,8 @@ const updateThemeController = async (req, res) => {
             .status(200)
             .json({ success: true, message: "Theme updated successfully" });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: false, message: error.message });
+        console.error(error);
+        return res.status(500).json({ success: false, message: "failed to update theme, please try again" });
     }
 };
 
@@ -55,16 +60,22 @@ const updateDashboardLayoutController = async (req, res) => {
         if (dashboardlayout === prevDashboardLayout) {
             return res
                 .status(200)
-                .json({ success: false, message: "Nothing to update" });
+                .json({ success: true, message: "Nothing to update" });
         }
 
         const result = await updateDashboardLayout(email, dashboardlayout);
 
-        if (!result || result.length === 0) {
-            return res.status(500).json({
+        if (!result) {
+            return res.status(503).json({
                 success: false,
                 message: "Database error while updating dashboard layout",
             });
+        }
+
+        if (result.length === 0) {
+            return res
+                .status(410)
+                .json({ success: false, message: "User not found" });
         }
 
         req.user.dashboardlayout = dashboardlayout;
@@ -74,8 +85,8 @@ const updateDashboardLayoutController = async (req, res) => {
             message: "Dashboard layout updated successfully",
         });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: false, message: error.message });
+        console.error(error);
+        return res.status(500).json({ success: false, message: "failed to update dashboard layout, please try again" });
     }
 };
 

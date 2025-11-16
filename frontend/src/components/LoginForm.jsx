@@ -187,7 +187,7 @@ const handleResetPassword = async () => {
   //useEffect for enabling/disabling submit button
 useEffect(() => {
     if(isForgotPassword){
-      setAreAllFieldsValid(email.trim() !== "");
+      setAreAllFieldsValid(email.trim() !== "" && (emailError === ""));
     }else{
         const isValid = email.trim() !== "" && password.trim() !== "" && emailError === "";
         setAreAllFieldsValid(isValid);

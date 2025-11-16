@@ -1,0 +1,35 @@
+{
+    "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+
+    "inPlace": true,
+
+    "testRunner": "jest",
+
+    "mutate": [
+        "src/**/*.js",
+        "!src/controllers/dashBoard/dashBoard.controller.js",
+        "!src/controllers/Portfolio/portfolio.controller.js",
+        "!src/controllers/user/user.controller.js",
+        "!src/routes/**"
+    ],
+    "mutator": {
+        "excludedMutations": ["StringLiteral"]
+    },
+
+    "reporters": ["html", "clear-text", "progress"],
+
+    "disableTypeChecks": true,
+
+    "jest": {
+        "enableFindRelatedTests": false,
+        "config": {
+            "testEnvironment": "node",
+
+            "transform": {
+                "^.+\\.js$": "babel-jest"
+            },
+
+            "testMatch": ["**/test/src/**/*.test.js"]
+        }
+    }
+}

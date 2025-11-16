@@ -11,8 +11,9 @@ const downloadActivityHistoryReport = async (req, res) => {
     const name = req.user.name;
 
     const history = await getAllActivityHistory(email);
-    if (!history || history.length === 0) {
-      return res.status(404).json({ success: false, message: "No activity found" });
+    
+    if (!history) {
+      return res.status(503).json({ success: false, message: "Database error occurred while getting activity history" });
     }
 
     const filteredData = history.map((item) => ({
@@ -108,11 +109,11 @@ const downloadActivityHistoryReport = async (req, res) => {
     });
 
     doc.end();
-  } catch (err) {
-    console.error("Error generating or sending PDF:", err);
+  } catch (error) {
+    console.error("Error generating or sending PDF:", error);
     res.status(500).json({
       success: false,
-      message: "Error generating or emailing activity report",
+      message: "failed to generate or send PDF, please try again",
     });
   }
 };

@@ -1,9 +1,10 @@
 import { checkNameSyntax } from "../../utils/checkUserSyntax.js";
-import { updateProfileName } from "../../db/updateProfileInfo.js";
-import { updateProfileInvestmentExperience } from "../../db/updateProfileInfo.js";
-import { updateProfileRiskProfile } from "../../db/updateProfileInfo.js";
-import { updateProfileFinancialGoals } from "../../db/updateProfileInfo.js";
-import { updateProfileInvestmentHorizon } from "../../db/updateProfileInfo.js";
+import { 
+    updateProfileName,
+    updateProfileInvestmentExperience,
+    updateProfileRiskProfile,
+    updateProfileFinancialGoals,
+    updateProfileInvestmentHorizon } from "../../db/updateProfileInfo.js";
 import { addActivityHistory } from "../../mongoModels/user.model.js";
 
 const updateProfileNameController = async (req, res) => {
@@ -18,9 +19,10 @@ const updateProfileNameController = async (req, res) => {
         }
 
         const isValidName = checkNameSyntax(name);
+
         if (!isValidName.success) {
             return res
-                .status(400)
+                .status(422)
                 .json({ success: false, message: result.message });
         }
 
@@ -30,12 +32,19 @@ const updateProfileNameController = async (req, res) => {
         if (name === prevName) {
             return res
                 .status(200)
-                .json({ success: false, message: "Nothing to update." });
+                .json({ success: true, message: "Nothing to update." });
         }
 
         const nameUpdateStatus = await updateProfileName(email, name);
 
-        if (!nameUpdateStatus || nameUpdateStatus.length === 0) {
+        if (!nameUpdateStatus ) {
+            return res.status(503).json({
+                success: false,
+                message: "Database error occurred while updating profile name.",
+            });
+        }
+
+        if (nameUpdateStatus.length === 0) {
             return res.status(400).json({
                 success: false,
                 message: "Error updating profile name.",
@@ -59,8 +68,8 @@ const updateProfileNameController = async (req, res) => {
             message: "Profile name updated successfully.",
         });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: false, message: error.message });
+        console.error(error);
+        return res.status(500).json({ success: false, message: "failed to update profile name, please try again" });
     }
 };
 
@@ -79,7 +88,7 @@ const updateProfileInvestmentExperienceController = async (req, res) => {
         if (investmentExperience === prevInvestmentExperience) {
             return res
                 .status(200)
-                .json({ success: false, message: "Nothing to update." });
+                .json({ success: true, message: "Nothing to update." });
         }
 
         const investmentExperienceUpdateStatus =
@@ -88,11 +97,15 @@ const updateProfileInvestmentExperienceController = async (req, res) => {
                 investmentExperience
             );
 
-        if (
-            !investmentExperienceUpdateStatus ||
-            investmentExperienceUpdateStatus.length === 0
-        ) {
-            return res.status(400).json({
+        if (!investmentExperienceUpdateStatus) {
+            return res.status(503).json({
+                success: false,
+                message: "Error updating profile investment experience.",
+            });
+        }
+
+        if (investmentExperienceUpdateStatus.length === 0) {
+            return res.status(410).json({
                 success: false,
                 message: "Error updating profile investment experience.",
             });
@@ -115,8 +128,8 @@ const updateProfileInvestmentExperienceController = async (req, res) => {
             message: "Profile investment experience updated successfully.",
         });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: false, message: error.message });
+        console.error(error);
+        return res.status(500).json({ success: false, message: "failed to update profile investment experience, please try again" });
     }
 };
 
@@ -135,7 +148,7 @@ const updateProfileRiskProfileController = async (req, res) => {
         if (prevRiskProfile === riskProfile) {
             return res
                 .status(200)
-                .json({ success: false, message: "Nothing to update." });
+                .json({ success: true, message: "Nothing to update." });
         }
 
         const financialGoalsUpdateStatus = await updateProfileRiskProfile(
@@ -143,11 +156,15 @@ const updateProfileRiskProfileController = async (req, res) => {
             riskProfile
         );
 
-        if (
-            !financialGoalsUpdateStatus ||
-            financialGoalsUpdateStatus.length === 0
-        ) {
-            return res.status(400).json({
+        if (!financialGoalsUpdateStatus) {
+            return res.status(503).json({
+                success: false,
+                message: "Database error occurred while updating risk profile.",
+            });
+        }
+
+        if (financialGoalsUpdateStatus.length === 0) {
+            return res.status(410).json({
                 success: false,
                 message: "Error updating risk profile.",
             });
@@ -170,8 +187,8 @@ const updateProfileRiskProfileController = async (req, res) => {
             message: "risk profile updated successfully.",
         });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: false, message: error.message });
+        console.error(error);
+        return res.status(500).json({ success: false, message: "failed to update risk profile, please try again" });
     }
 };
 
@@ -190,7 +207,7 @@ const updateProfileFinancialGoalsController = async (req, res) => {
         if (prevFinancialGoals === financialGoals) {
             return res
                 .status(200)
-                .json({ success: false, message: "Nothing to update." });
+                .json({ success: true, message: "Nothing to update." });
         }
 
         const financialGoalsUpdateStatus = await updateProfileFinancialGoals(
@@ -198,11 +215,15 @@ const updateProfileFinancialGoalsController = async (req, res) => {
             financialGoals
         );
 
-        if (
-            !financialGoalsUpdateStatus ||
-            financialGoalsUpdateStatus.length === 0
-        ) {
-            return res.status(400).json({
+        if (!financialGoalsUpdateStatus) {
+            return res.status(503).json({
+                success: false,
+                message: "Database error occurred while updating financial goals.",
+            });
+        }
+
+        if (financialGoalsUpdateStatus.length === 0) {
+            return res.status(410).json({
                 success: false,
                 message: "Error updating financial goals.",
             });
@@ -225,8 +246,8 @@ const updateProfileFinancialGoalsController = async (req, res) => {
             message: "financial goals updated successfully.",
         });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: false, message: error.message });
+        console.error(error);
+        return res.status(500).json({ success: false, message: "failed to update financial goals, please try again" });
     }
 };
 
@@ -245,17 +266,21 @@ const updateProfileInvestmentHorizonController = async (req, res) => {
         if (prevInvestmentHorizon === investmentHorizon) {
             return res
                 .status(200)
-                .json({ success: false, message: "Nothing to update." });
+                .json({ success: true, message: "Nothing to update." });
         }
 
         const investmentHorizonUpdateStatus =
             await updateProfileInvestmentHorizon(email, investmentHorizon);
 
-        if (
-            !investmentHorizonUpdateStatus ||
-            investmentHorizonUpdateStatus.length === 0
-        ) {
-            return res.status(400).json({
+        if (!investmentHorizonUpdateStatus) {
+            return res.status(503).json({
+                success: false,
+                message: "Database error occurred while updating investment horizon.",
+            });
+        }
+
+        if (investmentHorizonUpdateStatus.length === 0) {
+            return res.status(410).json({
                 success: false,
                 message: "Error updating investment horizon.",
             });
@@ -278,8 +303,8 @@ const updateProfileInvestmentHorizonController = async (req, res) => {
             message: "investment horizon updated successfully.",
         });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: false, message: error.message });
+        console.error(error);
+        return res.status(500).json({ success: false, message: "failed to update investment horizon, please try again" });
     }
 };
 

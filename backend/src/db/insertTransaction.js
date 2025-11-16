@@ -5,7 +5,7 @@ import YahooFinance from 'yahoo-finance2';
 const yahooFinance = new YahooFinance();
     export const insertTransaction = async (email, symbol, quantity, transaction_type, time) => {
         try {
-            let price = undefined
+            let price
             const holding_check = await sql`SELECT spended_amount,current_holding FROM "stock_summary" WHERE email=${email} AND symbol=${symbol}`;
             if(holding_check.length===0){
                 holding_check[0]={current_holding:0,spended_amount:0};
@@ -24,7 +24,6 @@ const yahooFinance = new YahooFinance();
                     const quoteSummary = await yahooFinance.quoteSummary(symbol, { modules: ['assetProfile', 'price'] });
                     //console.log(quoteSummary)
                     if(!quoteSummary.price){
-                        //console.log('No data found for symbol:', symbol);   
                         return {success:false,message:"Unable to fetch stock details."};
                     }
                     const {
@@ -73,7 +72,7 @@ const yahooFinance = new YahooFinance();
             const [insert,update] = await sql.transaction(queries);
             return {success:true,insert, update};
         } catch (error) {
-            console.log('Error inserting transaction:', error);
+            console.error('Error inserting transaction:', error);
             return null;
         }
     };

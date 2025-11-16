@@ -12,6 +12,12 @@ const sendUserSuggestion = async (req, res) => {
                 message: "suggestion required",
             });
 
+        if (suggestion.length > 1000)
+            return res.status(422).json({
+                success: false,
+                message: "suggestion should be less than 1000 characters",
+            });
+
         await UserSuggestion.create({ email, suggestion });
 
         const newActivity = {
@@ -39,10 +45,10 @@ const sendUserSuggestion = async (req, res) => {
                 success: false,
                 message: "You have already submitted this suggestion before.",
             });
-        console.log(error);
+        console.error("send user suggestion error", error);
         return res
             .status(500)
-            .json({ success: false, message: "Internal server error" });
+            .json({ success: false, message: "failed to send suggestion, please try again" });
     }
 };
 
