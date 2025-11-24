@@ -1,6 +1,6 @@
 import { addSymbol, checkpresent, getWatchlist, removeSymbol } from "../../db/watchlist.js";
 import { getPrice } from "../../utils/getQuotes.js";
-
+import { addActivityHistory } from "../../mongoModels/user.model.js";
 export const showWatchlist = async (req, res) => {
     const { email } = req.user;
     try {
@@ -14,7 +14,7 @@ export const showWatchlist = async (req, res) => {
         }
         for (const symbol of watchlist) {
             const data = await getPrice(symbol.symbol);
-            if (!data) return res.status(503).json({ success: false, message: "Failed to fetch stock prices." });
+            if (!data) return res.status(504).json({ success: false, message: "Failed to fetch stock prices." });
             watchlistData.push({
                 symbol: symbol.symbol,
                 currentPrice: data.current,
@@ -46,11 +46,11 @@ export const addToWatchlist = async (req, res) => {
             return res.status(503).json({ success: false, message: "Failed to add symbol to watchlist." });
         }
         const newActivity = {
-            os_type: req.activeSession.osType,
-            browser_type: req.activeSession.browserType,
+            os_type: req?.activeSession?.osType,
+            browser_type: req?.activeSession?.browserType,
             type: `add ${symbol} in Watchlist`,
             message: "Adding stock to Watchlist",
-            token: req.cookies.token,
+            token: req?.cookies?.token,
         };
         await addActivityHistory(email, newActivity);
         return res.status(200).json({ success: true, message: "Symbol added to watchlist." });
@@ -67,7 +67,7 @@ export const removeFromWatchlist = async (req, res) => {
             return res.status(400).json({ success: false, message: "Stock symbol is required." });
         }
         const available = await checkpresent(email,symbol);
-        if(available===undefined){
+        if(available==undefined){
             return res.status(503).json({success:false,message: "Database Error"});
         }
         if(available<=0){

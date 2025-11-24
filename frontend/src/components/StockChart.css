@@ -1,0 +1,255 @@
+.stockchart-container {
+  width: 96%;
+  margin-left: 2%;
+  height: 490px;
+  background: transparent;
+  border-radius: 12px;
+  padding: 1.2rem;
+  color: #fff;
+}
+
+.stockchart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.stockchart-header h2 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-left: -2%;
+  color: #00c853;
+}
+
+.stockchart-ranges {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.range-btn {
+  padding: 0.35rem 0.9rem;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  background: #1b1b1b;
+  color: #c4c4c4;
+  border: 1px solid #333;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.range-btn.active {
+  background: #00c853;
+  color: #000;
+  border-color: #00c853;
+}
+
+.range-btn:hover {
+  background: #00a845;
+  color: #000;
+}
+
+.stockchart-graph {
+  height: 400px;
+  margin-top: 0.5rem;
+}
+
+.error {
+  color: #c81b00;
+  font-size: 1rem;
+}
+
+@media (max-width: 1280px) {
+  .stockchart-container {
+    width: 96%;
+    margin-left: 2%;
+    height: 420px;
+    border-radius: 12px;
+    padding: 1.2rem;
+  }
+
+  .stockchart-header {
+    margin-bottom: 3rem;
+  }
+
+  .stockchart-header h2 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-left: -2%;
+  }
+
+  .stockchart-ranges {
+    gap: 0.6rem;
+  }
+
+  .range-btn {
+    padding: 0.35rem 0.9rem;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    height: 2rem;
+  }
+
+  .stockchart-graph {
+    height: 330px;
+    margin-top: 0.5rem;
+  }
+
+  .error {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .stockchart-container {
+    width: 96%;
+    margin-left: 2%;
+    height: 400px;
+    border-radius: 12px;
+    padding: 1.2rem;
+  }
+
+  .stockchart-header {
+    margin-bottom: 3rem;
+  }
+
+  .stockchart-header h2 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-left: -2%;
+  }
+
+  .stockchart-ranges {
+    gap: 0.6rem;
+  }
+
+  .range-btn {
+    padding: 0rem 0.8rem;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    height: 1.6rem;
+  }
+
+  .stockchart-graph {
+    height: 320px;
+    margin-top: 0.5rem;
+  }
+
+  .error {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .stockchart-container {
+    width: 98%;
+    height: 360px;
+    margin-left: 1%;
+    border-radius: 12px;
+    padding: 1.2rem;
+  }
+
+  .stockchart-header {
+    margin-bottom: 2rem;
+  }
+
+  .stockchart-header h2 {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-left: -2%;
+  }
+
+  .stockchart-ranges {
+    gap: 0.6rem;
+  }
+
+  .range-btn {
+    padding: 0rem 0.8rem;
+    font-size: 0.65rem;
+    border-radius: 4px;
+    height: 1.4rem;
+  }
+
+  .stockchart-graph {
+    height: 300px;
+    margin-top: 0.5rem;
+  }
+
+  .error {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .stockchart-container {
+    width: 100%;
+    height: 320px;
+    margin-left: 1%;
+  }
+
+  .stockchart-header h2 {
+    font-size: 1.1rem;
+  }
+
+  .stockchart-ranges {
+    gap: 0.6rem;
+  }
+
+  .range-btn {
+    padding: 0rem 0.8rem;
+    font-size: 0.55rem;
+    border-radius: 4px;
+    height: 1.4rem;
+  }
+
+  .stockchart-graph {
+    margin-left: -3%;
+    height: 270px;
+    margin-top: 0.5rem;
+  }
+
+  .error {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .stockchart-container {
+    width: 100%;
+    height: 270px;
+    margin-left: 1%;
+    border-radius: 12px;
+    padding: 1.2rem;
+  }
+
+  .stockchart-header {
+    margin-bottom: 2rem;
+  }
+
+  .stockchart-header h2 {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-left: -5%;
+  }
+
+  .stockchart-ranges {
+    gap: 0.6rem;
+  }
+
+  .range-btn {
+    padding: 0rem 0.5rem;
+    font-size: 0.5rem;
+    border-radius: 4px;
+    height: 1.4rem;
+  }
+
+  .stockchart-graph {
+    margin-left: -7%;
+    margin-right: -5%;
+    height: 220px;
+    margin-top: 0.5rem;
+  }
+
+  .error {
+    font-size: 0.65rem;
+  }
+}

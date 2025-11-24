@@ -1,4 +1,4 @@
-import { getProfile } from "../../../../src/controllers/user/profile.controller.js";
+import { getProfile } from "../../../../src/controllers/user/getProfile.controller.js";
 
 describe("getProfile", () => {
     let req, res;

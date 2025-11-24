@@ -16,7 +16,7 @@ const createPriceStore = async () => {
         const now = Date.now();
         if (cache['INR'].expiresAt < now) {
             delete cache['INR'];
-            console.log(`Cleaned up stock data for: INR`);
+            console.log(`Cleaned up price exchange for: INR`);
             const rates = await fetchRates();
             cache['INR'] = {...rates,expiresAt:Date.now()+60*60*1000};
         }

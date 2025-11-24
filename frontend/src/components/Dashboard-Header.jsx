@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Dashboard-Header.css';
 import growthicon from '../assets/growthicon.svg';
-import historyicon from '../assets/historyicon.svg';
 import { useAppContext } from "../context/AppContext.jsx";
 
 //Enable cookies for all axios requests (important for auth sessions)
@@ -13,7 +12,7 @@ axios.defaults.withCredentials = true;
 const BACKEND_URL = import.meta.env.VITE_BACKEND_LINK;
 const STOCK_API = `${BACKEND_URL}/api/v1/dashboard/starter`;
 
-const DashboardHeader = () => {
+const DashboardHeader = ({ isWatchlistPage = false, onAddToWatchlist = null }) => {
   const [stocks, setStocks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -21,7 +20,7 @@ const DashboardHeader = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [typingTimeout, setTypingTimeout] = useState(null);
   const navigate = useNavigate();
-  const { isSearchActive, setIsSearchActive } = useAppContext();
+  const { isSearchActive, setIsSearchActive, headerStocks, setHeaderStocks, headerStocksTimestamp, setHeaderStocksTimestamp } = useAppContext();
 
   const handleFocus = () => setIsSearchActive(true);
   const handleClose = () => {setIsSearchActive(false); setQuery(''); setSearchResults([]);}
@@ -35,8 +34,12 @@ const DashboardHeader = () => {
       const res = await axios.get(STOCK_API);
 
       if (res.data?.data && Array.isArray(res.data.data)) {
-        setStocks(res.data.data.slice(0, 3)); //show top 3 stocks
-        console.log(res.data.data.slice(0, 3))
+        const stockData = res.data.data.slice(0, 3); //show top 3 stocks
+        setStocks(stockData);
+        // Cache in context
+        setHeaderStocks(stockData);
+        setHeaderStocksTimestamp(Date.now());
+        console.log(stockData);
       } else {
         setError('Invalid data format from server.');
       }
@@ -90,9 +93,31 @@ const DashboardHeader = () => {
       setQuery('');
       setSearchResults([]);
     };
+    
+    const handleAddStock = async (e, symbol) => {
+      
+      e.stopPropagation();
+      if (onAddToWatchlist) {
+        await onAddToWatchlist(symbol);
+        setIsSearchActive(false);
+        setSearchResults([]);
+       setQuery('');
+      }
+    };
 
   useEffect(() => {
-    fetchStockData();
+    // Check if we have cached data that's less than 5 minutes old
+    const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
+    const now = Date.now();
+    
+    if (headerStocks && headerStocksTimestamp && (now - headerStocksTimestamp) < CACHE_DURATION) {
+      // Use cached data
+      setStocks(headerStocks);
+      setLoading(false);
+    } else {
+      // Fetch fresh data
+      fetchStockData();
+    }
     // Optionally auto-refresh every minute:
     // const interval = setInterval(fetchStockData, 60000);
     // return () => clearInterval(interval);
@@ -111,14 +136,6 @@ const DashboardHeader = () => {
     return () => window.removeEventListener('keydown', onEsc);
   }, []);
 
-  // Loading state
-  if (loading)
-    return (
-      <div className="dashboard-header loading">
-        <p>Loading market data...</p>
-      </div>
-    );
-
   // Error state
   if (error)
     return (
@@ -133,13 +150,53 @@ const DashboardHeader = () => {
 
       <div className="dashboard-header">
         {/*  Dynamic stock data display */}
+        
         <div className="d-stock-display-container">
+          {loading ? (
+            // ⭐ show skeletons while loading
+            <div className="d-stock-display-container">
+              {Array.from({ length: 3 }).map((_, idx) => (
+                <React.Fragment key={idx}>
+                  <div className="d-stock-info">
+                    <div className="d-stock-header">
+                      <span className="d-stock-name">
+                        <div className="skeleton skeleton-text medium"></div>
+                      </span>
+
+                      <span className="d-stock-exchange">
+                        <div className="skeleton skeleton-text very-short"></div>
+                      </span>
+                    </div>
+
+                    <div className="d-stock-details">
+                      <span className="d-stock-price">
+                        <div className="skeleton skeleton-text short"></div>
+                      </span>
+
+                      <span className="d-stock-change">
+                        <div className="skeleton skeleton-text short"></div>
+                      </span>
+                    </div>
+                  </div>
+
+                  {idx < 2 && <span className="divider">|</span>}
+                </React.Fragment>
+              ))}
+            </div>
+
+          ) : (<>
+
           {stocks.length > 0 ? (
             stocks.map((stock, index) => {
               const isNegative = Number(stock.change) < 0;
+              const stockSymbol = stock.Symbol || stock.symbol;
               return (
-                <React.Fragment key={stock.Symbol || index}>
-                  <div className="d-stock-info">
+                <React.Fragment key={stockSymbol || index}>
+                  <div 
+                    className="d-stock-info"
+                    onClick={() => stockSymbol && handleStockClick(stockSymbol)}
+                    style={{ cursor: stockSymbol ? 'pointer' : 'default' }}
+                  >
                     <div className="d-stock-header">
                       <span className="d-stock-name">
                         {stock.name ? stock.name : 'N/A'}
@@ -175,6 +232,8 @@ const DashboardHeader = () => {
           ) : (
             <p className="no-stocks">No active stock data available</p>
           )}
+          </>
+        )}
         </div>
 
         {/* Search Bar */}
@@ -221,6 +280,15 @@ const DashboardHeader = () => {
                     <div className="result-meta">
                       <span className="result-name">{item.longname || item.shortname}</span>
                     </div>
+                    {isWatchlistPage && onAddToWatchlist && (
+                      <button
+                        className="add-to-watchlist-btn"
+                        onClick={(e) => handleAddStock(e, item.symbol)}
+                        aria-label={`Add ${item.symbol} to watchlist`}
+                      >
+                        <i className="pi pi-plus"></i>
+                      </button>
+                    )}
                   </li>
                 ))}
               </ul>

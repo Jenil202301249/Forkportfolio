@@ -11,7 +11,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 3rem;
+  padding: 0 72px;
   z-index: 999;
   background-color: black;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
@@ -33,24 +33,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
+  gap: 20px;
   /* padding: 0; */
 }
-.center_btn
-{
- gap: 2.5rem;
+.center_btn {
+  width: 784px;
+  gap: 20px;
 }
 
 .navbar_btn {
   background: none;
-  border: 1px solid currentColor;
+  border: 2px solid #ffffff;
   color: inherit;
-  font-size: 1rem;
+  font-size: 0.95rem;
   cursor: pointer;
   font-family: 'Montserrat', Arial, sans-serif;
   font-weight: 500;
-  border-radius: 20px;
-  padding: 8px 24px;
+  border-radius: 60px;
+  padding: 8px 20px;
   transition: all 0.3s ease;
 }
 
@@ -58,14 +58,21 @@
   background-color: black ;
     font-weight: 500; 
     color: #00C853 ;
-    border: 1px solid #00C853 ;
+    border: 2px solid #00C853 ;
+}
+
+.navbar_btn.active {
+  background-color: #00C853;
+  color: black;
+  border: 1px solid #00C853;
+  font-weight: 500;
 }
 
 .login_btn{
   background-color: #00C853;
   color: black;
   border-radius: 10px;
-  padding: 10px 20px;
+  padding: 10px 24px;
   border: 1px solid black;
     font-weight: 600;
     transition: all 0.3s ease;
@@ -73,6 +80,7 @@
 }
 .login_btn button{
   cursor: pointer;
+  font-size: 1rem;
 }
 .login_btn:hover {
   background-color: white;
@@ -110,13 +118,13 @@
    background-color: rgba(0, 0, 0, 0.911);
   backdrop-filter: blur(5px);
   color: white;
-  min-width: 390px;
+  min-width: 350px;
   /* height: fit-content; */
   border-radius: 16px;
   z-index: 10000;
   padding: 0 16px 16px 16px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(0, 200, 83, 0.4);
+  border: 2px solid #00C853;
   animation: slideDown 0.3s ease;
   transform-origin: top right;
 }
@@ -129,12 +137,12 @@
 }
 
 .name-email h3 {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 500;
 }
 
 .name-email span {
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: #F5F5F5;
   font-weight: 300;
 }
@@ -152,7 +160,7 @@
   /* border-bottom:1px solid rgba(255, 255, 255, 0.383); */
   /* border-radius: 3px; */
   transition: all 0.25s linear;
-  font-size: 1rem;
+  font-size: 0.95rem;
 }
 
 .popupoptions li:hover {
@@ -168,6 +176,10 @@
 }
 .menu_toggle {
   display: none;
+  cursor: pointer;
+  padding: 1rem;
+  color: #00C853;
+  font-size: 2.2rem;
 }
 .mobile_menu {
   display: none;
@@ -181,7 +193,7 @@
   border-radius: 16px;
   z-index: 10000;
   padding: 1rem 1.2rem;
-  border: 1px solid rgba(0, 200, 83, 0.4);
+  border: 2px solid #00C853;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   animation: slideDown 0.3s ease;
   transform-origin: top right;
@@ -217,7 +229,9 @@
   transition: all 0.3s ease;
   gap : 1rem;
 }
-.right_btn:active{
+
+.profile_btn:active,
+.menu_toggle:active{
   transform: scale(0.95);
 }
 .profile_btn{
@@ -232,328 +246,117 @@
   border: 1.5px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
 }
-/* XXL (very large screens) */
-@media (min-width:1600px) {
-.logo img{
-    height: 50px;
-} 
-.center_btn > *{
-  font-size: 1.25rem;
-}
-.center_btn
-{
-  gap: 3.5rem;
-}
-
-.login_btn{
-  padding: 10px 24px;
-}
-.login_btn button{
-  font-size : 1.25rem
-}
-.name-email h3 {
-  font-size: 1.4rem;
-}
-.name-email span {
-  font-size: 1.15rem;
-}
-
-.popupoptions li {
-  font-size: 1rem;
-}
-.popupoptions img {
-    height: 15px;
-    width: 15px;
-}
-
-}
-/* Extra large (desktop) */
-@media (min-width:1200px) and (max-width:1599px) {
-  .navbar{
-    padding: 0 2rem;
+/* Desktop and Large Screens */
+@media (min-width: 992px) {
+  .center_btn, .login_btn {
+    display: flex;
   }
-  .center_btn
-{
-  gap: 2rem;
-  
-}
-.logo img{
-    height: 42px;
-} 
-.navbar_btn {
-  padding: 8px 20px;
-  font-size: 0.95rem;
-}
-.login_btn{
-  padding: 10px 24px; 
-}
-.login_btn button{
-  font-size: 1rem;
-}
-
-.profilepopup {
-  min-width: 350px;
-}
-.name-email h3 {
-  font-size: 1.3rem;
-  font-weight: 500;
-}
-
-.name-email span {
-  font-size: 1rem;
-}
-
-.popupoptions li {
-  font-size: 0.95rem;
-}
-}
-/* Large (laptop) */
-@media (min-width:992px) and (max-width:1199px) {
-  .logo img{
-    height: 40px;
-} 
-.navbar {
-  padding: 0 1.5rem;
-}
-.center_btn
-{
-  gap: 1.5rem;
-}
-.right_btn{
-  gap: 0.5rem;
-}
-.left_btn{
-  gap: 0.5rem;
-}
-.navbar_btn {
-  padding: 8px 14px;
-  font-size: 0.9rem;
-}
-.login_btn{
-  padding: 10px 20px; 
-}
-.login_btn button{
-  font-size: 1rem;
-}
-.profilepopup {
-  min-width: 320px;
-}
-.name-email h3 {
-  font-size: 1.25rem;
-}
-
-.name-email span {
-  font-size: 1rem;
-}
-.popupoptions li {
-  font-size: 0.9rem;
-}
-
-.popupoptions img {
-    height: 10px;
-    width: 10px;
-}
-}
-/* Medium (tablet) */
-@media (min-width:768px) and (max-width:992px) {
-.logo img{
-    height: 42px;
-} 
-.center_btn,.login_btn {
+  .menu_toggle, .mobile_menu {
     display: none;
   }
+}
 
-.menu_toggle{
-    display: block; 
-  } 
-  .mobile_menu {
-    display: block ;
-    
+/* Tablet and Mobile - Hide desktop nav, show mobile menu */
+@media (max-width: 1100px) {
+  .center_btn, .login_btn {
+    display: none;
   }
-  .menuoptions ul{
-    list-style-type:circle;
+  .menu_toggle {
+    display: block;
+  }
+  .mobile_menu {
+    display: block;
+    right: 2rem;
+  }
+  .menuoptions ul {
+    list-style-type: circle;
     padding-left: 1.5rem;
   }
-  .menuoptions li{
+  .menuoptions li {
     font-size: 1rem;
     text-align: left;
   }
-  .profile_btn img{
-    height:2.2rem;
-    width:2.2rem;
-}
-.menu_toggle {
-    cursor: pointer;
-    padding: 1rem;
-    color:#00C853;
-    font-size: 2.2rem;
+  .navbar {
+    padding: 0 2rem;
   }
-
-.navbar {
-  padding: 0 2rem;
-}
-
-.right_btn{
-  gap: 0.5rem;
-}
-.left_btn{
-  gap: 1rem;
-}
-
-.profilepopup {
-  min-width: 300px; 
-}
-
-.name-email h3 {
-  font-size: 1.2rem;
- 
-}
-
-.name-email span {
-  font-size: 0.95rem;
- 
-}
-
-.popupoptions li {
-  font-size: 0.9rem;
-}
-
-.popupoptions img {
+  .right_btn {
+    gap: 0.5rem;
+  }
+  .left_btn {
+    padding-left:1rem;
+    gap: 1rem;
+  }
+  .profilepopup {
+    min-width: 300px;
+  }
+  .name-email h3 {
+    font-size: 1.2rem;
+  }
+  .name-email span {
+    font-size: 0.95rem;
+  }
+  .popupoptions li {
+    font-size: 0.9rem;
+  }
+  .popupoptions img {
     height: 10px;
     width: 10px;
+  }
 }
 
-}
-/* Small (mobile landscape) */
-@media (min-width: 576px) and (max-width: 768px) {
+@media (max-width: 767px) {
   .navbar {
     padding: 0 1rem;
   }
-  .logo img{
-    height: 42px;
-} 
-.center_btn,.login_btn {
-    display: none;
-  }
-
-.menu_toggle{
-    display: block; 
-  } 
   .mobile_menu {
-    display: block ;
     right: 2rem;
   }
-  .menuoptions ul{
-    list-style-type:circle;
-    padding-left: 1.5rem;
+  .right_btn {
+    gap: 0.5rem;
   }
-  .menuoptions li{
-    font-size: 1rem;
-    text-align: left;
+  .left_btn {
+    gap: 1rem;
   }
-  .menu_toggle {
-    cursor: pointer;
-    padding: 1rem;
-    color:#00C853;
-    font-size: 2.1rem;
+  .name-email h3 {
+    font-size: 1.15rem;
   }
-  .profile_btn img{
-   height:2.1rem;
-   width:2.1rem;
-}
-.right_btn{
-  gap: 0.5rem;
-}
-.left_btn{
-  gap: 1rem;
+  .name-email span {
+    font-size: 0.9rem;
+  }
+  .popupoptions li {
+    font-size: 0.85rem;
+  }
 }
 
-.profilepopup {
-  min-width: 300px;
-}
-
-.name-email h3 {
-  font-size: 1.15rem;
-}
-
-.name-email span {
-  font-size: 0.9rem;
-}
-
-.popupoptions li {
-  font-size: 0.85rem;
-}
-.popupoptions img {
-    height: 10px;
-    width: 10px;
-}
-}
-/* Extra small (mobile portrait) */
-@media (max-width: 576px) {
+/* Mobile Portrait */
+@media (max-width: 575px) {
   .navbar {
-    padding: 0rem 1rem;
+    padding: 0 1rem;
   }
-
-  .logo img{
-    height: 40px;
-} 
-.center_btn,.login_btn {
-    display: none;
-  }
-
-.menu_toggle{
-    display: block; 
-  } 
   .mobile_menu {
-    display: block ;
     right: 1.5rem;
   }
-  .menuoptions ul{
-    list-style-type:circle;
-    padding-left: 1.5rem;
+  .right_btn {
+    gap: 0.1rem;
   }
-  .menuoptions li{
-    font-size: 1rem;
-    text-align: left;
+  .left_btn {
+    gap: 0.1rem;
   }
-.menu_toggle {
-    cursor: pointer;
-    padding: 1rem;
-    color:#00C853;
-    font-size: 1.8rem;
+  .name-email h3 {
+    font-size: 1.1rem;
   }
-  .profile_btn img{
-   height:1.8rem;
-   width:1.8rem;
-}
-.right_btn{
-  gap: 0.1rem;
-}
-.left_btn{
-  gap: 0.1rem;
-}
-
-
-.profilepopup {
-  min-width: 300px;
-}
-
-.name-email h3 {
-  font-size: 1.1rem;
-}
-.popupheading img{
-  height: 35px;
-  width: 35px;
-}
-.name-email span {
-  font-size: 0.85rem;
-}
-
-.popupoptions li {
-  font-size: 0.8rem;
-}
-.popupoptions img {
+  .popupheading img {
+    height: 35px;
+    width: 35px;
+  }
+  .name-email span {
+    font-size: 0.85rem;
+  }
+  .popupoptions li {
+    font-size: 0.8rem;
+  }
+  .popupoptions img {
     height: 9px;
     width: 9px;
-}
+  }
 }

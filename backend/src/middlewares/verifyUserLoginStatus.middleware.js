@@ -8,6 +8,8 @@ const verifyUserLoginStatus = async (req, res, next) => {
         
         let { email } = req.body;
 
+        if(!email)return res.status(400).json({ success: false, message: "Email is required" });
+
         //array of active sessions(object)
         const activeSessions = await getAllActiveSessionOfUser(email);
         if(!activeSessions) {

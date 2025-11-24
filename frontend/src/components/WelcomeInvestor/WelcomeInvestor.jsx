@@ -140,9 +140,8 @@ const WelcomeInvestor = () => {
           let errorMsg = 'Failed to load data.';
           if (err.response?.status === 401) {
             errorMsg = 'Session expired. Please login again.';
-          } else if (backendMsg) {
-            errorMsg = backendMsg;
-          } else {
+          } 
+          else {
             errorMsg = err.message;
           }
           if (!cancelled) setError(errorMsg);

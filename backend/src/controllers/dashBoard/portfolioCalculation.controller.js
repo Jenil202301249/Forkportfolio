@@ -33,8 +33,10 @@ export const calculatePortfolio = async (req, res) => {
         let totalspending = 0;
         let totalInvestment = 0;
         for (const row of stockSummary) {
-            let {symbol, current_holding, spended_amount, yestarday_holding,avg_price } = row;
-            spended_amount = Number(spended_amount)
+            let {symbol, current_holding, spended_amount,avg_price } = row;
+            spended_amount = Number(spended_amount);
+            current_holding = Number(current_holding);
+            avg_price = Number(avg_price);
             let data = await getPrice(symbol);
             
             if(!data){
@@ -42,7 +44,7 @@ export const calculatePortfolio = async (req, res) => {
             }
             if (data.current === undefined || data.close === undefined) continue;
             const currentValue = current_holding * data.current;
-            const yesterdayValue = yestarday_holding * data.close;
+            const yesterdayValue = current_holding * data.close;
             const overallProfit = currentValue - spended_amount;
             const todayProfit = currentValue - yesterdayValue;
             const currentInvested = current_holding * avg_price;
@@ -74,7 +76,7 @@ export const calculatePortfolio = async (req, res) => {
             todayProfitLoss: todayPL.toFixed(2), 
             todayProfitLosspercentage: todayPLPercentage,
             overallProfitLosspercentage: overallPLPercentage,
-            totalInvestment: totalInvestment,
+            totalInvestment: totalInvestment.toFixed(2),
         });
 
     } catch (error) {

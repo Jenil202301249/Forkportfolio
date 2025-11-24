@@ -1,3 +1,4 @@
+// @ts-nocheck
 jest.mock("../../../src/db/dbConnection.js", () => ({
   sql: jest.fn(),
 }));

@@ -1,7 +1,7 @@
 import React from "react";
 import github_logo from "../assets/github_logo.png";
 import "./Footer.css";
-import logofooter from "../assets/logofooter.svg";
+import logofooter from "../assets/logofooter-navbar.svg";
 import logotext from "../assets/logotext.svg";
 const Footer = ({ darkMode ,navigationLinks=[],legalLinks=[] }) => {
   return (

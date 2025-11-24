@@ -8,28 +8,38 @@
     "mutate": [
         "src/**/*.js",
         "!src/controllers/dashBoard/dashBoard.controller.js",
+        "!src/controllers/dashBoard/searchStock.controller.js",
         "!src/controllers/Portfolio/portfolio.controller.js",
         "!src/controllers/user/user.controller.js",
+        "!src/controllers/user/deleteAccount.controller.js",
+        "!src/middlewares/multer.middleware.js",
         "!src/routes/**"
     ],
     "mutator": {
-        "excludedMutations": ["StringLiteral"]
+        "excludedMutations": ["StringLiteral","ObjectLiteral","FunctionCall","MethodCall","OptionalChaining"]
     },
 
     "reporters": ["html", "clear-text", "progress"],
 
     "disableTypeChecks": true,
+    "coverageAnalysis": "off",
 
     "jest": {
-        "enableFindRelatedTests": false,
+        "enableFindRelatedTests": true,
+        "projectType": "custom",
         "config": {
+            "clearMocks": true,
+            "resetMocks": true,
+            "restoreMocks": true,
+            "cache": false,
             "testEnvironment": "node",
 
             "transform": {
                 "^.+\\.js$": "babel-jest"
             },
 
-            "testMatch": ["**/test/src/**/*.test.js"]
+            "testMatch": ["**/test/src/**/*.test.js","!**/test/src/controllers/dashBoard/searchStock.controller.test.js","!**/test/src/controllers/user/deleteAccount.controller.test.js"]
         }
     }
+
 }

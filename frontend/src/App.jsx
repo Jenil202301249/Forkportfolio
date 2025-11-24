@@ -6,6 +6,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { Home } from './pages/Home'
 import { Dashboard } from './pages/Dashboard';
+import { Portfolio } from './pages/Portfolio';
 import { MyProfile} from './pages/MyProfile';
 import { StockDetails } from './pages/StockDetails';
 import {HelpSupport} from './pages/HelpSupport';
@@ -26,6 +27,10 @@ const router = createBrowserRouter(
     {
       path:"/dashboard",
       element:<Dashboard/>
+    },
+    {
+      path:"/portfolio",
+      element:<Portfolio/>
     },
     {
       path:"/my-profile",

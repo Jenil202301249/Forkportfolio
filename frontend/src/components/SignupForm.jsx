@@ -49,6 +49,7 @@ const SignupForm = ({ toggleForm, resetFormStates: parentResetFormStates }) => {
   }
 
 
+
 /*----------------------------------- Registration handlers-----------------------------------------------------------------------*/
 // Function to handle OTP generation
 const handleOtpGeneration = async () => {

@@ -2,7 +2,7 @@
 .insights-card {
   flex: 1;
   min-height: 40px;
-  min-width: 625px;
+  min-width: 710px;
   max-width: 45%;
   height: 500px;
   border: 1px solid white;
@@ -10,29 +10,84 @@
 
 .ai-title {
   color: #00C853;
-  margin-left: 75px;
+  margin-left: 5px;
   font-size: 1.5rem; 
   font-weight: 700;
 }
 
 .insights {
   list-style: none;
-  padding-left: 75px;
+  padding-left: 5px; 
   margin: 1rem 0;
   line-height: 1.6;
 }
 
-.insights li {
-  margin-bottom: 0.8rem;
+.insight-item
+{
+  margin-bottom: 0.2rem;
+  text-align: left;
+  font-size: 1.05rem;
 }
-
 .view-all {
   color: white;
   font-weight: 600;
   cursor: pointer;
-  margin-left: 75px;
+  margin-left: 5px;
+  transition: all 0.3s ease;
 }
 
-.view-all :hover {
+.view-all:hover {
+  transform: translateX(2px);
   color: #00C853;
+}
+.view-all:active {
+  transform: scale(0.97);
+  color: #00C853;
+}
+
+
+@media (max-width: 1050px) {
+  .insights-card {
+    min-width: unset;
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    margin: 0 auto 1rem;
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 16px;
+  }
+
+  .ai-title {
+    margin-left: 20px;
+    font-size: 1.35rem;
+  }
+
+  .insights {
+    padding-left: 20px;
+    margin: 0.6rem 0;
+  }
+
+  .view-all {
+    margin-left: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+    .insights-card {
+      width:100%;
+  }
+  .ai-title {
+    margin-left: 12px;
+    font-size: 1.1rem;
+  }
+
+  .insights {
+    padding-left: 12px;
+    font-size: 0.95rem;
+  }
+
+  .view-all {
+    margin-left: 12px;
+    font-size: 0.95rem;
+  }
 }

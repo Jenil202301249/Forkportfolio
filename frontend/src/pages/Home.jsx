@@ -24,35 +24,46 @@ export const Home = () => {
   const [openIndex, setOpenIndex] = useState(0);
   const { darkMode, setDarkMode } = useAppContext();
   const [expandedCard, setExpandedCard] = useState(null);
-
+  
   /*-----------------------------------Functions ------------------------------------------------------ */
+  const { ensureAuth } = useAppContext();
   // Function to toggle the arrow direction and show/hide answer
   function toggleArrow(index) { 
     setOpenIndex(openIndex === index ? 0 : index)
   }
+
   function CardClick(cardNumber) {
     if (window.innerWidth <= 768) return; 
     setExpandedCard(cardNumber);
   }
-  async function checkToken() {
-    try {
-      console.log("Checking token validity...");
-      const res = await axios.get(import.meta.env.VITE_BACKEND_LINK+"/api/v1/users/checkToken");
-      return Boolean(res?.data?.success);
-    } catch (err) {
-      console.error("Error checking token:", err);
-      return false;
-    }
-  }
+
   /*----------------------------------------useEffect----------------------------------------------------------*/
   const navigate = useNavigate();
 
   useEffect(() => {
-    (async () => {
-      const valid = await checkToken();
-      if (valid) navigate("/dashboard");
-    })();
-  }, []);
+        // Run an initial check: this page is an auth/home page, so pass true
+        (async () => {
+          try {
+            await ensureAuth(navigate, true);
+          } catch (e) {
+            console.error("ensureAuth initial check failed:", e);
+          }
+        })();
+  
+        // Poll token validity every 30 seconds and react the same way
+        const intervalId = setInterval(() => {
+          // fire-and-forget, ensureAuth handles navigation
+          ensureAuth(navigate, true).catch((e) => console.error(e));
+        }, 30000);
+  
+        // When user navigates back (browser back button / swipe-back), run the same
+        // cleanup that the Back button does (clear session flags / reset forms).
+        return () => {
+          clearInterval(intervalId);
+        };
+      }, [navigate, ensureAuth]);
+
+  /*----------------------------------------JSX Return Statement----------------------------------------------------------*/
   return (
 
       <div className="home-main">

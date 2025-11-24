@@ -383,11 +383,7 @@ body {
   .chat-input-area{
     padding: 8px 12px;
     width: 94%;
-    position: fixed;
-    bottom: env(safe-area-inset-bottom, 8px);
-    left: 50%;
-    transform: translateX(-50%);
-    margin: 0;
+    margin: 4;
   }
 
   .chat-input{

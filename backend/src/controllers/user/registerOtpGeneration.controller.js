@@ -21,7 +21,7 @@ const registerOtpGeneration = async (req, res)=>{
         }
         const validity = checkUserSyntax(req.body);
         if(!validity.success){
-            return res.status(422).json({success: false,message: validity.message});
+            return res.status(422).json({success: false,message: "Invalid user details Format"});
         }
         const hashedPassword = await bcrypt.hash(password,10);
         const otp = crypto.randomInt(100000, 999999).toString();

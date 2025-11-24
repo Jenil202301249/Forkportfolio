@@ -23,7 +23,7 @@ export const getPrice = async (symbols) => {
                 longname: result.price.longName ?? null,
                 change: (result.price.regularMarketChange/currencychange)|| 0,
                 marketstate: result.price.marketState?? "unknown",
-                marketcap: result.price.marketCap?? 0,
+                marketcap: result.price.marketCap? result.price.marketCap.toFixed(2) : 0,
                 sector: result.assetProfile?.sector ?? null,
             };
             stockPriceStore.add(symbols,{...price,expiresAt: Date.now()+60*1000});

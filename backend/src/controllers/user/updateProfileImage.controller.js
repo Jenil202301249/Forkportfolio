@@ -9,7 +9,7 @@ import { addActivityHistory } from "../../mongoModels/user.model.js";
 const updateProfileImageController = async (req, res) => {
     try {
         const oldProfileImage = req.user.profileimage;
-        const profileImageLocalPath = req.file?.path;
+        const profileImageLocalPath = req?.file?.path;
 
         if (!profileImageLocalPath)
             return res.status(400).json({

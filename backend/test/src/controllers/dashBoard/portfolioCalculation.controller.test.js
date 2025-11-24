@@ -1,161 +1,207 @@
+process.env.NODE_ENV = "test";
+jest.mock("../../../../src/db/stockSummary.js");
+jest.mock("../../../../src/utils/getQuotes.js");
+jest.mock("../../../../src/mongoModels/userPortfolioValuation.model.js");
+jest.mock("../../../../src/utils/stockPriceStore.js", () => ({
+  stockPriceStore: {
+    get: jest.fn(),
+    add: jest.fn()
+  }
+}));
+jest.mock("../../../../src/utils/stores/priceRates.js", () => ({
+  PriceStore: { get: jest.fn() },
+}));
+jest.mock("../../../../src/db/dbConnection.js", () => ({
+  sql: jest.fn()
+}));
 import { calculatePortfolio } from "../../../../src/controllers/dashBoard/portfolioCalculation.controller.js";
 import { getStockSummary } from "../../../../src/db/stockSummary.js";
 import { getPrice } from "../../../../src/utils/getQuotes.js";
-import { stockPriceStore } from "../../../../src/utils/stockPriceStore.js";
+import { UserPortfolioValuationdaily } from "../../../../src/mongoModels/userPortfolioValuation.model.js";
 jest.mock("../../../../src/db/stockSummary.js");
 jest.mock("../../../../src/utils/getQuotes.js");
 
-jest.mock("../../../../src/utils/stockPriceStore.js", () => ({
-    stockPriceStore: {
-        get: jest.fn(),
-        add: jest.fn(),
-    },
-}));
-
-const MOCK_USER_EMAIL = "test@example.com";
-const MOCK_STOCK_SUMMARY = [
-    { symbol: 'AAPL', current_holding: 10, spended_amount: 1500.00, yestarday_holding: 10 },
-    { symbol: 'GOOG', current_holding: 5, spended_amount: 5000.00, yestarday_holding: 5 },
-];
-
-const MOCK_AAPL_PRICE = { MarketPrice: 160.00, close: 158.00, currency: 'USD' };
-const MOCK_GOOG_PRICE = { MarketPrice: 1050.00, close: 1040.00, currency: 'USD' };
+const mockRes = () => ({
+  status: jest.fn().mockReturnThis(),
+  json: jest.fn(),
+});
 
 describe("calculatePortfolio", () => {
-    let req, res;
+  let req, res;
 
-    beforeEach(() => {
-        req = { user: { email: MOCK_USER_EMAIL } };
-        res = {
-            status: jest.fn().mockReturnThis(),
-            json: jest.fn().mockReturnThis(),
-        };
+  beforeEach(() => {
+    req = { user: { email: "test@example.com" } };
+    res = mockRes();
+    jest.clearAllMocks();
+  });
 
-        jest.clearAllMocks();
+  test("503 → stockSummary null", async () => {
+    getStockSummary.mockResolvedValue(null);
 
-        jest.spyOn(console, 'log').mockImplementation(() => {});
-        jest.spyOn(console, 'error').mockImplementation(() => {});
+    await calculatePortfolio(req, res);
+
+    expect(getStockSummary).toHaveBeenCalledWith("test@example.com");
+    expect(res.status).toHaveBeenCalledWith(503);
+    expect(res.json).toHaveBeenCalledWith({
+      success: false,
+      message: "Database Error in getting stock summary.",
+    });
+  });
+
+  test("200 → empty stockSummary returns zeros", async () => {
+    getStockSummary.mockResolvedValue([]);
+
+    await calculatePortfolio(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({
+      success: true,
+      totalValuation: 0,
+      overallProfitLoss: 0,
+      todayProfitLoss: 0,
+      todayProfitLosspercentage: 0,
+      overallProfitLosspercentage: 0,
+      totalInvestment: 0,
+    });
+  });
+
+  test("504 → getPrice returns null", async () => {
+    getStockSummary.mockResolvedValue([
+      {
+        symbol: "AAPL",
+        current_holding: 2,
+        spended_amount: 100,
+        avg_price: 50,
+      },
+    ]);
+
+    getPrice.mockResolvedValue(null);
+
+    await calculatePortfolio(req, res);
+
+    expect(getPrice).toHaveBeenCalledWith("AAPL");
+    expect(res.status).toHaveBeenCalledWith(504);
+    expect(res.json).toHaveBeenCalledWith({
+      success: true,
+      message: "Failed to get stock data",
+    });
+  });
+
+  test("200 → skips entries with undefined current/close", async () => {
+    getStockSummary.mockResolvedValue([
+      {
+        symbol: "AAPL",
+        current_holding: 2,
+        spended_amount: 100,
+        avg_price: 50,
+      },
+    ]);
+
+    getPrice.mockResolvedValue({ current: undefined, close: undefined });
+
+    UserPortfolioValuationdaily.updateOne.mockResolvedValue({});
+
+    await calculatePortfolio(req, res);
+
+    expect(getPrice).toHaveBeenCalledWith("AAPL");
+
+    expect(UserPortfolioValuationdaily.updateOne).toHaveBeenCalled();
+
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({
+      success: true,
+      totalValuation: "0.00",
+      overallProfitLoss: "0.00",
+      todayProfitLoss: "0.00",
+      todayProfitLosspercentage: "0.00",
+      overallProfitLosspercentage: "0.00",
+      totalInvestment: "0.00",
+    });
+  });
+
+  test("200 → multiple stocks with mixed skip conditions", async () => {
+    getStockSummary.mockResolvedValue([
+      {
+        symbol: "AAPL",
+        current_holding: 2,
+        spended_amount: 100,
+        avg_price: 50,
+      },
+      {
+        symbol: "TCS.NS",
+        current_holding: 2,
+        spended_amount: 100,
+        avg_price: 50,
+      },
+    ]);
+
+    getPrice.mockImplementation((symbol) => {
+      if (symbol === "AAPL") return { current: 0, close: undefined };
+      if (symbol === "TCS.NS") return { current: undefined, close: 2 };
+      return null;
     });
 
-    afterAll(() => {
-        jest.restoreAllMocks();
+    UserPortfolioValuationdaily.updateOne.mockResolvedValue({});
+
+    await calculatePortfolio(req, res);
+
+    expect(getPrice).toHaveBeenCalledTimes(2);
+    expect(getPrice).toHaveBeenNthCalledWith(1, "AAPL");
+    expect(getPrice).toHaveBeenNthCalledWith(2, "TCS.NS");
+
+    expect(UserPortfolioValuationdaily.updateOne).toHaveBeenCalled();
+
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({
+      success: true,
+      totalValuation: "0.00",
+      overallProfitLoss: "0.00",
+      todayProfitLoss: "0.00",
+      todayProfitLosspercentage: "0.00",
+      overallProfitLosspercentage: "0.00",
+      totalInvestment: "0.00",
     });
+  });
 
-    it("should calculate portfolio metrics successfully using cached prices", async () => {
-        getStockSummary.mockResolvedValue(MOCK_STOCK_SUMMARY);
+  test("200 → fully correct numeric calculation", async () => {
+    getStockSummary.mockResolvedValue([
+      {
+        symbol: "AAPL",
+        current_holding: 2,
+        spended_amount: 100,
+        avg_price: 40,
+      },
+    ]);
 
-        // Setup: Mock price store to simulate a cache hit for both symbols
-        stockPriceStore.get.mockImplementation((symbol) => {
-            if (symbol === 'AAPL') return { current: MOCK_AAPL_PRICE.MarketPrice, yesterdayClose: MOCK_AAPL_PRICE.close };
-            if (symbol === 'GOOG') return { current: MOCK_GOOG_PRICE.MarketPrice, yesterdayClose: MOCK_GOOG_PRICE.close };
-            return undefined;
-        });
+    getPrice.mockResolvedValue({ current: 60, close: 55 });
 
-        await calculatePortfolio(req, res);
+    UserPortfolioValuationdaily.updateOne.mockResolvedValue({});
 
-        expect(getStockSummary).toHaveBeenCalledWith(MOCK_USER_EMAIL);
-        expect(stockPriceStore.get).toHaveBeenCalledTimes(2);
-        expect(getPrice).not.toHaveBeenCalled();
+    await calculatePortfolio(req, res);
 
-        expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toHaveBeenCalledWith({
-            success: true,
-            totalValuation: "6850.00",
-            overallProfitLoss: "350.00",
-            todayProfitLoss: "70.00",
-            ttodayProfitLosspercentage: "1.02", 
-            overallProfitLosspercentage: "5.38"
-        });
+    expect(UserPortfolioValuationdaily.updateOne).toHaveBeenCalled();
+
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({
+      success: true,
+      totalValuation: "120.00",
+      overallProfitLoss: "20.00",
+      todayProfitLoss: "10.00",
+      todayProfitLosspercentage: "8.33",
+      overallProfitLosspercentage: "20.00",
+      totalInvestment: "80.00",
     });
+  });
 
-    it("should calculate portfolio metrics successfully and fetch uncached prices", async () => {
-        getStockSummary.mockResolvedValue(MOCK_STOCK_SUMMARY);
+  test("500 → catch block", async () => {
+    getStockSummary.mockRejectedValue(new Error("DB down"));
 
-        stockPriceStore.get.mockReturnValue(undefined);
+    await calculatePortfolio(req, res);
 
-        getPrice.mockImplementation((symbol) => {
-            if (symbol === 'AAPL') return Promise.resolve(MOCK_AAPL_PRICE);
-            if (symbol === 'GOOG') return Promise.resolve(MOCK_GOOG_PRICE);
-        });
-        
-        await calculatePortfolio(req, res);
-
-        expect(getPrice).toHaveBeenCalledTimes(2);
-        expect(getPrice).toHaveBeenCalledWith('AAPL');
-        expect(getPrice).toHaveBeenCalledWith('GOOG');
-        expect(stockPriceStore.add).toHaveBeenCalledTimes(2);
-
-        expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
-            success: true,
-            totalValuation: "6850.00",
-            overallProfitLoss: "350.00",
-            ttodayProfitLosspercentage: "1.02",
-        }));
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({
+      success: false,
+      message: "An error occurred while calculating the portfolio.",
     });
-
-
-    it("should return 500 if external price fetching fails (returns falsy)", async () => {
-        getStockSummary.mockResolvedValue([
-            { symbol: 'FAIL', current_holding: 1, spended_amount: 10, yestarday_holding: 1 },
-        ]);
-        
-        stockPriceStore.get.mockReturnValue(undefined); 
-        getPrice.mockResolvedValue(null); 
-
-        await calculatePortfolio(req, res);
-
-        expect(getPrice).toHaveBeenCalledWith('FAIL');
-        expect(res.status).toHaveBeenCalledWith(500);
-        expect(res.json).toHaveBeenCalledWith({
-            success: false,
-            message: "Failed to fetch stock prices.",
-        });
-    });
-
-    it("should calculate portfolio correctly when price data is 0 (zero-based calculation)", async () => {
-        const summaryForZeroTest = [
-            { symbol: 'SKIP', current_holding: 10, spended_amount: 100, yestarday_holding: 10 },
-        ];
-        getStockSummary.mockResolvedValue(summaryForZeroTest);
-
-        stockPriceStore.get.mockReturnValue(undefined);
-        getPrice.mockResolvedValue({ MarketPrice: 0, close: 0, currency: 'USD' });
-
-        await calculatePortfolio(req, res); 
-
-        expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
-            success: true,
-            totalValuation: "0.00",
-            overallProfitLoss: "-100.00",
-            todayProfitLoss: "0.00",
-        }));
-    });
-
-
-    it("should return 404 if no stock summary is found (empty array)", async () => {
-        getStockSummary.mockResolvedValue([]);
-
-        await calculatePortfolio(req, res);
-
-        expect(res.status).toHaveBeenCalledWith(404);
-        expect(res.json).toHaveBeenCalledWith({
-            success: false,
-            message: "No stock summary found for the user.",
-        });
-    });
-
-    it("should return 500 if DB fetching stock summary throws an error", async () => {
-        const error = new Error("DB connection failed");
-        getStockSummary.mockRejectedValue(error);
-
-        await calculatePortfolio(req, res);
-
-        expect(res.status).toHaveBeenCalledWith(500);
-        expect(res.json).toHaveBeenCalledWith({ 
-            success: false, 
-            message: "An error occurred while calculating the portfolio." 
-        });
-    });
+  });
 });

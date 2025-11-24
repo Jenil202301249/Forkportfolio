@@ -1,0 +1,230 @@
+.holdings-table-wrapper {
+    width: 90%;
+    margin-left: 5%;
+    padding: 0.5rem 0.8rem;
+    border: 3px solid #1e1e1e;
+    background-color: transparent;
+    border-radius: 14px;
+    overflow-x: auto;
+}
+
+.holdings-table-wrapper::-webkit-scrollbar {
+    height: 6px;
+}
+
+.holdings-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: none;
+    border-spacing: 0;
+    color: #fff;
+    font-size: 0.75rem;
+    background-color: transparent;
+}
+
+.holdings-table .negative {
+    color: #c81b00;
+}
+
+.holdings-table .positive {
+    color: #00c853;
+}
+
+.holdings-table thead {
+    height: 3rem;
+    padding: 1rem 1rem;
+    border-bottom: 3px solid #383838;
+}
+
+.holdings-table th {
+    padding: 10px 20px;
+    text-align: left;
+    font-weight: 500;
+    opacity: 0.8;
+    color: #fff;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    text-transform: uppercase;
+    border: none;
+    background-color: transparent;
+
+}
+
+.holdings-table td {
+    padding: 20px 20px;
+    border: none;
+    text-align: left;
+    white-space: nowrap;
+    color: #fff;
+    background-color: transparent;
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.holdings-table td:first-child {
+    font-weight: 650;
+}
+
+.holdings-table td:first-child:hover {
+    cursor: pointer;
+    color: #6e6e6e;
+    transition: 0.3s;
+}
+
+@media (max-width: 1280px) {
+    .holdings-table-wrapper {
+        width: 90%;
+        margin-left: 5%;
+        padding: 0.5rem 0.8rem;
+        border: 3px solid #1e1e1e;
+        border-radius: 14px;
+    }
+
+    .holdings-table-wrapper::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    .holdings-table thead {
+        height: 3rem;
+        padding: 1rem 1rem;
+        border-bottom: 3px solid #383838;
+    }
+
+    .holdings-table th {
+        padding: 10px 20px;
+        font-weight: 500;
+        font-size: 0.85rem;
+    }
+
+    .holdings-table td {
+        padding: 20px 20px;
+        font-size: 1rem;
+        font-weight: 400;
+    }
+
+    .holdings-table td:first-child {
+        font-weight: 650;
+    }
+}
+
+@media (max-width: 1024px) {
+    .holdings-table-wrapper {
+        width: 90%;
+        margin-left: 5%;
+        padding: 0.5rem 0.8rem;
+        border: 3px solid #1e1e1e;
+        border-radius: 12px;
+    }
+
+    .holdings-table-wrapper::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    .holdings-table thead {
+        height: 2.5rem;
+        border-bottom: 2px solid #383838;
+    }
+
+    .holdings-table th {
+        padding: 18px 18px;
+        font-weight: 500;
+        font-size: 0.8rem;
+    }
+
+    .holdings-table td {
+        padding: 18px 18px;
+        font-size: 0.95rem;
+        font-weight: 400;
+    }
+
+    .holdings-table td:first-child {
+        font-weight: 650;
+    }
+}
+
+@media (max-width: 768px) {
+    .holdings-table-wrapper {
+        width: 90%;
+        margin-left: 5%;
+        padding: 0.2rem 0.8rem;
+        border: 2px solid #1e1e1e;
+        border-radius: 10px;
+    }
+
+    .holdings-table-wrapper::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    .holdings-table thead {
+        height: 2rem;
+        border-bottom: 1.5px solid #383838;
+    }
+
+    .holdings-table th {
+        padding: 15px 15px;
+        font-size: 0.7rem;
+    }
+
+    .holdings-table td {
+        padding: 15px 15px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .holdings-table-wrapper {
+        width: 90%;
+        margin-left: 5%;
+        padding: 0rem 1rem;
+        border: 2px solid #1e1e1e;
+        border-radius: 10px;
+    }
+
+    .holdings-table-wrapper::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    .holdings-table thead {
+        height: 2rem;
+        border-bottom: 1.3px solid #383838;
+    }
+
+    .holdings-table th {
+        padding: 12px 14px;
+        font-size: 0.6rem;
+    }
+
+    .holdings-table td {
+        padding: 12px 14px;
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .holdings-table-wrapper {
+        width: 90%;
+        margin-left: 5%;
+        padding: 0rem 1rem;
+        border: 2px solid #1e1e1e;
+        border-radius: 10px;
+    }
+
+    .holdings-table-wrapper::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    .holdings-table thead {
+        height: 2rem;
+        border-bottom: 1.3px solid #383838;
+    }
+
+    .holdings-table th {
+        padding: 12px 12px;
+        font-size: 0.5rem;
+    }
+
+    .holdings-table td {
+        padding: 14px 12px;
+        font-size: 0.6rem;
+    }
+}

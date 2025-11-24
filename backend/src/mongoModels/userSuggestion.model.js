@@ -6,7 +6,7 @@ const userSuggestionSchema = new Schema({
     },
     suggestion:{
         type:String,
-        required:[true,"Query is required"]
+        required:[true,"Suggestion is required"]
     }
 },
 {
@@ -14,6 +14,6 @@ const userSuggestionSchema = new Schema({
 }
 )
 
-userSuggestionSchema.index({ email: 1, query: 1 }, { unique: true });
+userSuggestionSchema.index({ email: 1, suggestion: 1 }, { unique: true });
 
-export const UserSuggestion = mongoose.model("userSuggestion",userSuggestionSchema)
+export const UserSuggestion = mongoose.model("UserSuggestion", userSuggestionSchema, "user_suggestions")

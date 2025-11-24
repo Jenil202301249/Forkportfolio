@@ -3,7 +3,9 @@ import { addActivityHistory } from "../../mongoModels/user.model.js";
 
 const toggleAiSuggestionController = async (req, res) => {
     try {
-        const result = await toggleAiSuggestion(req.user.email);
+        const email = req?.user?.email;
+        if(!email) return res.status(401).json({ success: false, message: "Email expected" });
+        const result = await toggleAiSuggestion(email);
         if (!result) {
             return res
                 .status(503)

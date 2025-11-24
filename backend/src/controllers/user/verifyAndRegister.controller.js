@@ -56,7 +56,7 @@ export const register = async (req,res)=>{
             sameSite: "none",
             maxAge: 7*24*60*60*1000,
         })
-        return res.status(201).json({success: true,userID:user.id,message: 'User registered successfully'})
+        return res.status(201).json({success: true,userID:user[0].id,message: 'User registered successfully'})
     } catch(error){
         console.log('User registration error:',error);
         return res.status(401).json({success: false,message: error.message})

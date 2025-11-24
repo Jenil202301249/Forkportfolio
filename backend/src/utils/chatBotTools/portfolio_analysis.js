@@ -109,7 +109,7 @@ export const Portfolio_analysis_tool = tool(
           bookValue: null,
           priceToBook: null,
           userName : name,
-          investmentexperience,
+          investmentExperience: userDetails.investmentExperience || "not specified",
           financialGoals,
           investmentHorizon
         });
@@ -125,8 +125,8 @@ export const Portfolio_analysis_tool = tool(
     
     for(const stock of result){
       totalValue += stock.price * stock.quantity;
-      totalInvested += stock.spended_amount || (stock.avg_price * stock.quantity);
-      totalProfitLoss += stock.profitLoss || (stock.price - stock.avg_price) * stock.quantity;
+      totalInvested +=  (stock.avg_price * stock.quantity);
+      totalProfitLoss +=  (stock.price - stock.avg_price) * stock.quantity;
       totalDivYield += stock.divYield || 0;
     }
 

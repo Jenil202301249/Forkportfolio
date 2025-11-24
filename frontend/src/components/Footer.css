@@ -134,3 +134,60 @@
     padding-top: 15px !important;   
   }
 }
+
+/* Mobile font size adjustments */
+@media (max-width: 768px) {
+  .column_div {
+    font-size: 13px !important;
+  }
+  
+  .column_div h2 {
+    font-size: 0.95rem;
+  }
+  
+  .rights_text p {
+    font-size: 0.9rem;
+  }
+  
+  .column_div a {
+    font-size: 13px;
+  }
+  
+  .column_div p {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .column_div {
+    font-size: 11px !important;
+  }
+  
+  .column_div h2 {
+    font-size: 0.85rem;
+  }
+  
+  .rights_text p {
+    font-size: 0.75rem;
+  }
+  
+  .column_div a {
+    font-size: 11px;
+  }
+  
+  .column_div p {
+    font-size: 11px;
+  }
+  
+  .footer_web img {
+    max-height: 36px;
+  }
+  
+  .logotext {
+    max-height: 36px;
+  }
+  
+  .github_logo img {
+    max-height: 24px;
+  }
+}

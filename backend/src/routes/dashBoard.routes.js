@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { graphFormetData } from "../controllers/dashBoard/graphDataFromet.js";
-import { getNews,starter,searchStock, calculatePortfolio, addTransaction, showWatchlist, addToWatchlist, removeFromWatchlist, getStockAllocation, getMarketGainers, getMarketLosers, getMarketactiveStocks, userStockSummary, getUserPortfolioValuations, stockDetails } from "../controllers/dashBoard/dashBoard.controller.js";
+import { getNews,starter,searchStock, calculatePortfolio, addTransaction, showWatchlist, addToWatchlist, removeFromWatchlist, getStockAllocation, getMarketGainers, getMarketLosers, getMarketactiveStocks, userStockSummary, getUserPortfolioValuations, stockDetails ,getPortfolioInsight} from "../controllers/dashBoard/dashBoard.controller.js";
 import { verifyToken } from "../middlewares/auth.middleware.js";
 
 const router = Router();
@@ -21,4 +21,5 @@ router.route("/marketLosers").get(verifyToken,getMarketLosers);
 router.route("/stockSummary").get(verifyToken,userStockSummary);
 router.route("/userPortfolioValuation").get(verifyToken,getUserPortfolioValuations)
 router.route("/stockDetails").get(verifyToken,stockDetails)
+router.route("/getPortfolioInsight").get(verifyToken,getPortfolioInsight);
 export default router;

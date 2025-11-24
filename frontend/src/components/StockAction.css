@@ -1,0 +1,669 @@
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.model-custom-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.model-custom-input .controls {
+    position: absolute;
+    right: 10px;
+    margin-top: 1.8rem;
+    transform: translateY(-40%);
+    display: flex;
+    flex-direction: column;
+}
+
+.model-custom-input .controls button {
+    background: #1e1e1e;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 1px 4px;
+    border-radius: 3px;
+}
+
+.model-custom-input .controls button:hover {
+    background: #fff;
+    color: #000;
+}
+
+.model-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.model-box {
+    width: 28rem;
+    background: #0e0e0e;
+    border-radius: 12px;
+    padding: 25px;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.model-box h2 {
+    margin-bottom: 2rem;
+    font-size: 1.2rem;
+    color: #fff;
+}
+
+.model-name-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.model-buy,
+.model-sell {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.3rem 0.4rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: 0.4s ease, transform 0.4s ease;
+}
+
+.model-buy.active-buy {
+    background-color: #00c853;
+    color: #1e1e1e;
+    border-radius: 4px;
+    transform: scale(1);
+}
+
+.model-sell.active-sell {
+    background-color: #c81b00;
+    color: #1e1e1e;
+    border-radius: 4px;
+    transform: scale(1);
+}
+
+.model-toggle-container {
+    display: flex;
+    background: #1e1e1e;
+    width: 25%;
+    border-radius: 6px;
+    justify-content: space-between;
+    padding: 0.3rem 0.4rem;
+}
+
+.model-stock-symbol {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+}
+
+.model-price-info {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 0.8rem;
+}
+
+.model-price {
+    font-size: 1.3rem;
+    opacity: 0.9;
+    margin-bottom: 0.5rem;
+}
+
+.model-price-change {
+    font-size: 1rem;
+    margin-left: 0.5rem;
+}
+
+.model-box label {
+    display: block;
+    opacity: 0.8;
+    margin-bottom: 0.8rem;
+}
+
+.model-tot-amount {
+    margin-bottom: 0.8rem;
+}
+
+.model-calc {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.model-box input {
+    margin-top: 8px;
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 8px;
+    background: #1a1a1a;
+    color: white;
+    margin-bottom: 8px;
+}
+
+.model-confirm-btn.BUY,
+.model-confirm-btn.SELL {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    color: black;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 18px;
+}
+
+.model-confirm-btn.BUY {
+    background: #00c853;
+    border: 1px solid #00c853;
+}
+
+.model-confirm-btn.SELL {
+    background: #c81b00;
+    border: 1px solid #c81b00;
+}
+
+.model-confirm-btn.BUY:hover {
+    color: #fff;
+    background: transparent;
+    transition: 0.3s;
+}
+
+.model-confirm-btn.SELL:hover {
+    color: #fff;
+    background: transparent;
+    transition: 0.3s;
+}
+
+.model-cancel-btn {
+    margin-top: 15px;
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    border: 2px solid #1e1e1e;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.model-cancel-btn:hover {
+    color: #fff;
+    background: #1e1e1e;
+    transition: 0.3s;
+}
+
+.model-error {
+    color: #ff4d4d;
+    background: #220000;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+@media (max-width: 1024px) {
+
+    .model-custom-input .controls {
+        right: 10px;
+        margin-top: 1.2rem;
+    }
+
+    .model-custom-input .controls button {
+        font-size: 0.5rem;
+        font-weight: 600;
+        padding: 1px 4px;
+        border-radius: 3px;
+    }
+
+    .model-box {
+        width: 25rem;
+        height: 28rem;
+        border-radius: 10px;
+        padding: 20px;
+    }
+
+    .model-box h2 {
+        margin-bottom: 2rem;
+        font-size: 1rem;
+    }
+
+    .model-buy,
+    .model-sell {
+        font-size: 0.6rem;
+        font-weight: 600;
+        padding: 0.3rem 0.4rem;
+        border-radius: 4px;
+    }
+
+    .model-sell.active-sell {
+        border-radius: 4px;
+    }
+
+    .model-toggle-container {
+        width: 22%;
+        border-radius: 6px;
+        padding: 0.3rem 0.4rem;
+    }
+
+    .model-stock-symbol {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+    }
+
+    .model-price-info {
+        margin-bottom: 0.8rem;
+    }
+
+    .model-price {
+        font-size: 1rem;
+        opacity: 0.9;
+        margin-bottom: 0.5rem;
+    }
+
+    .model-price-change {
+        font-size: 0.8rem;
+        margin-left: 0.5rem;
+    }
+
+    .model-box label {
+        font-size: 0.8rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .model-tot-amount {
+        margin-bottom: 0.8rem;
+    }
+
+    .model-calc {
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .model-box input {
+        height: 2.5rem;
+        margin-top: 6px;
+        width: 100%;
+        padding: 12px;
+        font-size: 0.9rem;
+        border-radius: 8px;
+        margin-bottom: 8px;
+    }
+
+    .model-confirm-btn.BUY,
+    .model-confirm-btn.SELL {
+        width: 100%;
+        height: 2.5rem;
+        padding: 6px 12px;
+        font-weight: 600;
+        border-radius: 8px;
+        margin-top: 18px;
+    }
+
+    .model-confirm-btn.BUY {
+        border: 1px solid #00c853;
+    }
+
+    .model-confirm-btn.SELL {
+        border: 1px solid #c81b00;
+    }
+
+    .model-cancel-btn {
+        height: 2.5rem;
+        padding: 6px 12px;
+        margin-top: 15px;
+        width: 100%;
+        border: 2px solid #1e1e1e;
+        border-radius: 8px;
+    }
+
+    .model-error {
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .model-custom-input .controls {
+        right: 10px;
+        margin-top: 1.3rem;
+    }
+
+    .model-custom-input .controls button {
+        font-size: 0.4rem;
+        font-weight: 700;
+        padding: 1px 4px;
+        border-radius: 2px;
+    }
+
+    .model-box {
+        width: 23rem;
+        height: 25.5rem;
+        border-radius: 10px;
+        padding: 20px;
+    }
+
+    .model-box h2 {
+        margin-bottom: 1.8rem;
+        font-size: 0.9rem;
+    }
+
+    .model-buy,
+    .model-sell {
+        font-size: 0.5rem;
+        font-weight: 600;
+        padding: 0.3rem 0.4rem;
+        border-radius: 3px;
+    }
+
+    .model-sell.active-sell {
+        border-radius: 3px;
+    }
+
+    .model-toggle-container {
+        width: 22%;
+        border-radius: 6px;
+        padding: 0.3rem 0.4rem;
+    }
+
+    .model-stock-symbol {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+    }
+
+    .model-price-info {
+        margin-bottom: 0.8rem;
+    }
+
+    .model-price {
+        font-size: 0.9rem;
+        opacity: 0.9;
+        margin-bottom: 0.5rem;
+    }
+
+    .model-price-change {
+        font-size: 0.75rem;
+        margin-left: 0.5rem;
+    }
+
+    .model-box label {
+        font-size: 0.75rem;
+        margin-bottom: 0.7rem;
+    }
+
+    .model-tot-amount {
+        margin-bottom: 0.7rem;
+    }
+
+    .model-calc {
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .model-box input {
+        height: 2.2rem;
+        margin-top: 6px;
+        width: 100%;
+        padding: 12px;
+        font-size: 0.85rem;
+        border-radius: 8px;
+        margin-bottom: 5px;
+    }
+
+    .model-confirm-btn.BUY,
+    .model-confirm-btn.SELL {
+        width: 100%;
+        height: 2.2rem;
+        padding: 6px 12px;
+        font-weight: 600;
+        border-radius: 8px;
+        margin-top: 15px;
+    }
+
+    .model-confirm-btn.BUY {
+        border: 1px solid #00c853;
+    }
+
+    .model-confirm-btn.SELL {
+        border: 1px solid #c81b00;
+    }
+
+    .model-cancel-btn {
+        height: 2.5rem;
+        padding: 6px 12px;
+        margin-top: 10px;
+        width: 100%;
+        border: 2px solid #1e1e1e;
+        border-radius: 8px;
+    }
+
+    .model-error {
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .model-custom-input .controls {
+        right: 8px;
+        margin-top: 1.3rem;
+    }
+
+    .model-custom-input .controls button {
+        font-size: 0.4rem;
+        font-weight: 700;
+        padding: 1px 4px;
+        border-radius: 2px;
+    }
+
+    .model-box {
+        width: 21rem;
+        height: 24.5rem;
+    }
+
+    .model-box h2 {
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .model-buy,
+    .model-sell {
+        font-size: 0.45rem;
+        border-radius: 3px;
+    }
+
+    .model-sell.active-sell {
+        border-radius: 3px;
+    }
+
+    .model-stock-symbol {
+        font-size: 1rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .model-price-info {
+        margin-bottom: 0.8rem;
+    }
+
+    .model-price {
+        font-size: 0.8rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .model-price-change {
+        font-size: 0.65rem;
+        margin-left: 0.5rem;
+    }
+
+    .model-box label {
+        font-size: 0.65rem;
+        margin-bottom: 0.7rem;
+    }
+
+    .model-tot-amount {
+        margin-bottom: 0.7rem;
+    }
+
+    .model-calc {
+        font-size: 0.8rem;
+    }
+
+    .model-box input {
+        font-size: 0.75rem;
+    }
+
+    .model-confirm-btn.BUY,
+    .model-confirm-btn.SELL {
+        font-size: 0.8rem;
+    }
+
+    .model-cancel-btn {
+        height: 2.5rem;
+        font-size: 0.8rem;
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 400px) {
+
+    .model-custom-input .controls {
+        right: 7px;
+        margin-top: 1.3rem;
+    }
+
+    .model-custom-input .controls button {
+        font-size: 0.4rem;
+        font-weight: 700;
+        padding: 1px 4px;
+        border-radius: 2px;
+    }
+
+    .model-box {
+        width: 18rem;
+        height: 22rem;
+        border-radius: 10px;
+        padding: 20px;
+    }
+
+    .model-box h2 {
+        margin-bottom: 1.2rem;
+        font-size: 0.7rem;
+    }
+
+    .model-buy,
+    .model-sell {
+        font-size: 0.4rem;
+        font-weight: 600;
+        padding: 0.3rem 0.3rem;
+        border-radius: 2px;
+    }
+
+    .model-sell.active-sell {
+        border-radius: 2px;
+    }
+
+    .model-buy.active-buy {
+        border-radius: 2px;
+    }
+
+    .model-toggle-container {
+        width: 22%;
+        border-radius: 4px;
+        padding: 0.3rem 0.3rem;
+    }
+
+    .model-stock-symbol {
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+    }
+
+    .model-price-info {
+        margin-bottom: 0.7rem;
+    }
+
+    .model-price {
+        font-size: 0.7rem;
+        opacity: 0.9;
+        margin-bottom: 0.5rem;
+    }
+
+    .model-price-change {
+        font-size: 0.6rem;
+        margin-left: 0.3rem;
+    }
+
+    .model-box label {
+        font-size: 0.65rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .model-tot-amount {
+        margin-bottom: 0.7rem;
+    }
+
+    .model-calc {
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .model-box input {
+        height: 2.2rem;
+        margin-top: 6px;
+        width: 100%;
+        padding: 12px;
+        font-size: 0.75rem;
+        border-radius: 8px;
+        margin-bottom: 5px;
+    }
+
+    .model-confirm-btn.BUY,
+    .model-confirm-btn.SELL {
+        width: 100%;
+        height: 2rem;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        border-radius: 8px;
+        margin-top: 8px;
+    }
+
+    .model-confirm-btn.BUY {
+        border: 1px solid #00c853;
+    }
+
+    .model-confirm-btn.SELL {
+        border: 1px solid #c81b00;
+    }
+
+    .model-cancel-btn {
+        height: 2.1rem;
+        padding: 4px 12px;
+        font-size: 0.8rem;
+        margin-top: 8px;
+        width: 100%;
+        border: 2px solid #1e1e1e;
+        border-radius: 8px;
+    }
+
+    .model-error {
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+}

@@ -24,7 +24,7 @@ app.listen(process.env.PORT || 8000, '0.0.0.0',async()=>{
                     { upsert: true,new: true })
                 } 
             }catch(error){
-                console.log("Update Price error");
+                console.error("Update Price error ",error);
             }
             
         }

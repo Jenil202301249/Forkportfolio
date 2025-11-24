@@ -11,18 +11,10 @@ import GoogleLogo from "../assets/google_logo.svg";
 import Footer from '../components/Footer.jsx';
 import { Sidebar } from "../components/Sidebar.jsx";
 import { useAppContext } from "../context/AppContext";
+import { useNavigate } from "react-router-dom";
 
 export const MyProfile = () => {
-    const [userInfo, setUserInfo] = useState({
-        name: "",
-        email: "",
-        profimg: "",
-        investmentExp: "",
-        riskProfile: "",
-        InvHorizon: "",
-        FinGoal: ""
-    });
-    const { darkMode, setDarkMode } = useAppContext();
+    const { darkMode, setDarkMode, userDetails, setUseDetails } = useAppContext();
     const fileInputRef = useRef(null);
     const [isEditingInfo, setIsEditingInfo] = useState(false);
     const [isEditingPass, setIsEditingPass] = useState(false);
@@ -42,46 +34,38 @@ export const MyProfile = () => {
     const [isSendingOtp, setIsSendingOtp] = useState(false);
     const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
     const [resendCountdown, setResendCountdown] = useState(0);
+    const navigate = useNavigate();
+      const { ensureAuth } = useAppContext();
+    
+      useEffect(() => {
+                 // Run an initial check: this page is an auth/home page, so pass true
+              (async () => {
+                try {
+                  await ensureAuth(navigate, false);
+                } catch (e) {
+                  console.error("ensureAuth initial check failed:", e);
+                }
+              })();
+        
+              const intervalId = setInterval(() => {
+                ensureAuth(navigate, false).catch((e) => console.error(e));
+              }, 10000);
+        
+              return () => {
+                clearInterval(intervalId);
+              };
+        },  [navigate, ensureAuth]);
 
+        
     const { handlePicChange, handleSaveName, handleSavePass, resendOtp,
-         verifyOtpAndReset, handleFinGoals, handleInvExp, handleInvHorizon, handleRiskProf } = MyProfileHandlers(
-            { setUserInfo, setIsEditingInfo, editedName, resendCountdown,
-              currPass, newPass, confirmPass, setIsSendingOtp, setOtp, setOtpError, setResendCountdown,
-              setIsVerifyingOtp, setConfirmPass, setCurrPass, setNewPass, setShowOtpModal, otp, setIsEditingPass});
+        verifyOtpAndReset, handleFinGoals, handleInvExp, handleInvHorizon, handleRiskProf } = MyProfileHandlers(
+            {
+                setUseDetails, setIsEditingInfo, editedName, resendCountdown,
+                currPass, newPass, confirmPass, setIsSendingOtp, setOtp, setOtpError, setResendCountdown,
+                setIsVerifyingOtp, setConfirmPass, setCurrPass, setNewPass, setShowOtpModal, otp, setIsEditingPass
+            });
 
     axios.defaults.withCredentials = true;
-
-    useEffect(() => {
-        const getUserInfo = async () => {
-            try {
-                const res = await axios.get(import.meta.env.VITE_BACKEND_LINK + "/api/v1/users/myProfile",
-                    {
-                        withCredentials: true,
-                    }
-                );
-                console.log("Fetched successfully:", res.data);
-
-                const user = res.data?.data;
-
-                if (user) {
-                    setUserInfo({
-                        name: user.name,
-                        email: user.email,
-                        profimg: user.profileImage,
-                        investmentExp: user.investmentExperience,
-                        riskProfile: user.riskProfile,
-                        InvHorizon: user.investmentHorizon,
-                        FinGoal: user.financialGoals
-                    });
-                } else {
-                    console.warn("User data not found in response:", res.data);
-                }
-            } catch (err) {
-                console.error("Error fetching user info:", err.response?.data?.message || err.message);
-            }
-        };
-        getUserInfo();
-    }, []);
 
     useEffect(() => {
         const trimmedName = editedName.trim();
@@ -113,7 +97,7 @@ export const MyProfile = () => {
     const handleButtonClick = () => fileInputRef.current.click();
 
     const handleEditInfo = () => {
-        setEditedName(userInfo.name);
+        setEditedName(userDetails?.name);
         setIsEditingInfo(true);
     };
     const handleCancelInfo = () => setIsEditingInfo(false);
@@ -136,10 +120,10 @@ export const MyProfile = () => {
     }, [resendCountdown]);
 
     function checkCountdown() {
-        if(resendCountdown > 0){
+        if (resendCountdown > 0) {
             return `Resend (${resendCountdown}s)`;
         }
-        else{
+        else {
             return isSendingOtp ? "Sending..." : "Resend";
         }
     }
@@ -147,18 +131,18 @@ export const MyProfile = () => {
     return (
         <div className="myPage">
             <Navbar darkMode={darkMode} setDarkMode={setDarkMode} pageType="my-profile"
-                profileData={{ name: userInfo.name, email: userInfo.email, profileImage: userInfo.profimg }} />
+                profileData={{ name: userDetails?.name, email: userDetails?.email, profileImage: userDetails?.profileImage }} />
 
             <div className="myPage_Container">
 
-                <Sidebar primaryData={{ name: userInfo.name, email: userInfo.email, profileImage: userInfo.profimg }} />
+                <Sidebar primaryData={{ name: userDetails?.name, email: userDetails?.email, profileImage: userDetails?.profileImage }} />
 
                 <div className="myPage_MainContent">
                     <h2 className="myPage_PersProfile"> Your personal profile </h2>
                     <div className="myPage_ProfilePic">
                         <label>Profile photo</label>
                         <div className="myPage_PicSection">
-                            <img className="myPage_PicPlaceholder" src={userInfo.profimg ? userInfo.profimg : profileImg} alt="Profile Pic" />
+                            <img className="myPage_PicPlaceholder" src={userDetails?.profileImage ? userDetails?.profileImage : profileImg} alt="Profile Pic" />
                             <input type="file" ref={fileInputRef} accept="image/*" style={{ display: "none" }} onChange={handlePicChange} />
                             <button className="myPage_ChangePhoto" value="Change Photo" onClick={handleButtonClick}>Change Photo</button>
                         </div>
@@ -185,7 +169,7 @@ export const MyProfile = () => {
                                         <p style={{ display: editedName ? 'block' : 'none' }} className="myPage_name-error error">{nameError}</p>
                                     </div>
                                 ) : (
-                                    <span>{userInfo.name}</span>
+                                    <span>{userDetails?.name}</span>
                                 )}
                             </div>
                         </div>
@@ -201,7 +185,7 @@ export const MyProfile = () => {
                         <div className="myPage_InfRow2">
                             <label>Email address</label>
                             <div className="myPage_InfValue">
-                                <span>{userInfo.email}</span>
+                                <span>{userDetails?.email}</span>
                             </div>
                         </div>
                         <hr />
@@ -274,17 +258,21 @@ export const MyProfile = () => {
                         </div>
                         <hr />
 
-                        <div className="myPage_InfRow4">
-                            <label>Linked accounts</label>
-                            <div className="myPage_LinkedBox">
-                                <img src={GoogleLogo} alt="Google Logo" />
-                                <div className="myPage_InsideBox">
-                                    <span className="myPage_ServiceName">Google</span>
-                                    <span className="myPage_AccName">Ayush Dhamecha</span>
+                        {userDetails?.registrationMethod === "google" && (
+                            <>    
+                            <div className="myPage_InfRow4">
+                                <label>Linked accounts</label>
+                                <div className="myPage_LinkedBox">
+                                    <img src={GoogleLogo} alt="Google Logo" />
+                                    <div className="myPage_InsideBox">
+                                        <span className="myPage_ServiceName">Google</span>
+                                        <span className="myPage_AccName">{userDetails?.name}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <hr />
+                            <hr />
+                        </>
+                        )}
 
                         <h2 className="myPage_InvProfile"> Your investment profile </h2>
                         <span className="myPage_AIspan"> This field helps us to provide you better suggestions.</span>
@@ -292,7 +280,7 @@ export const MyProfile = () => {
                             <div className="myPage_InvExp">
                                 <label>Investment Experience</label>
                                 <div className="myPage_InfValueDropDown1">
-                                    <select className="myPage_InvExpList" value={userInfo.investmentExp} onChange={handleInvExp}>
+                                    <select className="myPage_InvExpList" value={userDetails?.investmentExp} onChange={handleInvExp}>
                                         <option value="" disabled>Select an option</option>
                                         <option value="Beginner">Beginner</option>
                                         <option value="Intermediate">Intermediate</option>
@@ -305,7 +293,7 @@ export const MyProfile = () => {
                             <div className="myPage_RiskProfile">
                                 <label>Risk Profile</label>
                                 <div className="myPage_InfValueDropDown2">
-                                    <select className="myPage_RiskProfList" value={userInfo.riskProfile} onChange={handleRiskProf}>
+                                    <select className="myPage_RiskProfList" value={userDetails?.riskProfile} onChange={handleRiskProf}>
                                         <option value="" disabled>Select an option</option>
                                         <option value="Low - Conservative">Low - Conservative</option>
                                         <option value="Medium - Moderate">Medium - Moderate</option>
@@ -320,7 +308,7 @@ export const MyProfile = () => {
                             <div className="myPage_FinGoals">
                                 <label>Financial Goals</label>
                                 <div className="myPage_InfValueDropDown3">
-                                    <select className="myPage_FinGoalList" value={userInfo.FinGoal} onChange={handleFinGoals}>
+                                    <select className="myPage_FinGoalList" value={userDetails?.FinGoal} onChange={handleFinGoals}>
                                         <option value="" disabled>Select an option</option>
                                         <option value="Primary Growth">Primary growth</option>
                                         <option value="Income Generation">Income generation</option>
@@ -333,7 +321,7 @@ export const MyProfile = () => {
                             <div className="myPage_InvHorizon">
                                 <label>Investment Horizon</label>
                                 <div className="myPage_InfValueDropDown4">
-                                    <select className="myPage_InvHorizonList" value={userInfo.InvHorizon} onChange={handleInvHorizon}>
+                                    <select className="myPage_InvHorizonList" value={userDetails?.InvHorizon} onChange={handleInvHorizon}>
                                         <option value="" disabled>Select an option</option>
                                         <option value="Short-term (1-3 years)">Short-term (1-3 years)</option>
                                         <option value="Medium-term (3-10 years)">Medium-term (3-10 years)</option>
@@ -368,7 +356,7 @@ export const MyProfile = () => {
                             </button>
                             <button className="myPage_OTPResend" onClick={resendOtp} disabled={isSendingOtp || resendCountdown > 0}>
                                 {checkCountdown()}
-                                
+
                             </button>
                             <button className="myPage_OTPCancel" onClick={() => { setShowOtpModal(false); setOtp(""); setOtpError(""); }}>
                                 Cancel

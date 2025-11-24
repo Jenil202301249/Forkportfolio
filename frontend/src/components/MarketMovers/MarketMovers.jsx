@@ -49,7 +49,6 @@ const BusinessGroupCard = ({ logo, name, stockCount }) => (
   <div className="group-card">
     <img src={logo} alt={`${name} logo`} className="group-logo" />
     <p className="group-name">{name}</p>
-    <p className="group-stock-count">{stockCount} stocks</p>
   </div>
 );
 
@@ -143,12 +142,12 @@ const MarketMovers = () => {
 
   // Static business group cards
   const businessGroupsData = [
-    { logo: tata_icon, name: 'TATA', stockCount: 15 },
-    { logo: reliance_icon, name: 'Reliance', stockCount: 8 },
-    { logo: adani_icon, name: 'Adani', stockCount: 9 },
-    { logo: mahindra_icon, name: 'Mahindra', stockCount: 7 },
-    { logo: bajaj_icon, name: 'Bajaj', stockCount: 11 },
-    { logo: adityabirla_icon, name: 'Aditya Birla', stockCount: 8 },
+    { logo: tata_icon, name: 'TATA'},
+    { logo: reliance_icon, name: 'Reliance'},
+    { logo: adani_icon, name: 'Adani'},
+    { logo: mahindra_icon, name: 'Mahindra'},
+    { logo: bajaj_icon, name: 'Bajaj'},
+    { logo: adityabirla_icon, name: 'Aditya Birla'},
   ];
 
   if (loading) {

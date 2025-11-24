@@ -3,7 +3,7 @@ import { getPrice } from "../../utils/getQuotes.js";
 
 
 function formatNumber(num) {
-  if (num === null || num === undefined) return "--";
+  if (!num && num !== 0) return "--";
   return Number(num).toLocaleString("en-IN", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
@@ -17,11 +17,11 @@ export const getPortfolioHoldings = async (req, res) => {
       return res.status(400).json({ success: false, message: "Email required" });
     }
 
-    const portfolio = await getStockSummary(email);
+    let portfolio = await getStockSummary(email);
     if (!portfolio || portfolio.length === 0) {
       return res.status(404).json({ success: false, message: "No holdings found" });
     }
-
+    portfolio = portfolio.filter(item => item.current_holding > 0);
     const results = await Promise.allSettled(
       portfolio.map(stock =>
         getPrice(stock.symbol)
@@ -43,16 +43,16 @@ export const getPortfolioHoldings = async (req, res) => {
           dayGainValue: "--",
           totalGainPercent: "--",
           totalGainValue: "--",
-          realizedGain: stock.realized_gain ?? 0,
+          realizedGain: stock.realized_gain,
         };
       }
 
       const p = res.value;
-      const lastPrice = p.current ?? 0;
-      const prevClose = p.close ?? 0;
-      const qty = stock.current_holding ?? 0;
-      const avgPrice = stock.avg_price ?? 0;
-      const realizedGain = stock.realized_gain ?? 0;
+      const lastPrice = p.current;
+      const prevClose = p.close;
+      const qty = stock.current_holding;
+      const avgPrice = stock.avg_price;
+      const realizedGain = stock.realized_gain;
       const status = p.marketstate;
       const totalCost = avgPrice * qty;
       const marketValue = lastPrice * qty;
@@ -66,7 +66,7 @@ export const getPortfolioHoldings = async (req, res) => {
 
       return {
         symbol: stock.symbol,
-        status: status,
+        status: status ?? "UNKNOWN",
         shares: qty,
         lastPrice: formatNumber(lastPrice),
         avgPrice: formatNumber(avgPrice),

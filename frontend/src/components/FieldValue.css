@@ -13,7 +13,7 @@
 .flabel {
   font-weight: 300;
   font-size: 1.2rem;
-  white-space: nowrap;
+  flex-wrap: wrap;
 }
 
 .fvalue {
@@ -23,6 +23,50 @@
   text-align: right;
   flex: 1;
   margin-left: 1rem;
+  flex-wrap: wrap;
   overflow-wrap: break-word;
+}
+
+@media (max-width: 1280px) {
+
+  .field-value{
+    padding: 0.5rem 0.9rem;
+  }
+  
+  .flabel, .fvalue {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 1024px){
+
+  .flabel, .fvalue {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 768px){
+
+  .field-value{ 
+    padding: 0.4rem 0.5rem;
+  }
+
+  .flabel, .fvalue {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 600px){
+
+  .flabel, .fvalue {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 400px){
+
+  .flabel, .fvalue {
+    font-size: 0.7rem;
+  }
 }
 

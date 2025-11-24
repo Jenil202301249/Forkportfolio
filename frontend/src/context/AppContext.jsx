@@ -1,6 +1,7 @@
 import { createContext,useContext,useState,useEffect } from "react";
+import axios from "axios";
 import { GetUserDetails } from "../utils/getUserDetails.js"; 
-
+import Swal from "sweetalert2";
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
@@ -8,13 +9,68 @@ export const AppProvider = ({ children }) => {
     const [isSearchActive, setIsSearchActive] = useState(false);
     const [userDetails, setUserDetails] = useState(null); 
     const [userLoggedIn, setUserLoggedIn] = useState(false);
-    const val = { darkMode, setDarkMode ,userDetails,setUserDetails,userLoggedIn,setUserLoggedIn,isSearchActive,setIsSearchActive};
+    const [headerStocks, setHeaderStocks] = useState(null);
+    const [headerStocksTimestamp, setHeaderStocksTimestamp] = useState(null);
+    const val = { 
+        darkMode, setDarkMode,
+        userDetails, setUserDetails,
+        userLoggedIn, setUserLoggedIn,
+        isSearchActive, setIsSearchActive,
+        headerStocks, setHeaderStocks,
+        headerStocksTimestamp, setHeaderStocksTimestamp
+    };
     useEffect(() => {
         GetUserDetails(setUserDetails);
     }, [userLoggedIn]);
-    
+
+    // Check token by calling backend endpoint. Returns boolean.
+    const checkToken = async () => {
+        try {
+            const res = await axios.get(import.meta.env.VITE_BACKEND_LINK + "/api/v1/users/checkToken");
+            return Boolean(res?.data?.success);
+        } catch (err) {
+            console.error("checkToken error:", err);
+            return false;
+        }
+    };
+
+    // ensureAuth controls navigation depending on whether the current page
+    // is an auth/home page (isAuthOrHome = true) or a protected page (false).
+    // - If isAuthOrHome === true: if token exists => navigate to /dashboard
+    // - If isAuthOrHome === false: if token missing => alert and navigate to /
+    const ensureAuth = async (navigate, isAuthOrHome = false) => {
+        const hasToken = await checkToken();
+        if (isAuthOrHome) {
+            if (hasToken) navigate("/dashboard");
+        } else {
+            if (!hasToken) {
+                try {
+                    // Inform the user and redirect to home/auth
+                    // Using window.alert for simplicity; components may choose custom UI.
+                    Swal.fire(
+                        {
+                            title: "Session Expired",
+                            text: "Session expired or not authenticated. Redirecting to home.",
+                            icon: "warning",
+                            background: "#0d0d0d",        // black background
+                            color: "rgb(0, 200, 83)",             // soft green text
+                            confirmButtonColor: "#33ff57", // bright green button
+                            confirmButtonText: "Login Again",
+                        }
+                    );
+                } catch (e) {
+                    // ignore alert failures in non-browser tests
+                }
+                navigate("/");
+            }
+        }
+        return hasToken;
+    };
+
+    const contextValue = { ...val, checkToken, ensureAuth };
+
     return (
-        <AppContext.Provider value={val}>
+        <AppContext.Provider value={contextValue}>
             {children}
         </AppContext.Provider>
     );

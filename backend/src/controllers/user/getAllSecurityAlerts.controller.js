@@ -2,7 +2,7 @@ import { getAllSecurityAlerts } from "../../mongoModels/user.model.js";
 
 const getAllSecurityAlertsController = async (req, res) => {
     try {
-        const email = req.user.email;
+        const email = req?.user?.email;
         const alerts = await getAllSecurityAlerts(email);
 
         for (let i = 0; i < alerts.length; i++) {

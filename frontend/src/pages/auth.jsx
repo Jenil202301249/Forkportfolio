@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 import LoginForm from "../components/LoginForm.jsx";
 import SignupForm from "../components/SignupForm.jsx";
 import { useNavigate } from "react-router-dom";
+import { useAppContext } from "../context/AppContext";
 import axios from "axios";
 
 export const Auth = () => {
@@ -12,7 +13,6 @@ export const Auth = () => {
   const [isLogin, setIsLogin] = useState(() => {
     return sessionStorage.getItem("isLogin") === "false" ? false : true;
   });
-
   /*-----------------------------------------------functions----------------------------------------------- */
   // Function to reset form states
   const resetFormStates = () => {
@@ -27,22 +27,24 @@ export const Auth = () => {
       return newVal;
     });
   };
-  async function checkToken() {
-    try {
-      console.log("Checking token validity...");
-      const res = await axios.get(import.meta.env.VITE_BACKEND_LINK+"/api/v1/users/checkToken");
-      return Boolean(res?.data?.success);
-    } catch (err) {
-      console.error("Error checking token:", err);
-      return false;
-    }
-  }
+  const { ensureAuth } = useAppContext();
   const navigate = useNavigate();
+  
   useEffect(() => {
+      // Run an initial check: this page is an auth/home page, so pass true
       (async () => {
-        const valid = await checkToken();
-        if (valid) navigate("/dashboard");
+        try {
+          await ensureAuth(navigate, true);
+        } catch (e) {
+          console.error("ensureAuth initial check failed:", e);
+        }
       })();
+
+      // Poll token validity every 30 seconds and react the same way
+      const intervalId = setInterval(() => {
+        // fire-and-forget, ensureAuth handles navigation
+        ensureAuth(navigate, true).catch((e) => console.error(e));
+      }, 5000);
 
       // When user navigates back (browser back button / swipe-back), run the same
       // cleanup that the Back button does (clear session flags / reset forms).
@@ -52,8 +54,11 @@ export const Auth = () => {
         resetFormStates();
       };
       window.addEventListener('popstate', handlePop);
-      return () => window.removeEventListener('popstate', handlePop);
-    }, []);
+      return () => {
+        clearInterval(intervalId);
+        window.removeEventListener('popstate', handlePop);
+      };
+    }, [navigate, ensureAuth]);
   /*-----------------------------------------------JSX-Return-Statement----------------------------------------------- */
   return (
       <div className="auth_main_div px-0 py-0">

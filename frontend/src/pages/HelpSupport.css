@@ -1,55 +1,44 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap');
 
 /* --- Styles for Help & Support Page --- */
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-}
-
-
 .HelpSupportLayout {
-    height: 100%;
-    width: 100%;
-    background-color: #000;
+  background-color: black;
+  min-height: 100vh;
+  width: 100%;
 }
 
 .HelpSupportBody {
     display: flex;
-    justify-content: center;
     width: 100%;
     background-color: #000;
     margin-top: 80px;
 }
 
 
-.HelpSupportContainer{
-    width: 60%;
-    min-height: 910px;
-    margin-top: 2rem;
-    margin-bottom: 30px;   
-    border: 4px solid #28282889;
-    background-color: #0f0f0f;
-    padding:2rem;
-    color:#ffffff;
+.HelpSupportContainer {
+    width: 73%;
+    margin-top: 1rem;
+    border: 3px solid #1e1e1e;
+    background-color: #0e0e0e;
+    padding:3rem;
+    box-sizing: border-box;    
+}
+
+.HelpSupportContainer,
+.HelpSupportContainer * {
+  font-family: 'Poppins', sans-serif;
+  color: inherit;
 }
 
 /* Quick Help Buttons */
 
 .quick-help-section {
-  border-bottom: 0.95px solid #444444;
+  border-bottom: 3px solid #1e1e1e;
   margin-bottom: 2.5rem;
 }
 
-.quick-help-section h2,
-.quick-help-section h3{
-   color:#ffffff;
-}
-
 .quick-help-section h2 {
-  font-weight:600;
+  font-weight:500;
   font-size:2rem;
   margin-bottom: 2.5rem;
 }
@@ -62,14 +51,14 @@
 
 .quick-help-section p {
   color: #999999;
-  font-size: 14px;
+  font-size: 0.9rem;
 }
 
 .quick-help-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
-  margin-top: 1.5rem;;
+  margin-top: 1.5rem;
   margin-bottom: 1.5rem;
 }
 
@@ -78,7 +67,7 @@
   align-items: center;
   justify-content: center;
   background-color: #1E1E1E;
-  color: #ffffff;
+  color: #fff;
   padding: 12px;
   border-radius: 10px;
   font-size: 1rem;
@@ -102,7 +91,7 @@ height:1.5rem;
 /* FAQ Styles */
 
 .help-section{
-  border-bottom: 0.95px solid #444444;
+  border-bottom: 3px solid #1e1e1e;
   margin-bottom: 2.5rem;
 }
 
@@ -111,26 +100,25 @@ height:1.5rem;
   margin-bottom: 10px;
   font-weight: 500;
   font-size: 18px;
-  color:#ffffff;
 }
 
 .help-section:last-child {
   border-bottom: none;
 }
 
+.help-section .submit-ticket-btn{
+    margin-bottom: 2.5rem;
+}
+
 .faq-item{
-color: #999999;
 margin-bottom: 1.5rem ;
-font-size: 14px;
+font-size: 0.9rem;
 }
 
-.faq-question {
+.faq-item .faq-question,
+.faq-item .faq-answer {
+  color: #999999;
   padding-bottom: 0.5rem;
-}
-
-.faq-answer {
- padding-bottom: 0.5rem;
-
 }
 
 
@@ -140,14 +128,14 @@ font-size: 14px;
   margin-bottom: 10px;
   color: #999999;
   font-weight: 400;
-  font-size: 14px;
+  font-size: 0.9rem;
 }
 
 .support-form label {
-  color:#ffffff;
   display: block;
   margin-bottom: 10px; 
   font-weight: 500;
+  font-size: 1rem;
 }
 
 /* Feedback */
@@ -156,41 +144,30 @@ font-size: 14px;
   width: 100%;
   min-height: 120px;
   background-color: #1a1a1a;
-  border: 1px solid #444444;
+  border: 1px solid #1E1E1E;
   border-radius: 10px;
   padding: 0.5rem;
-  color: #999999;
-  font-size: 12px;
+  font-size: 0.9rem;
   font-weight: 400;
-  font-family: inherit;
   resize: vertical;
   margin-bottom: 1rem;
 }
 
-.support-contact-info {
-  font-size: 12px;
-  color: #999999;
-  margin-top: 10px;
-}
-
 .support-form .btn-primary{
-    display:flex;
-    align-items: center;
-    font-size: 0.8rem;
-    padding: 0.3rem 0.8rem;
-    border-radius: 6px;
+    font-size: 1rem;
+    padding: 8px 12px 8px 12px;
+    border-radius: 10px;
     background-color:  #00C853;
-    justify-content: center;
     cursor: pointer;
     border: 1px solid #00c853;
-    color:#000000;
+    color:#000;
     font-weight: 300;
-    gap:10px;
+    text-align: center;
 }
 
 .support-form .btn-primary:hover{
 background-color: #0f0f0f;
-color:#ffffff;
+color:#fff;
 border:1px solid #00c853;
 transition: 0.3s;
 }
@@ -225,12 +202,18 @@ transition: 0.3s;
   width:55%;
   max-width: 900px;
   min-width: 340px;
-  background-color: #000000;
+  background-color: #000;
   padding: 40px 32px 40px 32px;
   border-radius: 10px;
   max-height: 80vh; 
   overflow-y: auto;
 }
+
+.detailed-content-card strong {
+  color: #fff; 
+  font-weight: 500;
+}
+
 
 body.modal-open {
   overflow: hidden; 
@@ -243,7 +226,6 @@ body.modal-open {
   gap: 12px;
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
-  color: #FCF7F7;
   font-weight: 500;
 }
 
@@ -251,6 +233,7 @@ body.modal-open {
   color: #999999;
   line-height: 35px;
   margin-bottom: 0.5rem;
+  font-size: 0.9rem;
 }
 
 .detailed-content-card ul,.detailed-content-card ol {
@@ -266,15 +249,15 @@ body.modal-open {
 }
 
 .detailed-content-card button {
-  display: flex;
-  color: #000000;
+  color: #000;
   background-color:  #00c853;
   border-radius: 10px;
   padding: 12px;
+  font-size: 1rem;
   margin-top: 1.5rem;
   cursor:pointer;
   border:1px solid #00c853;
-  gap:10px;
+  text-align: center;
 }
 .detailed-content-card button:hover {
    background-color: transparent;
@@ -283,8 +266,399 @@ body.modal-open {
 }
 
 
+/*-- RESPONSIVE BREAKPOINTS --*/
+
+@media (max-width: 1280px) {
+  
+  .HelpSupportContainer {
+    padding: 2rem;
+  }
+  .HelpSupportContainer p{
+    font-size: 0.9rem;
+  }  
+  .quick-help-section{
+    margin-bottom: 2rem;
+  }
+  .quick-help-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+  } 
+  .quick-help-section h3 {
+    font-size: 1rem;
+  }  
+  .help-section{
+    margin-bottom: 1.5rem;
+  }
+  .help-section h3{
+    font-size: 1rem;
+  }
+  .help-section .submit-ticket-btn{
+    margin-bottom: 2rem;
+  }
+  .faq-item{
+    margin-bottom: 1.2rem;
+  }
+  .quick-help-btn{  
+    padding: 10px;
+    font-size: 0.9rem;
+    gap:8px;
+    border-radius: 8px;
+  }
+  .quick-help-icon {
+    width:1.2rem;
+    height:1.2rem;
+  }    
+  .support-form textarea {
+    min-height: 110px;
+    margin-bottom: 0.7rem;
+    border-radius: 8px;
+  }
+  .support-form .btn-primary{
+    font-size: 0.9rem;
+    padding: 6px 10px 6px 10px;
+    border-radius: 8px;
+  }
+  .support-form label{
+    font-size: 0.9rem;
+  }
+  .detailed-content-card h3 {
+     font-size: 1.2rem;
+  }
+  .detailed-content-card {
+    border-radius: 8px;
+    width: 60%;
+    padding: 37.5px 30px;
+  } 
+  .detailed-content-card p,.detailed-content-card li {
+    line-height: 30px;
+  }  
+  .detailed-content-card button {
+    margin-top: 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    padding:10px;
+  }
+}
 
 
+/* Medium Tablets (1024px and below) */
+@media (max-width: 1024px) {
+  
+  .quick-help-section{
+    border-bottom: 2px solid #1e1e1e;
+  }
+  .quick-help-section h2 {
+    font-size: 1.3rem;
+    margin-left: -0.5rem;
+    margin-top: -0.5rem;
+  } 
+  .quick-help-section h3 {
+    font-size: 0.95rem;
+  }  
+  .help-section{
+    border-bottom: 2px solid #1e1e1e;
+  }
+  .help-section h3{
+    font-size: 0.95rem;
+  }
+  .quick-help-btn{  
+    padding: 9px;
+    font-size: 0.8rem;
+    border-radius: 7px;
+    height: 50px;
+    gap:6px;
+  }
+  .quick-help-grid {
+    gap: 1.3rem;
+    margin-top: 1.3rem;
+    margin-bottom: 1.3rem;
+  }
+  .quick-help-icon {
+    width:1.1rem;
+    height:1.1rem;
+  } 
+  .support-form .btn-primary{
+    font-size: 0.8rem;
+    padding: 5px 9px 5px 9px;
+    border-radius: 7px;
+  }      
+  .support-form textarea{
+    min-height: 100px;
+    font-size: 0.8rem;
+    border-radius: 7px;
+  }   
+  .detailed-content-card h3 {
+     font-size: 1.2rem;
+  }
+  .detailed-content-card {
+    border-radius: 7px;
+    width: 70%;
+    padding: 31.25px 25px;
+  } 
+  .detailed-content-card button {
+    border-radius: 7px;
+    font-size: 0.8rem;
+    padding:9px;
+  }
+}
+
+/* Tablets / Large Mobiles (768px and below) */
+@media (max-width: 768px) {
+  
+  .HelpSupportContainer{
+    border: 2px solid #1e1e1e;
+  }
+  .HelpSupportContainer p{
+    font-size: 0.7rem;
+  }
+  .quick-help-section{
+    margin-bottom: 1.5rem;
+  }    
+  .quick-help-section h2 { 
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem ;
+  } 
+  .quick-help-section h3 {
+    font-size: 0.85rem;
+  }
+  .quick-help-grid {
+    gap: 1.1rem;
+    margin-top: 1.1rem;
+    margin-bottom: 1.1rem;
+  }    
+  .help-section{
+    margin-bottom: 1rem;
+  }
+  .help-section .submit-ticket-btn{
+    margin-bottom: 1.5rem;
+  }  
+  .faq-item{
+    margin-bottom: 0.6rem;
+  }  
+  .help-section h3{
+    font-size: 0.85rem;
+  }
+  .quick-help-btn{  
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    height: 40px;
+    gap: 5px;
+  }
+  .quick-help-icon {
+    width:1rem;
+    height:1rem;
+  }   
+  .support-form .btn-primary{
+    font-size: 0.7rem;
+    padding: 5px 9px 5px 9px;
+    border-radius: 6px;
+  }   
+  .support-form label{
+    font-size: 0.7rem;
+  }
+  .support-form textarea{
+    min-height: 90px;
+    font-size: 0.7rem;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    padding: 0.4rem;
+  }
+  .detailed-content-card h3 {
+     font-size: 1.1rem;
+  }
+  .detailed-content-card {
+    padding: 27.5px 22px;
+    border-radius: 6px;
+    width: 75%;
+  } 
+  .detailed-content-card li {
+    font-size: 0.7rem;
+  }  
+  .detailed-content-card p,.detailed-content-card li {
+    line-height: 20px;
+    font-size: 0.7rem;
+  }
+  .detailed-content-card ul,.detailed-content-card ol {
+    padding-left: 1.4rem;
+  }
+  .detailed-content-card button {
+    margin-top: 0.8rem;
+    border-radius: 6px;
+    font-size: 0.6rem;
+    padding:7px;
+  }
+}
 
 
+@media (max-width: 600px){ 
+  
+  .HelpSupportContainer p{
+    font-size: 0.65rem;
+  }
+  .quick-help-section{
+    margin-bottom: 1rem;
+  }
+  .quick-help-section h2 {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  } 
+  .quick-help-section h3 {
+    font-size: 0.75rem;
+  }   
+  .help-section{
+    margin-bottom: 1rem;
+  }
+  .help-section h3{
+    font-size: 0.75rem;
+  }
+  .help-section .submit-ticket-btn{
+    margin-bottom: 1.2rem;
+  }
+  .faq-item{
+    margin-bottom: 0.5rem;
+  }
+  .quick-help-btn{  
+    padding: 7px;
+    border-radius: 5px;
+    font-size: 0.65rem;
+    height: 30px;
+    gap: 5px;
+  }
+  .quick-help-grid {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }   
+  .quick-help-icon {
+    width:0.95rem;
+    height:0.95rem;
+  }    
+  .support-form textarea {
+    min-height: 80px;
+    margin-bottom: 0.65rem;
+    font-size: 0.6rem;
+    border-radius: 5px;
+    padding: 0.3rem;
+  }
+  .support-form .btn-primary{
+    font-size: 0.6rem;
+    padding: 4px 8px 4px 8px;
+    border-radius: 5px;
+  }
+  .support-form label{
+    font-size: 0.65rem;
+  }
+  .detailed-content-card h3 {
+     font-size: 1rem;
+  }
+  .detailed-content-card {
+    width: 85%;
+    padding: 25px 20px;
+    border-radius: 5px;
+  } 
+  .detailed-content-card p,.detailed-content-card li {
+    line-height: 20px;
+    font-size: 0.65rem;
+  }  
+  .detailed-content-card button {
+    margin-top: 0.5rem;
+    border-radius: 5px;
+    font-size: 0.55rem;
+    padding:6px;
+  }
+}
 
+
+@media (max-width: 400px) {
+  
+  .HelpSupportContainer{
+    padding: 1rem;
+    border: 1.5px solid #1e1e1e;
+  }
+  .HelpSupportContainer p{
+    font-size: 0.6rem;
+  }
+  .quick-help-section{
+    margin-bottom: 0.6rem;
+  }
+  .quick-help-section h2 {
+    font-size: 0.8rem;
+    margin-bottom: 1.5rem;
+    margin-left: 0;
+    margin-top: 0;    
+  } 
+  .quick-help-section h3 {
+    font-size: 0.6rem;
+  }   
+  .help-section{
+    margin-bottom: 0.6rem;
+  }
+  .help-section h3{
+    font-size: 0.6rem;
+  }
+  .help-section .submit-ticket-btn{
+    margin-bottom: 1rem;
+  }
+  .faq-item{
+    margin-bottom: 0.5rem;
+  }
+  .quick-help-btn{  
+    padding: 6px;
+    font-size: 0.55rem;
+    height: 25px;
+    gap: 5px;
+    border-radius: 4px;
+  }
+  .quick-help-grid {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+    margin-top: 0.8rem;
+    margin-bottom: 0.8rem;
+  }   
+  .quick-help-icon {
+    width:0.75rem;
+    height:0.75rem;
+  }    
+  .support-form textarea {
+    margin-bottom: 0.65rem;
+    min-height: 70px;
+    font-size: 0.55rem;
+    border-radius: 4px;
+    padding: 0.2rem;
+  }
+  .support-form .btn-primary{
+    font-size: 0.55rem;
+    padding: 3px 7px 3px 7px;
+    border-radius: 4px;
+  }
+  .support-form label{
+    font-size: 0.55rem;
+  }
+  .detailed-content-card h3 {
+     font-size: 0.8rem;
+  }
+  .detailed-content-card {
+    min-width:0;
+    max-width: 95%;
+    padding: 12px 10px;
+    border-radius: 4px;
+  } 
+    .modal-overlay {
+    padding: 1rem 0.5rem; 
+  }
+  .detailed-content-card p,.detailed-content-card li {
+    line-height: 15px;
+    font-size: 0.6rem;
+  }  
+  .detailed-content-card ul,.detailed-content-card ol {
+    padding-left: 1.3rem;
+  }
+  .detailed-content-card button {
+    margin-top: 0.4rem;
+    border-radius: 4px;
+    font-size: 0.55rem;
+    padding:5px;
+  }
+}

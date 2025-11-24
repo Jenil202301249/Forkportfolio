@@ -8,6 +8,7 @@ import jwt from "jsonwebtoken";
 const activityAndSessionHistory = async (req, res) => {
     try {
         const email = req.user.email;
+        if(!email) return res.status(401).json({success:false,message:"expected mail"});
         const activeSessions = await getAllActiveSessionOfUser(email);
         if (!activeSessions) {
             return res
@@ -18,7 +19,7 @@ const activityAndSessionHistory = async (req, res) => {
                         "Database error while getting active session count",
                 });
         }
-
+        
         for (let i = 0; i < activeSessions.length; i++) {
             try {
                 jwt.verify(activeSessions[i].token, process.env.JWT_SECRET);

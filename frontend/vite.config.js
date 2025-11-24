@@ -9,4 +9,10 @@ export default defineConfig({
   //   }
   // },
   plugins: [react(), tailwindcss()],
+    test: {
+    environment: "jsdom",
+    deps: {
+      fallbackCJS: true,   // <-- FIX ESM REQUIRE ISSUES
+    },
+  },
 })

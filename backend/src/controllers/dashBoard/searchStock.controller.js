@@ -62,13 +62,12 @@ export const searchStock = async (req,res)=>{
     if(!ticker || ticker.length<1){
         return res.status(400).json({success:false,message:"Query is required"})
     }
-    console.log(ticker)
     try{
         let localsuggestions = fuse.search(ticker, { limit: 10 });
         localsuggestions = localsuggestions.map(r => r.item);
         let result = await yahooFinance.search(ticker,{enableFuzzyQuery: true,quotesCount: 10,region: 'INDIA',enableEnhancedTrivialQuery: true});
-        if(!result){
-            if(!localsuggestions){
+        if(!result||!result.quotes||result.quotes.length===0){
+            if(!localsuggestions||localsuggestions.length===0){
                 return res.status(404).json({success:false,message:"Stock not found"})
             }
             return res.status(200).json({success:true,suggestions: localsuggestions});

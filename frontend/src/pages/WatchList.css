@@ -97,15 +97,60 @@
     border: 3px solid #1e1e1e;
 }
 
+/* Empty watchlist state uses same card as table */
+.watchlist-empty-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.watchlist-empty-state {
+    width: 100%;
+    min-height: 260px; /* roughly height of skeleton table (~4 rows) */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem 1rem;
+    gap: 1rem;
+}
+
+.watchlist-empty-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #cccccc;
+}
+
+.add-stocks-btn {
+    margin-top: 0.25rem;
+    padding: 0.6rem 1.5rem;
+    border-radius: 999px;
+    border: 1px solid #00c853;
+    background-color: transparent;
+    color: #00c853;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.add-stocks-btn:hover {
+    background-color: #00c853;
+    color: #000;
+}
+
 .watchlist-table {
     width: 100%;
     border-collapse: separate !important;
     border-spacing: 0 !important;
     background-color: transparent !important;
 }
-
+.table-stock:hover {
+    background-color: #0a0a0a;
+}
 .watchlist-table th {
-    padding: 0 0.75rem;
+    padding: 1rem 0.75rem;
     padding-bottom:1rem;
     text-align: center;
     font-weight: 700;
@@ -142,7 +187,7 @@
     padding-right:2rem;
 }
 .watchlist-table td:nth-child(2),.watchlist-table td:nth-child(3),.watchlist-table td:nth-child(4){
-    padding-left:2.75rem;
+    padding-left:4.5%;
 }
 .watchlist-table td {
     padding: 1rem ;
@@ -173,7 +218,7 @@
 .change-cell-after {
   display: none;
 }
-@media (max-width: 820px) {
+@media (max-width: 1000px) {
     .search-container input {
         width: 164px;
     }
@@ -188,40 +233,102 @@
     display: block; 
     font-size: 0.75rem;
     width:100px;
+    margin-left: 20%;
   }
   .price-cell {
     font-size: 1rem;
-  }
-   
- .watchlist-table th:nth-child(2),
-    .watchlist-table td:nth-child(2) {
-    display: none;
+    margin-left: 20%;
+
   }
  
 }
-@media(max-width: 450px){
-    .watchlist-content {
-    width: 90%;
+@media(max-width: 800px){
+    .watchlist-table th:nth-child(2),
+    .watchlist-table td:nth-child(2) {
+    display: none;
   }
-}
-  @media(max-width: 550px){
-    .watchlist-table td:nth-child(3){
+      .watchlist-table td:nth-child(3){
         padding:0.75rem 0 0.75rem 1.5rem;
     }
-.watchlist-table th:first-child{
+    .watchlist-table th:first-child{
     padding:0 0 0.75rem 1.75rem;
+        width:40% !important;
+    }
+    .watchlist-table td:first-child{
+    padding:0.75rem 0 0.75rem 1.75rem;
+    width:40% !important;
+    }
+    .watchlist-table th:last-child{
+    padding-right:1.75rem;
+    
+    }
+    .watchlist-table td:last-child{
+    padding-right:0.75rem;
+    }
 }
-.watchlist-table td:first-child{
-padding:0.75rem 0 0.75rem 1.75rem;
+@media(max-width: 600px){
+    .watchlist-table {
+        table-layout: fixed;
+    }
+    
+    .watchlist-table th {
+        font-size: 0.75rem;
+    }
+    
+    .watchlist-table th:first-child,
+    .watchlist-table td:first-child {
+        width:calc(100% - 72px - 35%) !important;
+    }
+    
+    .watchlist-table th:nth-child(3) {
+        width: 35%;
+        padding-left: 3rem;
+    }
+    
+    .watchlist-table td:nth-child(3) {
+        width: 35%;
+        padding-left: 3rem;
+    }
+    
+    .watchlist-table th:last-child {
+        width: 100px;
+        min-width: 100px;
+        padding-left: 1.25rem;
+    }
+    
+    .watchlist-table td:last-child {
+        width: 72px;
+        min-width: 72px;
+        padding-left: 1.5rem;
+        padding-right: 0.5rem;
+    }
+    
+    .company-name,.price-cell{
+        font-size:0.8rem;
+        margin:0;
+    }
+    
+    .company-symbol {
+        font-size: 0.7rem;
+    }
+    
+    .change-cell, .change-cell-after{
+        font-size:0.65rem;
+        margin:0;
+    }
+    
+    .action-btn {
+        height: 32px;
+        width: 32px;
+        font-size: 1rem;
+    }
 }
-.watchlist-table th:last-child{
-padding-right:1.75rem;
-}
-.watchlist-table td:last-child{
-padding-right:0.75rem;
-}
-  }
 
+@media(max-width: 550px){
+    .watchlist-content {
+        width: 90%;
+    }
+}
 .change-cell {
     font-weight: 500;
 }
@@ -241,6 +348,7 @@ padding-right:0.75rem;
     color: #999;
     cursor: pointer;
     font-size: 0.85rem;
+    z-index: 10;
 }
 @media (max-width: 1150px) {
    .action-btn::before {
@@ -265,7 +373,9 @@ padding-right:0.75rem;
     color: #fff;
     border-color: #c81b00;
 }
-
+.watchlist-hidden{
+    display:none;
+}
 /* Filter Modal */
 .filter-modal-overlay {
     position: fixed;
@@ -413,6 +523,7 @@ padding-right:0.75rem;
     cursor: pointer;
     font-size: 0.95rem;
 }
+
 .price-range{
     width:280px;
 }
@@ -534,6 +645,12 @@ padding-right:0.75rem;
     border-color: #00c853;
 }
 
+.no-results-row .no-results-cell {
+  vertical-align: middle;          /* vertical center inside tall row */
+  padding: 3.5rem 1rem;            /* visually about 3–4 normal rows */
+  display: table-cell !important;  /* override flex display on td:last-child */
+}
+
 /* Skeleton loading */
 .skeleton {
   position: relative;
@@ -551,4 +668,30 @@ padding-right:0.75rem;
 }
 @keyframes skeleton-shimmer {
   100% { transform: translateX(100%); }
+}
+@media (max-width: 470px) {
+    .filter-option{
+        gap:0.5rem;
+    }
+    .filter-option label {
+        font-size: 0.75rem;
+    }
+    .filter-option input[type="radio"],
+    .filter-option input[type="checkbox"] {
+        height:16px;
+        width:16px;
+    }
+    .filter-option input[type="radio"]:checked::after{
+        width:8px;
+        height:8px;
+    }
+    .filter-options-sortby{
+        gap:0.5rem;
+    }
+
+        .price-range{
+            width:100%;
+            max-width:280px;
+
+        }
 }

@@ -12,15 +12,37 @@ import AiInsights from '../components/AiInsights/AiInsights'
 import MyHoldings from '../components/MyHoldings/MyHoldings'
 import Navbar from '../components/Navbar.jsx';
 import { useAppContext } from "../context/AppContext";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from 'react';
 export const Dashboard = () => {
-  const { darkMode, setDarkMode } = useAppContext();
+  const { darkMode, setDarkMode ,userDetails} = useAppContext();
+  const navigate = useNavigate();
+  const { ensureAuth } = useAppContext();
 
+  useEffect(() => {
+             // Run an initial check: this page is an auth/home page, so pass true
+          (async () => {
+            try {
+              await ensureAuth(navigate, false);
+            } catch (e) {
+              console.error("ensureAuth initial check failed:", e);
+            }
+          })();
+    
+          const intervalId = setInterval(() => {
+            ensureAuth(navigate, false).catch((e) => console.error(e));
+          }, 10000);
+    
+          return () => {
+            clearInterval(intervalId);
+          };
+    },  [navigate, ensureAuth]);
   return (
     <>
     <div className="dashboard-container">
        
       <Navbar darkMode={darkMode} setDarkMode={setDarkMode} pageType="dashboard" 
-      profileData={{name: "Ayush Dhamecha",email: "ma**@gmail.com",}}/>
+      profileData={{name: userDetails?.name?.split(" ")[0] || "Guest",email: userDetails?.email || "N/A"}}/>
 
       <DashboardHeader darkMode={darkMode}  />
       

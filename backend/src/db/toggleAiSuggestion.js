@@ -1,6 +1,7 @@
 import { sql } from "./dbConnection.js";
 
 const toggleAiSuggestion = async (email) => {
+    if(email === null || email === undefined || email === "") return null;
     try {
         const result =
             await sql`UPDATE "user" SET aiSuggestion = NOT aiSuggestion WHERE email=${email} RETURNING id`;

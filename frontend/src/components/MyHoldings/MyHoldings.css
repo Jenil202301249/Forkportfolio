@@ -1,7 +1,7 @@
 
 .card {
   background-color: #161616;
-  border: 1px solid #7dff9e;
+  border: 1px solid #00c853;
   border-radius: 12px;
   padding: 1.5rem;
   /* margin: 20px; */
@@ -15,7 +15,7 @@
   margin-top: 40px;
 }
 
-table {
+.holdings-card table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 1rem;
@@ -23,20 +23,84 @@ table {
   
 }
 
-th, td {
+.holdings-card th, .holdings-card td {
   border: 1px solid #2c2c2c;
   padding: 0.8rem;
   border: 1px solid white;
 }
 
-th {
+.holdings-card th {
   background-color: #1f1f1f;
   font-weight: 700;
   
 }
 
-td {
+.holdings-card td {
   background-color: #1f1f1f;
   font-weight: 700;
   color: gray;
 }
+
+/* Tablet breakpoint */
+@media (max-width: 1050px) {
+  .holdings-card {
+    width: 100%;
+    margin-top: 24px;
+    padding: 1rem;
+  }
+
+  .holdings-card table {
+    font-size: 0.92rem;
+  }
+
+  .holdings-card th, .holdings-card td {
+    padding: 0.6rem;
+  }
+}
+
+
+
+@media (max-width: 600px) {
+  .holdings-card {
+    width: 100%;
+    padding: 0.8rem;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+    width: 100%;        
+  }
+
+  /* Allow the table to shrink and wrap on very small screens. Use fixed layout so columns respect available width */
+  .holdings-card table {
+    min-width: auto;
+    width: 100%;
+    table-layout: fixed;
+    font-size: 0.82rem;
+    word-break: break-word;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .holdings-card th, .holdings-card td {
+    padding: 0.45rem;
+    white-space: normal;
+  }
+
+  .header-title {
+    font-size: 1.1rem;
+    text-align: center;
+  }
+}
+  .holdings-card .see-more {
+    font-weight: 700;
+    display: inline-block;
+    margin-top: 0.8rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .holdings-card .see-more:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+

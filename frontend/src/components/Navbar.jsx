@@ -1,13 +1,13 @@
 import React, { useState,useEffect } from "react";
 import axios from "axios";
 import { Link, Navigate } from "react-router-dom";
-import web_logo_without_bg_darkmode from "../assets/web_logo_without_bg_darkmode.png";
+import web_logo_without_bg_darkmode from "../assets/logofooter-navbar.svg";
 import web_logo_without_bg_lightmode from "../assets/web_logo_without_bg_lightmode.png";
 import themetoggledark from "../assets/themetoggledark.svg";
 import profileicon from "../assets/profileicon.svg";
 import routeicon from "../assets/routeicon.svg";
 import exiticon from "../assets/exiticon.svg";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./Navbar.css";
 import { useAppContext } from "../context/AppContext";
 // import tailwind from "tailwindcss/tailwind.css";
@@ -16,6 +16,7 @@ const Navbar = ({ darkMode, setDarkMode, pageType, profileData = {} }) => {
   axios.defaults.withCredentials = true;
   /*----------------------------------------------------State Varible------------------------------------------------------- */
   const navigate = useNavigate();
+  const location = useLocation();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false); 
   const handleProfileClick = () => setIsProfileOpen(true);
@@ -57,6 +58,11 @@ const Navbar = ({ darkMode, setDarkMode, pageType, profileData = {} }) => {
   return () => window.removeEventListener("resize", handleResize);
 }, [isMenuOpen]);
 
+  // Scroll to top when route changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   return (
     <>
       {/* Show overlay whenever profile popup is open (not only on dashboard) */}
@@ -81,11 +87,36 @@ const Navbar = ({ darkMode, setDarkMode, pageType, profileData = {} }) => {
             </>
           ) : (
             <>
-              <Link className="navbar_btn" to="/dashboard">Dashboard</Link>
-              <Link className="navbar_btn" to="#">Portfolio</Link>
-              <Link className="navbar_btn" to="/ai-insight">AI Insights</Link>
-              <Link className="navbar_btn" to="#">Compare Stocks</Link>
-              <Link className="navbar_btn" to="/watchlist">Watchlist</Link>
+              <Link 
+                className={`navbar_btn ${location.pathname === "/dashboard" ? "active" : ""}`} 
+                to="/dashboard"
+              >
+                Dashboard
+              </Link>
+              <Link 
+                className={`navbar_btn ${location.pathname === "/portfolio" ? "active" : ""}`} 
+                to="/portfolio"
+              >
+                Portfolio
+              </Link>
+              <Link 
+                className={`navbar_btn ${location.pathname === "/ai-insight" ? "active" : ""}`} 
+                to="/ai-insight"
+              >
+                AI Insights
+              </Link>
+              <Link 
+                className={`navbar_btn ${location.pathname === "/compare-stocks" ? "active" : ""}`} 
+                to="#"
+              >
+                Compare Stocks
+              </Link>
+              <Link 
+                className={`navbar_btn ${location.pathname === "/watchlist" ? "active" : ""}`} 
+                to="/watchlist"
+              >
+                Watchlist
+              </Link>
             </>
           )}
         </div>
@@ -108,17 +139,17 @@ const Navbar = ({ darkMode, setDarkMode, pageType, profileData = {} }) => {
             </div>
           )}
 
-          <div className="toggle_btn">
+          {/* <div className="toggle_btn">
             <button style = {{display : "none"}}onClick={() => setDarkMode(!darkMode)}>
               <img src={themetoggledark} alt="Toggle Theme" />
             </button>
-          </div>
+          </div> */}
           <i className="menu_toggle pi pi-bars" onClick={toggleMenu}> 
           </i>
         </div>
       </div>
         {isMenuOpen && (
-        <div className="mobile_menu ">
+        <div className="mobile_menu">
           {pageType === "/" ? (
             <div className="menuoptions">
               <ul>
@@ -135,7 +166,7 @@ const Navbar = ({ darkMode, setDarkMode, pageType, profileData = {} }) => {
             <div className="menuoptions">
               <ul>
               <Link to="/dashboard"><li>Dashboard </li></Link>
-              <Link to="#"><li>Portfolio</li></Link>
+              <Link to="/portfolio"><li>Portfolio</li></Link>
               <Link to="/ai-insight"><li>AI Insights</li></Link>
               <Link to="#"><li>Compare Stocks</li></Link>
               <Link to="/watchlist"><li className="lastli">Watchlist</li></Link>

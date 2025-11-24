@@ -15,11 +15,6 @@ export const sendMessage = async (req, res) => {
             investmentHorizon: req.user?.investmenthorizon,
         }
         const {message} = req.body;
-        // console.log("Received sendMessage request from user with userDetails:", userDetails);
-        // if(!userDetails.emailId){
-        //     return res.status(500).json({message:"emailid is absent"});
-        // }
-        // console.log("Message received in controller:",message.screenWidth );
         if(!message) return res.status(400).json({error : "message is required"});
         const result = await app.invoke({
             messages : [{ role: "user", content: message.text,additional_kwargs: { userDetails: userDetails ,screenWidth: message.screenWidth} }]

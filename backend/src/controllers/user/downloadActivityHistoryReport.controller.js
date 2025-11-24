@@ -7,8 +7,16 @@ import { getActivityHistoryDownloadEmailTemplate } from "../../utils/mailActivit
 
 const downloadActivityHistoryReport = async (req, res) => {
   try {
-    const email = req.user.email;
-    const name = req.user.name;
+    const email = req?.user?.email;
+    const name = req?.user?.name;
+
+    if (!email) {
+      return res.status(401).json({ success: false, message: "Expected email" });
+    }
+
+    if (!name) {
+      return res.status(401).json({ success: false, message: "Expected name" });
+    }
 
     const history = await getAllActivityHistory(email);
     

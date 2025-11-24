@@ -10,5 +10,5 @@ import { userStockSummary } from "./userStockSummary.controller.js";
 import { getUserPortfolioValuations } from "./portfoliograph.controller.js";
 import { graphFormetData } from "./graphDataFromet.js";
 import { stockDetails } from "./stockDetails.controller.js";
-
-export {searchStock, starter, getNews, calculatePortfolio, addTransaction, showWatchlist,removeFromWatchlist,addToWatchlist,getStockAllocation,getMarketGainers,getMarketactiveStocks,getMarketLosers,userStockSummary,getUserPortfolioValuations, graphFormetData, stockDetails};
+import { getPortfolioInsight } from "./getPortfolioInsight.controller.js";
+export {searchStock, starter, getNews, calculatePortfolio, addTransaction, showWatchlist,removeFromWatchlist,addToWatchlist,getStockAllocation,getMarketGainers,getMarketactiveStocks,getMarketLosers,userStockSummary,getUserPortfolioValuations, graphFormetData, stockDetails,getPortfolioInsight};

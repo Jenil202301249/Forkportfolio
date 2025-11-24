@@ -5,7 +5,7 @@
   height: 440px;
   font-size: 1.25rem; 
   color: #a1a1aa;
-  background-color: #000;
+  background-color: #000000;
   padding: 20px;
   border-radius: 8px;
   width: 100%;
@@ -14,18 +14,66 @@
 }
 
 .sector-allocation-container {
-  background-color: #000;
+  background-color: #000000;
   padding: 20px;
   border-radius: 8px;
   width: 100%;
   
   max-width: 672px;
   margin: 0 auto; 
-  color: #f4f4f5; 
+  color: #ffffff; 
 }
 
 .chart-wrapper {
   height: 400px;
   position: relative;
+}
+
+
+/* Ensure chart graphics scale on small screens */
+.chart-wrapper svg,
+.chart-wrapper canvas {
+  max-width: 100%;
+  height: auto !important;
+  display: block;
+}
+
+
+@media (max-width: 1050px) {
+  .loading-container,
+  .sector-allocation-container {
+    padding: 14px;
+    max-width: 100%;
+    width: 95%;
+  }
+
+  .chart-wrapper {
+    height: 300px;
+    min-height: 220px;
+  }
+}
+
+
+@media (max-width: 580px) {
+  .loading-container,
+  .sector-allocation-container {
+    padding: 12px;
+    width: 100%;
+  }
+  .sector-allocation-container .chart-wrapper {
+    height: 320px;
+    min-height: 260px;
+    overflow-x: auto;
+  }
+
+  /* Ensure the chart canvas/svg fill the wrapper on small screens
+     and maintain a usable height instead of collapsing. More specific
+     selector overrides the general svg/canvas rules above. */
+  .sector-allocation-container .chart-wrapper canvas,
+  .sector-allocation-container .chart-wrapper svg {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+  }
 }
 

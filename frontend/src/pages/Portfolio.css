@@ -1,0 +1,599 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap');
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.portfolio-main-page {
+    height: 100%;
+    width: 100%;
+    background-color: #000;
+    overflow-x: hidden;
+}
+
+.portfolio-empty {
+    height: 142px;
+}
+
+.portfolio-main-content {
+    display: flex;
+    height: 100%;
+    width: 90%;
+    align-items: center;
+    justify-content: center;
+    margin-left: 5%;
+    background-color: #000;
+    padding: 1rem 1rem;
+    margin-bottom: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    scroll-behavior: smooth;
+    scroll-padding-top: 142px;
+    overflow: hidden;
+}
+
+.portfolio-values {
+    display: flex;
+    padding: 1rem 1rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+    margin-left: 15%;
+    border-radius: 14px;
+    width: 70%;
+    height: 22rem;
+    border: 3px solid #383838;
+}
+
+.first-div {
+    display: flex;
+    gap: 8rem;
+    margin-bottom: 1.5rem;
+}
+
+.second-div {
+    display: flex;
+    gap: 7rem;
+}
+
+.total-val-cur,
+.total-val-inv,
+.today-gl,
+.overall-gl,
+.risk {
+    display: flex;
+    flex-direction: column;
+}
+
+.label-cur,
+.label-inv {
+    opacity: 0.8;
+    font-size: 1.5rem;
+    font-weight: 450;
+    font-family: 'Poppins', sans-serif;
+}
+
+.amount-cur,
+.amount-inv {
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-top: 0.3rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.today-gl-label,
+.overall-gl-label,
+.risk-label {
+    opacity: 0.8;
+    font-weight: 450;
+    font-size: 1.3rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+.today-gl-amount,
+.overall-gl-amount,
+.risk-amount {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-top: 0.3rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.today-gl-amount.profit,
+.overall-gl-amount.profit {
+    color: #00c853;
+}
+
+.today-gl-amount.loss,
+.overall-gl-amount.loss {
+    color: #c81b00;
+}
+
+.portfolio-stocks-list {
+    margin-bottom: 1rem;
+}
+
+.portfolio-mode-btns {
+    display: flex;
+    width: 86%;
+    margin-left: 7%;
+    margin-bottom: 0.8rem;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.portfolio-toggle-div {
+    display: flex;
+    gap: 0.7rem;
+}
+
+.portfolio-btn {
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease, transform 0.3s ease;
+}
+
+.portfolio-btn.active {
+    background-color: #00c853;
+    color: #000;
+    transition: 0.3s;
+    transform: scale(1);
+}
+
+.portfolio-btn.active:hover {
+    background-color: #00c853;
+}
+
+.portfolio-btn:hover {
+    background-color: #282828;
+    transition: 0.3s;
+}
+
+.portfolio-add-stk-btn {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    background-color: #1e1e1e;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.portfolio-add-stk-btn:hover {
+    background-color: transparent;
+    transition: 0.3s;
+}
+
+.risk-amount.low {
+    color: #00c853;
+}
+
+.risk-amount.med {
+    color: #ffab00;
+}
+
+.risk-amount.high {
+    color: #c81b00;
+}
+
+.portfolio-chart{
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 1280px) {
+
+    .portfolio-main-content {
+        height: 100%;
+        width: 90%;
+        margin-left: 5%;
+        padding: 1rem 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .portfolio-values {
+        padding: 0.8rem 0.8rem;
+        gap: 1.8rem;
+        margin-left: 13%;
+        border-radius: 14px;
+        width: 74%;
+        height: 20rem;
+    }
+
+    .first-div {
+        gap: 7rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .second-div {
+        gap: 3.5rem;
+    }
+
+    .label-cur,
+    .label-inv {
+        opacity: 0.8;
+        font-size: 1.35rem;
+        font-weight: 450;
+    }
+
+    .amount-cur,
+    .amount-inv {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-top: 0.3rem;
+    }
+
+    .today-gl-label,
+    .overall-gl-label,
+    .risk-label {
+        opacity: 0.8;
+        font-weight: 450;
+        font-size: 1.2rem;
+    }
+
+    .today-gl-amount,
+    .overall-gl-amount,
+    .risk-amount {
+        font-size: 1.65rem;
+        font-weight: 700;
+        margin-top: 0.3rem;
+    }
+
+    .portfolio-stocks-list {
+        margin-bottom: 1rem;
+    }
+
+    .portfolio-mode-btns {
+        width: 86%;
+        margin-left: 7%;
+        margin-bottom: 0.8rem;
+        gap: 1rem;
+    }
+
+    .portfolio-toggle-div {
+        gap: 0.7rem;
+    }
+
+    .portfolio-btn {
+        padding: 0.6rem 1rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .portfolio-add-stk-btn {
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        border-radius: 8px;
+    }
+
+}
+
+@media (max-width: 1024px) {
+
+    .portfolio-values {
+        padding: 0.7rem 0.8rem;
+        gap: 1.6rem;
+        margin-left: 13%;
+        border-radius: 14px;
+        width: 74%;
+        height: 18rem;
+    }
+
+    .first-div {
+        gap: 6rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .second-div {
+        gap: 2.7rem;
+    }
+
+    .label-cur,
+    .label-inv {
+        opacity: 0.8;
+        font-size: 1.2rem;
+        font-weight: 450;
+    }
+
+    .amount-cur,
+    .amount-inv {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-top: 0.3rem;
+    }
+
+    .today-gl-label,
+    .overall-gl-label,
+    .risk-label {
+        opacity: 0.8;
+        font-weight: 450;
+        font-size: 1.05rem;
+    }
+
+    .today-gl-amount,
+    .overall-gl-amount,
+    .risk-amount {
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin-top: 0.3rem;
+    }
+
+    .portfolio-stocks-list {
+        margin-bottom: 1rem;
+    }
+
+    .portfolio-mode-btns {
+        width: 86%;
+        margin-left: 7%;
+        margin-bottom: 0.8rem;
+        gap: 1rem;
+    }
+
+    .portfolio-toggle-div {
+        gap: 0.7rem;
+        align-items: center;
+    }
+
+    .portfolio-btn {
+        padding: 0.6rem 0.8rem;
+        border-radius: 7px;
+        font-size: 0.8rem;
+    }
+
+    .portfolio-add-stk-btn {
+        gap: 0.5rem;
+        padding: 0.5rem 0.8rem;
+        font-size: 0.7rem;
+        font-weight: 600;
+        border-radius: 8px;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .portfolio-values {
+        padding: 0.3rem 0.5rem;
+        gap: 1.6rem;
+        margin-left: 13%;
+        border-radius: 14px;
+        height: 14rem;
+        width: 74%;
+    }
+
+    .first-div {
+        gap: 4rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .second-div {
+        gap: 2rem;
+    }
+
+    .label-cur,
+    .label-inv {
+        opacity: 0.8;
+        font-size: 0.9rem;
+        font-weight: 450;
+    }
+
+    .amount-cur,
+    .amount-inv {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-top: 0.3rem;
+    }
+
+    .today-gl-label,
+    .overall-gl-label,
+    .risk-label {
+        opacity: 0.8;
+        font-weight: 450;
+        font-size: 0.85rem;
+    }
+
+    .today-gl-amount,
+    .overall-gl-amount,
+    .risk-amount {
+        font-size: 1rem;
+        font-weight: 700;
+        margin-top: 0.3rem;
+    }
+
+    .portfolio-stocks-list {
+        margin-bottom: 1rem;
+    }
+
+    .portfolio-mode-btns {
+        width: 86%;
+        margin-left: 7%;
+        margin-bottom: 0.8rem;
+        gap: 1rem;
+    }
+
+    .portfolio-toggle-div {
+        gap: 0.5rem;
+    }
+
+    .portfolio-btn {
+        padding: 0.4rem 0.6rem;
+        border-radius: 6px;
+        font-size: 0.7rem;
+    }
+
+    .portfolio-add-stk-btn {
+        font-size: 0.65rem;
+        border-radius: 6px;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .portfolio-values {
+        padding: 0.3rem 0.5rem;
+        gap: 1.6rem;
+        margin-left: 13%;
+        border: 2px solid #383838;
+        border-radius: 10px;
+        height: 11rem;
+        width: 74%;
+    }
+
+    .first-div {
+        gap: 2.7rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .second-div {
+        gap: 2rem;
+    }
+
+    .label-cur,
+    .label-inv {
+        opacity: 0.8;
+        font-size: 0.7rem;
+        font-weight: 450;
+    }
+
+    .amount-cur,
+    .amount-inv {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-top: 0.3rem;
+    }
+
+    .today-gl-label,
+    .overall-gl-label,
+    .risk-label {
+        opacity: 0.8;
+        font-weight: 450;
+        font-size: 0.65rem;
+    }
+
+    .today-gl-amount,
+    .overall-gl-amount,
+    .risk-amount {
+        font-size: 0.75rem;
+        font-weight: 700;
+        margin-top: 0.3rem;
+    }
+
+    .portfolio-stocks-list {
+        margin-bottom: 1rem;
+    }
+
+    .portfolio-mode-btns {
+        width: 86%;
+        margin-left: 7%;
+        margin-bottom: 0.8rem;
+        gap: 1rem;
+    }
+
+    .portfolio-toggle-div {
+        gap: 0.5rem;
+    }
+
+    .portfolio-btn {
+        padding: 0.4rem 0.6rem;
+        border-radius: 6px;
+        font-size: 0.6rem;
+    }
+
+    .portfolio-add-stk-btn {
+        font-size: 0.5rem;
+        border-radius: 6px;
+    }
+}
+
+@media (max-width: 400px) {
+
+    .portfolio-values {
+        padding: 0.3rem 0.5rem;
+        gap: 1rem;
+        margin-left: 9%;
+        border: 2px solid #383838;
+        border-radius: 10px;
+        height: 9rem;
+        width: 82%;
+    }
+
+    .first-div {
+        gap: 1.6rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .second-div {
+        gap: 1rem;
+    }
+
+    .label-cur,
+    .label-inv {
+        opacity: 0.8;
+        font-size: 0.55rem;
+        font-weight: 450;
+    }
+
+    .amount-cur,
+    .amount-inv {
+        font-size: 0.8rem;
+        font-weight: 700;
+        margin-top: 0.3rem;
+    }
+
+    .today-gl-label,
+    .overall-gl-label,
+    .risk-label {
+        opacity: 0.8;
+        font-weight: 450;
+        font-size: 0.45rem;
+    }
+
+    .today-gl-amount,
+    .overall-gl-amount,
+    .risk-amount {
+        font-size: 0.6rem;
+        font-weight: 700;
+        margin-top: 0.3rem;
+    }
+
+    .portfolio-stocks-list {
+        margin-bottom: 1rem;
+    }
+
+    .portfolio-mode-btns {
+        width: 86%;
+        margin-left: 7%;
+        margin-bottom: 0.8rem;
+        gap: 1rem;
+    }
+
+    .portfolio-toggle-div {
+        gap: 0rem;
+    }
+
+    .portfolio-btn {
+        padding: 0.3rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.45rem;
+    }
+
+    .portfolio-add-stk-btn {
+        font-size: 0.4rem;
+        border-radius: 6px;
+    }
+}

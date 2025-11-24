@@ -79,7 +79,7 @@ export const getMarketactiveStocks = async (req, res) => {
         if(result){
             return res.status(200).json({ success: true, data: result.activeStocks,news: result.news });
         }
-        const activeStocks = await getSymbols('most_actives',5);
+        const activeStocks = await getSymbols('most_actives',7);
         if (!activeStocks) {
             return res.status(504).json({ success: false, message: "No active stocks found." });
         }

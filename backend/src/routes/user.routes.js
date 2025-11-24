@@ -41,6 +41,7 @@ import {
 import { verifyToken } from "../middlewares/auth.middleware.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { verifyUserLoginStatus } from "../middlewares/verifyUserLoginStatus.middleware.js";
+import { verifyUserLoginStatusGoogle } from "../middlewares/verifyUserLoginGoogle.middleware.js";
 
 const router = Router();
 
@@ -50,14 +51,14 @@ router.route("/logoutSession").post(verifyToken, logoutUserSession);
 router.route("/logoutAllSessions").post(verifyToken, logoutAllUserSessions);
 router.route("/registerOtpGeneration").post(verifyUserLoginStatus,registerOtpGeneration);
 router.route("/register").post(verifyUserLoginStatus,register);
-router.route("/googleLogin").post(verifyUserLoginStatus,loginWithGoogle);
+router.route("/googleLogin").post(verifyUserLoginStatusGoogle,loginWithGoogle);
 router.route("/updateProfileName").patch(verifyToken, updateProfileNameController);
 router.route("/updateProfileInvestmentExperience").patch(verifyToken, updateProfileInvestmentExperienceController);
 router.route("/updateProfileRiskProfile").patch(verifyToken, updateProfileRiskProfileController);
 router.route("/updateProfileFinancialGoal").patch(verifyToken, updateProfileFinancialGoalsController)
 router.route("/updateProfileInvestmentHorizon").patch(verifyToken, updateProfileInvestmentHorizonController);
 router.route("/myProfile").get(verifyToken, getProfile);
-router.route("/registerWithGoogle").post(registerWithGoogle);
+router.route("/registerWithGoogle").post(verifyUserLoginStatusGoogle,registerWithGoogle);
 router.route("/forgotPasswordOtpGeneration").post(SendForgotPasswordOtp);
 router.route("/verifyOtp").post(VerifyOtp);
 router.route("/verifyOtpForProfile").post(verifyToken, VerifyOtpForProfile);

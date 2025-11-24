@@ -4,9 +4,14 @@
 html{
     scroll-behavior: smooth;
 }
-/* *:not(input):not(textarea) {
+*{
   caret-color: transparent; 
-} */
+}
+input,
+textarea,
+[contenteditable="true"] {
+  caret-color: auto; 
+}
 ::-webkit-scrollbar {
     width: 7px;
     height: 10px;

@@ -12,17 +12,29 @@ const createExcel = async (req, res) => {
     let filePath = "";
 
     try {
-        const email = req.user.email;
-        const userName = req.user.name;
+        const email = req?.user?.email;
+        const userName = req?.user?.name;
+
+        if (!email) {
+            return res
+                .status(401)
+                .json({ success: false, message: "email is not present" });
+        }
+
+        if (!userName) {
+            return res
+                .status(401)
+                .json({ success: false, message: "name is not present" });
+        }
 
         const userData = [
             {
-                name: req.user.name,
-                email: req.user.email,
-                investmentExperience: req.user.investmentexperience,
-                riskProfile: req.user.riskprofile,
-                financialGoals: req.user.financialgoals,
-                investmentHorizon: req.user.investmenthorizon,
+                name: req?.user?.name,
+                email: req?.user?.email,
+                investmentExperience: req?.user?.investmentexperience,
+                riskProfile: req?.user?.riskprofile,
+                financialGoals: req?.user?.financialgoals,
+                investmentHorizon: req?.user?.investmenthorizon,
             },
         ];
 
@@ -134,11 +146,11 @@ const createExcel = async (req, res) => {
         await sendMail(mailOptions);
 
         const newActivity = {
-            os_type: req.activeSession.osType,
-            browser_type: req.activeSession.browserType,
+            os_type: req?.activeSession?.osType,
+            browser_type: req?.activeSession?.browserType,
             type: "Downloaded Portfolio Data",
             message: "Downloaded Portfolio Data",
-            token: req.cookies.token,
+            token: req?.cookies.token,
         };
         await addActivityHistory(email, newActivity);
 

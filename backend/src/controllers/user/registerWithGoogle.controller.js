@@ -42,7 +42,7 @@ const registerWithGoogle = async (req, res) => {
 
             const addActiveSessionStatus = await insertActiveSession({
                 token: token,
-                email: user[0].email,
+                email: existingUser[0].email,
                 browser_type: browser,
                 os_type: os,
             });
@@ -58,7 +58,7 @@ const registerWithGoogle = async (req, res) => {
             secure: true,
             sameSite: "none",
             maxAge: 7 * 24 * 60 * 60 * 1000,
-          }).json({ success: true, message: "Registered Successfully" });
+          }).json({ success: true, message: "Login Successfully" });
         } else {
             const hashedPassword = await bcrypt.hash(id,10);
             const newUser = await insertUser({ name, email, Password:hashedPassword,method:"google" });

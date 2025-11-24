@@ -73,9 +73,6 @@
   background-color: #1E1E1E;
 }
 
-/* ===== RESPONSIVE STYLES ===== */
-
-/* Large Desktop (1440px and above) */
 @media (min-width: 1440px) {
   .sectorai {
     width: 80%;
@@ -83,7 +80,6 @@
   }
 }
 
-/* Desktop (1024px to 1439px) */
 @media (max-width: 1439px) {
   .section-wrapper {
     margin-top: 130px;
@@ -94,7 +90,6 @@
   }
 }
 
-/* Tablet Landscape (768px to 1023px) */
 @media (max-width: 1023px) {
   .section-wrapper {
     margin-top: 120px;
@@ -124,7 +119,7 @@
   }
 }
 
-/* Tablet Portrait (600px to 767px) */
+
 @media (max-width: 767px) {
   .section-wrapper {
     margin-top: 100px;
@@ -142,8 +137,15 @@
     width: 100%;
   }
   
+
+  .sectorai > :first-child,
+  .sectorai > :last-child {
+    padding: 16px;
+    border-radius: 12px;
+    background-clip: padding-box;
+  }
   .sectorai > :first-child {
-    padding: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.45);
   }
   
   .dashboard-content {
@@ -159,9 +161,42 @@
     height: auto;
     min-height: 1200px;
   }
+
+  .section-wrapper h1,
+  .section-wrapper h2,
+  .section-wrapper h3 {
+    font-size: 1.1rem;
+    line-height: 1.35;
+  }
+
+/* .section-wrapper button,
+.section-wrapper .btn,
+.section-wrapper .primary-btn {
+    font-size: 1rem;
+    padding: 12px 14px;
+    border-radius: 10px;
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+  } */
+
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .card-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .chart-container {
+    width: 100% !important;
+    height: 240px !important;
+  }
 }
 
-/* Mobile Landscape (481px to 599px) */
 @media (max-width: 599px) {
   .section-wrapper {
     margin-top: 80px;
@@ -173,16 +208,65 @@
   }
   
   .sectorai > :first-child {
-    padding: 12px;
-    border-radius: 8px;
+    padding: 14px;
+    border-radius: 10px;
   }
   
   .dashboard-content {
     margin-top: 80px;
   }
+
+  /* make images and icons fluid */
+  .sectorai img,
+  .chart-container img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .small-text {
+    font-size: 0.95rem;
+  }
+
+  
+  .portfoliochart-container,
+  .sector-allocation-container,
+  .insights-card,
+  .holdings-card,
+  .market-movers-container,
+  .trending-stocks-container,
+  .dashboard-wrapper,
+  .page-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    box-sizing: border-box;
+  }
+
+  .insights-card,
+  .ai-title,
+  .insights,
+  .chart-wrapper,
+  .portfoliochart-graph,
+  .market-movers-container {
+    min-width: 0 !important;
+  }
+
+  /* Ensure tables and lists are horizontally scrollable rather than overflowing viewport */
+  .table-wrapper,
+  .section-wrapper .table-responsive,
+  .chart-wrapper,
+  .chart-container,
+  .main-grid,
+  .groups-grid {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
-/* Mobile Portrait (320px to 480px) */
 @media (max-width: 480px) {
   .dashboard-container {
     overflow-x: hidden;
@@ -190,18 +274,18 @@
   
   .section-wrapper {
     margin-top: 70px;
-    padding: 0 10px;
+    padding: 0 12px;
   }
   
   .sectorai {
     width: 100%;
     gap: 15px;
-    padding: 0 5px;
+    padding: 0 6px;
   }
   
   .sectorai > :first-child {
-    padding: 10px;
-    border-radius: 8px;
+    padding: 12px;
+    border-radius: 10px;
     border-width: 1.5px;
   }
   
@@ -216,17 +300,101 @@
   .welcomediv {
     height: auto;
     min-height: 400px;
-    padding: 15px 10px;
+    padding: 16px 12px;
   }
   
   .portfoliodiv {
     height: auto;
     min-height: 1000px;
-    padding: 15px 10px;
+    padding: 16px 12px;
+  }
+
+  
+  .section-wrapper,
+  .dashboard-content,
+  .sectorai {
+    font-size: 15px;
+  }
+
+.section-wrapper input,
+.section-wrapper select,
+.section-wrapper textarea  {
+    font-size: 15px;
+    padding: 10px 12px;
+    border-radius: 8px;
+  }
+
+
+  .inline-cards,
+  .mini-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* horizontal overflow protection for tables and charts */
+  .table-responsive,
+  .chart-wrapper,
+  .chart-container {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Make common dashboard components fluid and stacked on very small screens */
+  .dashboard-wrapper,
+  .portfolio-grid,
+  .main-grid,
+  .groups-grid,
+  .framed-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100% !important;
+  }
+
+  
+  /* Keep chart buttons concise on very small screens: allow wrapping instead of full-width */
+  .portfoliochart-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  .portfoliochart-btn {
+    display: inline-block;
+    width: auto;
+    padding: 8px 12px;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    box-sizing: border-box;
+  }
+
+  .see-more-link,
+  .view-all {
+    width: 100%;
+    display: block;
+    text-align: left;
+    padding-left: 6px;
+  }
+
+  .card,
+  .portfolio-card,
+  .content-card,
+  .group-card,
+  .trending-stocks-container,
+  .portfoliochart-box {
+    box-shadow: none !important;
+    border-radius: 10px;
   }
 }
 
-/* Extra Small Mobile (below 320px) */
+
 @media (max-width: 319px) {
   .section-wrapper {
     margin-top: 60px;
@@ -237,6 +405,13 @@
   }
   
   .sectorai > :first-child {
+    padding: 8px;
+  }
+
+  
+  .sectorai > :first-child,
+  .sectorai > :last-child {
+    border-radius: 8px;
     padding: 8px;
   }
 }

@@ -92,7 +92,7 @@ useEffect(() => {
                     placeholder="Type a message..." 
                     className="chat-input"
                 />
-                <button className="send-btn" onClick={handleSend}>{isLoading ? <RingLoader color="#000000" size={20}/> : <>Send</>}</button>
+                <button className="send-btn" onClick={handleSend} disabled={input.length === 0} style={{opacity: input.length === 0 ? 0.5 : 1 , cursor: input.length === 0 ? "not-allowed" : "pointer"}}>{isLoading ? <RingLoader color="#000000" size={20}/> : <>Send</>}</button>
         </div>
     </div>
   )

@@ -17,6 +17,12 @@
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  transition: all 0.2s ease;
+}
+
+.d-stock-info:hover {
+  opacity: 0.8;
+  transform: translateY(-1px);
 }
 
 .d-stock-header {
@@ -227,10 +233,34 @@
   align-items: center;
   gap: 10px;
   padding: 10px 12px;
-  cursor: pointer; 
+  cursor: pointer;
+  position: relative;
 }
 .result-item:hover{ 
   background: rgba(0,0,0,0.05); 
+}
+.add-to-watchlist-btn {
+  margin-left: auto;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+.add-to-watchlist-btn:hover {
+  background: rgba(0, 200, 83, 0.2);
+  border-color: #00C853;
+  transform: scale(1.1);
+}
+.add-to-watchlist-btn i {
+  font-size: 16px;
 }
 .result-meta { 
   display: flex; 
@@ -294,4 +324,47 @@
   .d-stock-display-container{
     padding: 0 8px;
   }
+}
+/* Skeleton loading (watchlist identical) */
+.skeleton {
+  position: relative;
+  display: inline-block;       /* important so width/height apply */
+  overflow: hidden;
+  background-color: #1a1a1a;
+  border-radius: 6px;
+  vertical-align: middle;
+}
+
+/* Text-size placeholders that scale with font-size of parent */
+.skeleton-text {
+  display: inline-block;      /* follow content flow, but accept width/height */
+  width: 100%;
+  height: 1em;                /* matches current font-size of parent */
+  line-height: 1;             /* avoid extra spacing */
+  border-radius: 4px;
+  min-width: 16px;            /* avoids collapsing to zero on tiny containers */
+}
+
+/* optional variants if you want shorter lines explicitly in markup */
+.skeleton-text.short { width: 6ch; }   /* approx to characters */
+.skeleton-text.medium { width: 10ch; }
+.skeleton-text.very-short { width: 3ch; }
+
+/* shimmer pseudo-element (same as your watchlist) */
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0),
+    rgba(255, 255, 255, 0.08),
+    rgba(0, 0, 0, 0)
+  );
+  animation: skeleton-shimmer 1.2s infinite;
+}
+
+@keyframes skeleton-shimmer {
+  100% { transform: translateX(100%); }
 }

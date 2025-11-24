@@ -86,6 +86,7 @@ body {
   align-items: center;
   padding: 8px 0;
   border-bottom: 1px solid #374151;
+  transition: 0.25s ease;
 }
 
 .stock-item:last-child {
@@ -123,6 +124,8 @@ body {
   transform: translateY(-3px);
   background: rgba(0, 255, 120, 0.07);
   cursor: pointer;
+  padding: 0.5rem;              
+  border-radius: 1.5rem;
 
 }
 
@@ -130,6 +133,8 @@ body {
   transform: translateY(-3px);
   background: rgba(255, 80, 80, 0.07);
   cursor: pointer;
+  padding: 0.5rem;              
+  border-radius: 1.5rem;
 }
 
 
@@ -167,7 +172,7 @@ body {
 }
 
 .group-card {
-  background-color: #1f2937;
+  background-color: #0E0E0E;
   padding: 16px;
   border-radius: 8px;
   display: flex;
@@ -197,7 +202,9 @@ body {
 .news-item {
   padding: 8px 0;
   margin-bottom: 8px;
-  pointer-events: auto; /* ensures clicks go directly to <a> */
+  pointer-events: auto; 
+  /* ensures clicks go directly to <a> */
+  transition: 0.25s ease;
 }
 
 .news-headline {
@@ -221,4 +228,9 @@ body {
 
 .clickable-news:hover {
   opacity: 0.8;
+  transform: translateY(-3px);
+  background: rgba(0, 255, 120, 0.07);
+  cursor: pointer;
+  padding: 0.5rem;              
+  border-radius: 1.5rem;
 }

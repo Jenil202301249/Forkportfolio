@@ -6,25 +6,31 @@ import DashboardHeader from '../components/Dashboard-Header.jsx';
 import Footer from '../components/Footer.jsx';
 import filterIcon from '../assets/filter-button.svg';
 import axios from "axios";
-
+import {useNavigate} from 'react-router-dom';
 const BACKEND_URL = import.meta.env.VITE_BACKEND_LINK;
 const Watchlist_API = `${BACKEND_URL}/api/v1/dashboard/displayWatchlist`;
 
 
 const  Watchlist= () => {
-  const { darkMode, setDarkMode, isSearchActive, setIsSearchActive } = useAppContext();
+  const { darkMode, setDarkMode,setIsSearchActive} = useAppContext();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [priceError, setPriceError] = useState('');
-  const [watchlistData,setwatchlistData]=useState([]);
+  const [watchlistData, setwatchlistData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
+  const [searchData, setSearchData] = useState([]);   
   const [isFiltersApplied, setIsFiltersApplied] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const isWatchlistEmpty = !isLoading && watchlistData.length === 0;
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+
+
   // Filter states
-    const fetchWatchlist = async () => {
+  const fetchWatchlist = async () => {
     try {
       setIsLoading(true);
       const res = await axios.get(Watchlist_API);
-      const data = res.data?.watchlist || []; // safer access
+      const data = res.data?.watchlist || [];
 
       const formattedData = data.map((item) => ({
         company: item.shortName,
@@ -38,6 +44,7 @@ const  Watchlist= () => {
       
       setwatchlistData(formattedData);
       setFilteredData(formattedData);
+      setSearchData(formattedData);
     } catch (err) {
       console.error("Error fetching watchlist:", err);
     } finally {
@@ -46,23 +53,35 @@ const  Watchlist= () => {
   };
   const handleRemoveStock= async (symbol) => {
     try{
-      // Optimistic update - remove from UI immediately for instant feedback
       const updatedData = watchlistData.filter(stock => stock.symbol !== symbol);
       const updatedFiltered = filteredData.filter(stock => stock.symbol !== symbol);
-      
       setwatchlistData(updatedData);
       setFilteredData(updatedFiltered);
-      
-      // Then make the backend call (no need to refetch after)
       await axios.delete(`${BACKEND_URL}/api/v1/dashboard/removeFromWatchlist?symbol=${symbol}`);
     }
     catch(err){
       console.error("Error removing stock:", err);
       // If backend call fails, revert by refetching to restore data
-      fetchWatchlist();
-    }
+      if (err.response?.status !== 200) fetchWatchlist();    }
   }
-  const [filters, setFilters] = useState({
+  
+  const handleAddToWatchlist = async (symbol) => {
+    try {
+      const res = await axios.post(
+        `${BACKEND_URL}/api/v1/dashboard/addToWatchlist`,
+        { symbol },
+        { withCredentials: true }
+      );
+      console.log("Added to watchlist:", res.data);
+      await fetchWatchlist();
+    } catch (err) {
+      console.error("Error adding stock to watchlist:", err.response?.data || err);
+    }
+  };
+    const handleStockClick = (symbol) => {
+      navigate(`/stockdetails/${symbol}`);
+    };  
+    const [filters, setFilters] = useState({
     dailyChange: '',
     dailyChangePercent: '',
     priceFrom: '',
@@ -72,15 +91,30 @@ const  Watchlist= () => {
     sortBy: ''
   });
 
-useEffect(() => {
+  const { ensureAuth } = useAppContext();
 
+  useEffect(() => {
+             // Run an initial check: this page is an auth/home page, so pass true
+          (async () => {
+            try {
+              await ensureAuth(navigate, false);
+            } catch (e) {
+              console.error("ensureAuth initial check failed:", e);
+            }
+          })();
+    
+          const intervalId = setInterval(() => {
+            ensureAuth(navigate, false).catch((e) => console.error(e));
+          }, 10000);
+    
+          return () => {
+            clearInterval(intervalId);
+          };
+    },  [navigate, ensureAuth]);
 
-  fetchWatchlist();
-
-  // Optional auto-refresh every minute:
-  // const interval = setInterval(fetchWatchlist, 60000);
-  // return () => clearInterval(interval);
-}, []);
+  useEffect(() => {
+    fetchWatchlist();
+  }, []);
 
   const sectors = [
     'Technology / IT', 'Communication Services', 'Materials & Mining',
@@ -114,6 +148,23 @@ useEffect(() => {
     if (cap < 200000000000) return 'mid';
     return 'large';
   };
+const handleSearch = (value) => {
+  setSearchQuery(value);
+
+  if (value.trim() === "") {
+    setSearchData(filteredData);   // fallback to filter results
+    return;
+  }
+
+  const lower = value.toLowerCase();
+
+  const searched = filteredData.filter(stock =>
+    stock.company.toLowerCase().includes(lower) ||
+    stock.symbol.toLowerCase().includes(lower)
+  );
+
+  setSearchData(searched);
+};
 
   const handleApplyFilters = () => {
     let filtered = [...watchlistData];
@@ -177,6 +228,7 @@ useEffect(() => {
     }
 
     setFilteredData(filtered);
+    setSearchData(filtered);   // reset search results to filtered
     setIsFilterOpen(false);
   };
 
@@ -192,6 +244,7 @@ useEffect(() => {
     });
     setPriceError('');
     setFilteredData(watchlistData);
+    setSearchData(watchlistData);
     setIsFiltersApplied(false);
   };
 
@@ -204,7 +257,11 @@ useEffect(() => {
         profileData={{ name: "Ayush Dhamecha", email: "ma**@gmail.com" }} 
       />
       
-      <DashboardHeader darkMode={darkMode} />
+      <DashboardHeader 
+        darkMode={darkMode} 
+        isWatchlistPage={true}
+        onAddToWatchlist={handleAddToWatchlist}
+      />
       
       <div className="watchlist-content">
 
@@ -213,12 +270,13 @@ useEffect(() => {
             <p>Track your favorite stocks and monitor their performance</p>
           </div>
           
-          <div className="search-container">
+          <div className={`search-container  ${isWatchlistEmpty ? 'watchlist-hidden' : ''}`}>
               <i className="pi pi-search"></i>
               <input 
                 type="text" 
                 placeholder="Search your stock"
-                onFocus={() => setIsSearchActive(true)}
+                value={searchQuery}
+                onChange={(e) => handleSearch(e.target.value)}
               />
               <button className="filter-btn"  onClick={() => setIsFilterOpen(true)}> 
                 <img src={filterIcon} alt="filter-icon" />
@@ -228,87 +286,96 @@ useEffect(() => {
        
 
         {/* Watchlist Table */}
-        <div className="watchlist-table-container">
-          <table className="watchlist-table">
-            <thead>
-              <tr>
-                <th>Company</th>
-                <th>Symbol</th>
-                <th>Price</th>
-                <th>Change</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {isLoading ? (
-                Array.from({ length: 4 }).map((_, idx) => (
-                  <tr key={`skeleton-${idx}`}>
-                    <td>
-                      <div className="company-cell">
-                        <div className="skeleton" style={{ width: '60%', height: 14 }}></div>
-                        <div className="skeleton" style={{ width: '36%', height: 14, marginTop: 6 }}></div>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="skeleton" style={{ width: '40%', height: 14 }}></div>
-                    </td>
-                    <td>
-                      <div className="skeleton" style={{ width: '40%', height: 14 }}></div>
-                      <div className="skeleton change-cell-after" style={{ width: '60%', height: 12, marginTop: 6 }}></div>
-                    </td>
-                    <td>
-                      <div className="skeleton" style={{ width: '60%', height: 14 }}></div>
-                    </td>
-                    <td>
-                      <div className="skeleton" style={{ width: 64, height: 28, borderRadius: 9999 }}></div>
-                    </td>
-                  </tr>
-                ))
-              ) : filteredData.length === 0 ? (
+        {(isLoading || watchlistData.length > 0) && (
+          <div className="watchlist-table-container">
+            <table className="watchlist-table">
+              <thead>
                 <tr>
-                  <td colSpan="5" style={{ textAlign: 'center', padding: '2rem' }}>
-                    {isFiltersApplied 
-                      ? 'No stocks match your filters' 
-                      : 'Your watchlist is empty. Add stocks to start tracking!'}
-                  </td>
+                  <th>Company</th>
+                  <th>Symbol</th>
+                  <th>Price</th>
+                  <th>Change</th>
+                  <th>Action</th>
                 </tr>
-              ) : (
-                filteredData.map((stock) => (
-                  <tr key={stock.symbol}>
-                    <td>
-                      <div className="company-cell">
-                        <span className="company-name">{stock.company}</span>
-                      </div>
-                    </td>
-                    <td>
-                      <span className="company-symbol">{stock.symbol}</span>
-                    </td>
-                    <td>
-                      <span className="price-cell">{stock.price.toFixed(2)}</span>
-                       <span className={`change-cell ${stock.change >= 0 ? 'change-positive' : 'change-negative'} change-cell-after`}>
-                        {stock.change >= 0 ? '+' : ''}{stock.change.toFixed(2)} ({stock.changePercent >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%)
-                      </span>
-                    </td>
-                    <td>
-                      <span className={`change-cell ${stock.change >= 0 ? 'change-positive' : 'change-negative'}`}>
-                        {stock.change >= 0 ? '+' : ''}{stock.change.toFixed(2)} ({stock.changePercent >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%)
-                      </span>
-                    </td>
-                    <td>
-                      <button 
-                        className="action-btn"
-                        aria-label={`Remove ${stock.symbol} from watchlist`} 
-                        onClick={() => handleRemoveStock(stock.symbol)}
-                      >
-                       <span>Remove</span>
-                      </button>
+              </thead>
+              <tbody>
+                {isLoading ? (
+                  Array.from({ length: 4 }).map((_, idx) => (
+                    <tr key={`skeleton-${idx}`}>
+                      <td>
+                        <div className="company-cell">
+                          <div className="skeleton" style={{ width: '60%', height: 14 }}></div>
+                          <div className="skeleton" style={{ width: '36%', height: 14, marginTop: 6 }}></div>
+                        </div>
+                      </td>
+                      <td>
+                        <div className="skeleton" style={{ width: '40%', height: 14 }}></div>
+                      </td>
+                      <td>
+                        <div className="skeleton" style={{ width: '40%', height: 14 }}></div>
+                        <div className="skeleton change-cell-after" style={{ width: '60%', height: 12, marginTop: 6 }}></div>
+                      </td>
+                      <td>
+                        <div className="skeleton" style={{ width: '60%', height: 14 }}></div>
+                      </td>
+                      <td>
+                        <div className="skeleton" style={{ width: 64, height: 28, borderRadius: 9999 }}></div>
+                      </td>
+                    </tr>
+                  ))
+                ) : searchData.length === 0 ? (
+                  <tr className="no-results-row">
+                    <td colSpan="5" className="no-results-cell">
+                      No stocks matched your filters
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+                ) : (
+                  searchData.map((stock) => (
+                    <tr key={stock.symbol} className="table-stock" onClick={() => handleStockClick(stock.symbol)} style={{cursor: 'pointer'}}>
+                      <td>
+                        <div className="company-cell">
+                          <span className="company-name">{stock.company}</span>
+                        </div>
+                      </td>
+                      <td>
+                        <span className="company-symbol">{stock.symbol}</span>
+                      </td>
+                      <td>
+                        <span className="price-cell">{stock.price.toFixed(2)}</span>
+                         <span className={`change-cell ${stock.change >= 0 ? 'change-positive' : 'change-negative'} change-cell-after`}>
+                          {stock.change >= 0 ? '+' : ''}{stock.change.toFixed(2)} ({stock.changePercent >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%)
+                        </span>
+                      </td>
+                      <td>
+                        <span className={`change-cell ${stock.change >= 0 ? 'change-positive' : 'change-negative'}`}>
+                          {stock.change >= 0 ? '+' : ''}{stock.change.toFixed(2)} ({stock.changePercent >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%)
+                        </span>
+                      </td>
+                      <td>
+                        <button 
+                          className="action-btn"
+                          aria-label={`Remove ${stock.symbol} from watchlist`} 
+                           onClick={(e) => {e.stopPropagation(); handleRemoveStock(stock.symbol);}}
+                        >
+                         <span>Remove</span>
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {/* Empty state only when watchlist itself is empty (no stocks at all) */}
+        {!isLoading && isWatchlistEmpty && (
+          <div className="watchlist-table-container watchlist-empty-container">
+            <div className="watchlist-empty-state">
+              <p className="watchlist-empty-title">Nothing in this watchlist yet</p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Filter Modal */}

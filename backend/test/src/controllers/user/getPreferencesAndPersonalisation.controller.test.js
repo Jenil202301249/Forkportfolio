@@ -1,29 +1,26 @@
-import { getPreferencesAndPersonalisation } from "../../../../src/controllers/user/preferences.controller.js";
+import { getPreferencesAndPersonalisation } from "../../../../src/controllers/user/getPreferencesAndPersonalisation.controller.js";
 
-describe("getPreferencesAndPersonalisation", () => {
+describe("getPreferencesAndPersonalisation.controller.js", () => {
     let req, res;
 
     beforeEach(() => {
+        jest.clearAllMocks();
+
+        req = {
+            user: {
+                theme: "dark",
+                dashboardlayout: "grid",
+            },
+        };
+
         res = {
             status: jest.fn().mockReturnThis(),
             json: jest.fn().mockReturnThis(),
         };
-        jest.spyOn(console, 'log').mockImplementation(() => {});
     });
 
-    afterEach(() => {
-        // Restore console.log implementation
-        jest.restoreAllMocks();
-    });
-
-    it("should return 200 and user preferences when req.user is available", async () => {
-        req = { 
-            user: { 
-                theme: "dark", 
-                dashboardlayout: "compact" 
-            } 
-        };
-
+    // ---------- SUCCESS PATH ----------
+    it("returns 200 with theme and dashboardlayout", async () => {
         await getPreferencesAndPersonalisation(req, res);
 
         expect(res.status).toHaveBeenCalledWith(200);
@@ -31,22 +28,31 @@ describe("getPreferencesAndPersonalisation", () => {
             success: true,
             data: {
                 theme: "dark",
-                dashboardlayout: "compact",
+                dashboardlayout: "grid",
             },
         });
     });
 
-    it("should return 500 and an error message if req.user is missing or null", async () => {
-        req = {};
+    // ---------- CATCH BLOCK ----------
+    it("returns 500 when an exception occurs", async () => {
+        const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+
+        // Force error: create throwing getter
+        req.user = {};
+        Object.defineProperty(req.user, "theme", {
+            get() {
+                throw new Error("boom");
+            },
+        });
 
         await getPreferencesAndPersonalisation(req, res);
+
+        expect(consoleSpy).toHaveBeenCalled();
+
         expect(res.status).toHaveBeenCalledWith(500);
-        
-        expect(res.json).toHaveBeenCalledWith(
-            expect.objectContaining({
-                success: false,
-                message: expect.any(String),
-            })
-        );
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "failed to fetch data, please try again",
+        });
     });
 });
