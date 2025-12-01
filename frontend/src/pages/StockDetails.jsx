@@ -10,13 +10,13 @@ import StockChart from "../components/StockChart";
 import './StockDetails.css';
 import { useParams } from "react-router-dom";
 import { useAppContext } from "../context/AppContext.jsx";
-import { formatDate, formatLargeNumber, formatPercentage, formatSmallNumber, roundTo } from "../utils/dataCleaningFuncs.jsx";
 import { useNavigate } from "react-router-dom";
+import { formatDate, formatLargeNumber, formatPercentage, formatSmallNumber, roundTo } from "../utils/dataCleaningFuncs.jsx";
 
 export const StockDetails = () => {
     const BASE_URL = import.meta.env.VITE_BACKEND_LINK;
     const [darkMode, setDarkMode] = useState(true);
-    const { userDetails } = useAppContext();
+    const { userDetails, ensureAuth } = useAppContext();
     const [buyStock, handleBuyStock] = useState("");
     const [sellStock, handleSellStock] = useState("");
     const [addedStock, handleAdd] = useState("");
@@ -31,10 +31,30 @@ export const StockDetails = () => {
         fiscalInformation: {},
         Company: {},
     });
+    const navigate = useNavigate();
     const [newsData, setMarketData] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [modalAction, setModalAction] = useState("");
     axios.defaults.withCredentials = true;
+
+    useEffect(() => {
+        // Run an initial check: this page is an auth/home page, so pass true
+        (async () => {
+            try {
+                await ensureAuth(navigate, false);
+            } catch (e) {
+                console.error("ensureAuth initial check failed:", e);
+            }
+        })();
+
+        const intervalId = setInterval(() => {
+            ensureAuth(navigate, false).catch((e) => console.error(e));
+        }, 10000);
+
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, [navigate, ensureAuth]);
 
     const openAddModel = () => {
         setModalAction("BUY");
@@ -49,75 +69,6 @@ export const StockDetails = () => {
     const closeModel = () => {
         setShowModal(false);
     }
-
-    console.log(symbol);
-
-    const roundTo = (num, decimals = 2) => {
-        if (num === null || num === undefined || isNaN(Number(num))) return "--";
-        return Number.parseFloat(num).toFixed(decimals);
-    };
-
-    const formatPercentage = (num, decimals = 2) => {
-        if (num === null || num === undefined || isNaN(Number(num))) return "--";
-        const val = Number(num);
-        const percent = Math.abs(val) < 1 ? val * 100 : val;
-        return percent.toFixed(decimals);
-    };
-
-    const formatLargeNumber = (num) => {
-        if (num === null || num === undefined || isNaN(Number(num))) return "--";
-
-        const val = Number(num);
-        const absNum = Math.abs(val);
-        if (absNum >= 1e12) return (val / 1e12).toFixed(2) + "T";
-        if (absNum >= 1e9) return (val / 1e9).toFixed(2) + "B";
-        if (absNum >= 1e6) return (val / 1e6).toFixed(2) + "M";
-        if (absNum >= 1e3) return (val / 1e3).toFixed(2) + "K";
-        return val.toFixed(2);
-    };
-
-    const formatSmallNumber = (num) => {
-        if (num === null || num === undefined || isNaN(Number(num))) return "--";
-        const val = Number.parseFloat(num);
-        if (Math.abs(val) < 1e-3) return "0.00";
-        return val.toFixed(2);
-    };
-
-    const formatDate = (isoString) => {
-        if (!isoString) return "--";
-        try {
-            const date = new Date(isoString);
-            return date.toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "short",
-                day: "numeric"
-            });
-        } catch {
-            return "--";
-        }
-    };
-
-    const navigate = useNavigate();
-  const { ensureAuth } = useAppContext();
-
-  useEffect(() => {
-             // Run an initial check: this page is an auth/home page, so pass true
-          (async () => {
-            try {
-              await ensureAuth(navigate, false);
-            } catch (e) {
-              console.error("ensureAuth initial check failed:", e);
-            }
-          })();
-    
-          const intervalId = setInterval(() => {
-            ensureAuth(navigate, false).catch((e) => console.error(e));
-          }, 10000);
-    
-          return () => {
-            clearInterval(intervalId);
-          };
-    },  [navigate, ensureAuth]);
 
     useEffect(() => {
         const getStockDetails = async () => {
@@ -206,8 +157,20 @@ export const StockDetails = () => {
 
     const handleWatchlist = async () => {
         try {
-            await axios.post(`${BASE_URL}/api/v1/dashBoard/addToWatchlist`, {symbol: symbol}, { withCredentials: true });
-            alert("Added to watchlist");
+            await axios.post(`${BASE_URL}/api/v1/dashBoard/addToWatchlist`, { symbol: symbol }, { withCredentials: true });
+            Swal.fire({
+                toast: true,
+                position: "top",
+                icon: "success",
+                title: `${symbol} added to watchlist successfully!`,
+                iconColor: "#33ff57",
+                background: "#1a1a1a",
+                showConfirmButton: false,
+                timer: 3000,
+                customClass: {
+                    popup: "small-toast"
+                }
+            });
         }
         catch (error) {
             console.error("Error in adding the stock to watchlist:", error);
@@ -229,8 +192,8 @@ export const StockDetails = () => {
 
     return (
         <div className="stk-main-page-for-stock">
-            <Navbar darkMode={darkMode} setDarkMode={setDarkMode} pageType={`stockdetails/:${symbol}`}
-                profileData={{ name: userDetails?.name, email: userDetails?.email, profileImage: userDetails?.profileImage }} />
+            <Navbar darkMode={darkMode} setDarkMode={setDarkMode} pageType="stock-details"
+                profileData={{ name: userDetails?.name?.split(" ")[0] || "Guest", email: userDetails?.email || "N/A" }} />
             <DashboardHeader darkMode={darkMode} />
             <div className="stk-empty"></div>
             <div className="stk-stock-info-page">
@@ -258,6 +221,7 @@ export const StockDetails = () => {
                     <div className="stk-abs">{stockData.priceInfo?.currentPrice ?? stockData.priceInfo?.previousClose}</div>
                     <div
                         className="stk-percentage"
+                        data-testid="stk-percentage"
                         style={{
                             color:
                                 stockData?.priceInfo?.change > 0
@@ -539,7 +503,6 @@ export const StockDetails = () => {
                 <div className="stk-news">
                     <div className="stk-news-head">
                         <div className="stk-rec-news">Recent News: {symbol}</div>
-                        <a className="stk-see-more">See more →</a>
                     </div>
 
                     <div className="stk-news-container">
@@ -592,9 +555,9 @@ export const StockDetails = () => {
             <div className="footer-div">
                 <Footer darkMode={darkMode}
                     navigationLinks={[
-                        { text: "Portfolio", href: "#" },
-                        { text: "AI Insigths", href: "#" },
-                        { text: "Wacthlist", href: "#" },
+                        { text: "Portfolio", href: "/portfolio" },
+                        { text: "AI Insigths", href: "/ai-insight" },
+                        { text: "Wacthlist", href: "/watchlist" },
                         { text: "Compare Stocks", href: "#" },
 
                     ]}

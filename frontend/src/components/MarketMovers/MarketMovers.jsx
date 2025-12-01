@@ -158,7 +158,7 @@ const MarketMovers = () => {
     <div className="market-movers-container">
       <div className="header">
         <h2 className="header-title">Market Movers</h2>
-        <a href="#" className="see-more-link">See More →</a>
+        
       </div>
 
       <div className="framed-section">
@@ -188,7 +188,7 @@ const MarketMovers = () => {
               <BusinessGroupCard key={index} {...group} />
             ))}
           </div>
-          <a href="#" className="see-more-link">See More →</a>
+          
         </div>
 
         <div className="content-card">
@@ -196,7 +196,7 @@ const MarketMovers = () => {
           {marketNewsData.map((news, index) => (
             <MarketNewsItem key={index} {...news} />
           ))}
-          <a href="#" className="see-more-link">See More →</a>
+          
         </div>
       </div>
     </div>

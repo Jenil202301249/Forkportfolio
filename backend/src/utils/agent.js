@@ -242,7 +242,7 @@ async function callModel(state) {
   ⚠️ Never use Markdown tables or multi-column formatting.
   Use stacked key-value lines or bullet lists instead.
   Keep the output compact and readable on small screens.
-
+  --> Don't use br tags or any html elements.
   --> Use bold text sparingly — avoid excessive or heavy bold formatting.
   --> Do NOT change, round, approximate, or modify any numerical values.
      All numbers must remain exactly as provided in the input.
@@ -378,7 +378,7 @@ const workFlow = new StateGraph(MessagesAnnotation)
 
 
 /** ---------------------------------------------------------Compile Workflow------------------------------------------------------------------------------------- */
-const app =  workFlow.compile({debug: true ,checkpointer: checkPointer});
+const app =  workFlow.compile({debug: true ,checkpointer: checkPointer, maxHistoryMessages: 4});
 
 
 

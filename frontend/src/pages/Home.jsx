@@ -246,7 +246,7 @@ export const Home = () => {
                 </div>
                 <div className="p_feature_text_div">
                   <h2>2. Add Portfolio</h2>
-                  <p>Connect your brokerage or manually add assets to build your portfolio</p>
+                  <p>Manually add assets to build your portfolio and keep an eye on it.</p>
                 </div>
               </div>
 
@@ -330,13 +330,13 @@ export const Home = () => {
               <div className="que4 que">
                 {/* Question */}
                 <div className="innerBoxOfQue">
-                  <h2>Q : Which brokerages can I connect?</h2>
+                  <h2>Q : Is your stock data real time?</h2>
                   <div className="arrow_img_div" onClick={() => toggleArrow(4)}>
                     <img  src={openIndex==4 ? upArrow : downArrow} alt=" Arrow logo"/>
                   </div>
                 </div>
                 {/* answer */}
-                <p className="answer_text" style={{display : openIndex==4 ? "block" : "none"}}>We are constantly expanding our integrations. Currently, we support connections with major brokerages like Zerodha, Groww, and Upstox, with more coming soon. You can also add your holdings manually.</p>
+                <p className="answer_text" style={{display : openIndex==4 ? "block" : "none"}}>We are constantly expanding our integrations. Currently, Our website reflects latest day data but with 15mins delay due to limited resources.</p>
               </div>
 
               {/* Div 5 */}

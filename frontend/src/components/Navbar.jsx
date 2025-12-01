@@ -99,6 +99,12 @@ const Navbar = ({ darkMode, setDarkMode, pageType, profileData = {} }) => {
               >
                 Portfolio
               </Link>
+                <Link 
+                className={`navbar_btn ${location.pathname === "/watchlist" ? "active" : ""}`} 
+                to="/watchlist"
+              >
+                Watchlist
+              </Link>
               <Link 
                 className={`navbar_btn ${location.pathname === "/ai-insight" ? "active" : ""}`} 
                 to="/ai-insight"
@@ -110,12 +116,6 @@ const Navbar = ({ darkMode, setDarkMode, pageType, profileData = {} }) => {
                 to="#"
               >
                 Compare Stocks
-              </Link>
-              <Link 
-                className={`navbar_btn ${location.pathname === "/watchlist" ? "active" : ""}`} 
-                to="/watchlist"
-              >
-                Watchlist
               </Link>
             </>
           )}
@@ -167,9 +167,9 @@ const Navbar = ({ darkMode, setDarkMode, pageType, profileData = {} }) => {
               <ul>
               <Link to="/dashboard"><li>Dashboard </li></Link>
               <Link to="/portfolio"><li>Portfolio</li></Link>
+              <Link to="/watchlist"><li>Watchlist</li></Link>
               <Link to="/ai-insight"><li>AI Insights</li></Link>
-              <Link to="#"><li>Compare Stocks</li></Link>
-              <Link to="/watchlist"><li className="lastli">Watchlist</li></Link>
+              <Link to="#"><li className="lastli">Compare Stocks</li></Link>
              </ul>
               </div>
           )}

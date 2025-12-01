@@ -87,22 +87,14 @@ const DashboardHeader = ({ isWatchlistPage = false, onAddToWatchlist = null }) =
         setSearchResults([]);
       }
     };
-    const handleStockClick = (symbol) => {
-      navigate(`/stockdetails/${symbol}`);
-      setIsSearchActive(false);
-      setQuery('');
-      setSearchResults([]);
-    };
     
     const handleAddStock = async (e, symbol) => {
       
       e.stopPropagation();
-      if (onAddToWatchlist) {
         await onAddToWatchlist(symbol);
         setIsSearchActive(false);
         setSearchResults([]);
        setQuery('');
-      }
     };
 
   useEffect(() => {
@@ -135,6 +127,13 @@ const DashboardHeader = ({ isWatchlistPage = false, onAddToWatchlist = null }) =
 
     return () => window.removeEventListener('keydown', onEsc);
   }, []);
+
+  const handleStockClick = (symbol) => {
+      navigate(`/stockdetails/${symbol}`);
+      setIsSearchActive(false);
+      setQuery('');
+      setSearchResults([]);
+    };
 
   // Error state
   if (error)
@@ -194,8 +193,6 @@ const DashboardHeader = ({ isWatchlistPage = false, onAddToWatchlist = null }) =
                 <React.Fragment key={stockSymbol || index}>
                   <div 
                     className="d-stock-info"
-                    onClick={() => stockSymbol && handleStockClick(stockSymbol)}
-                    style={{ cursor: stockSymbol ? 'pointer' : 'default' }}
                   >
                     <div className="d-stock-header">
                       <span className="d-stock-name">

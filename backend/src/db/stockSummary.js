@@ -2,7 +2,7 @@ import { sql } from "./dbConnection.js";
 
 export const getStockSummary = async (email) => {
     try {
-        const result = await sql`SELECT * FROM "stock_summary" Where email=${email}`;
+        const result = await sql`SELECT * FROM "stock_summary" Where email=${email} and current_holding>0`;
         return result;
     } catch (error) {
         console.error('Stock details error:', error);

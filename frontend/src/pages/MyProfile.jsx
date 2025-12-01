@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import {useNavigate} from 'react-router-dom';
 import axios from "axios";
 import "../pages/MyProfile.css";
 import "primeicons/primeicons.css";
@@ -11,10 +12,9 @@ import GoogleLogo from "../assets/google_logo.svg";
 import Footer from '../components/Footer.jsx';
 import { Sidebar } from "../components/Sidebar.jsx";
 import { useAppContext } from "../context/AppContext";
-import { useNavigate } from "react-router-dom";
 
 export const MyProfile = () => {
-    const { darkMode, setDarkMode, userDetails, setUseDetails } = useAppContext();
+    const { darkMode, setDarkMode, userDetails, setUserDetails, ensureAuth, setChangeInProfile } = useAppContext();
     const fileInputRef = useRef(null);
     const [isEditingInfo, setIsEditingInfo] = useState(false);
     const [isEditingPass, setIsEditingPass] = useState(false);
@@ -30,42 +30,51 @@ export const MyProfile = () => {
     const [confirmPasswordError, setConfirmPasswordError] = useState("");
     const [showOtpModal, setShowOtpModal] = useState(false);
     const [otp, setOtp] = useState("");
-    const [otpError, setOtpError] = useState("");
     const [isSendingOtp, setIsSendingOtp] = useState(false);
     const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
     const [resendCountdown, setResendCountdown] = useState(0);
     const navigate = useNavigate();
-      const { ensureAuth } = useAppContext();
-    
-      useEffect(() => {
-                 // Run an initial check: this page is an auth/home page, so pass true
-              (async () => {
-                try {
-                  await ensureAuth(navigate, false);
-                } catch (e) {
-                  console.error("ensureAuth initial check failed:", e);
-                }
-              })();
-        
-              const intervalId = setInterval(() => {
-                ensureAuth(navigate, false).catch((e) => console.error(e));
-              }, 10000);
-        
-              return () => {
-                clearInterval(intervalId);
-              };
-        },  [navigate, ensureAuth]);
-
-        
     const { handlePicChange, handleSaveName, handleSavePass, resendOtp,
         verifyOtpAndReset, handleFinGoals, handleInvExp, handleInvHorizon, handleRiskProf } = MyProfileHandlers(
             {
-                setUseDetails, setIsEditingInfo, editedName, resendCountdown,
-                currPass, newPass, confirmPass, setIsSendingOtp, setOtp, setOtpError, setResendCountdown,
+                setChangeInProfile, setUserDetails, setIsEditingInfo, editedName, resendCountdown,
+                currPass, newPass, confirmPass, setIsSendingOtp, setOtp, setResendCountdown,
                 setIsVerifyingOtp, setConfirmPass, setCurrPass, setNewPass, setShowOtpModal, otp, setIsEditingPass
             });
 
     axios.defaults.withCredentials = true;
+
+    useEffect(() => {
+        // Run an initial check: this page is an auth/home page, so pass true
+        (async () => {
+            try {
+                await ensureAuth(navigate, false);
+            } catch (e) {
+                console.error("ensureAuth initial check failed:", e);
+            }
+        })();
+
+        const intervalId = setInterval(() => {
+            ensureAuth(navigate, false).catch((e) => console.error(e));
+        }, 10000);
+
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, [navigate, ensureAuth]);
+
+    useEffect(() => {
+        const onEsc = (e) => {
+            if (e.key === 'Escape') {
+                setIsEditingInfo(false);
+                setIsEditingPass(false);
+            }
+        };
+
+        window.addEventListener('keydown', onEsc);
+
+        return () => window.removeEventListener('keydown', onEsc);
+    }, []);
 
     useEffect(() => {
         const trimmedName = editedName.trim();
@@ -130,8 +139,8 @@ export const MyProfile = () => {
 
     return (
         <div className="myPage">
-            <Navbar darkMode={darkMode} setDarkMode={setDarkMode} pageType="my-profile"
-                profileData={{ name: userDetails?.name, email: userDetails?.email, profileImage: userDetails?.profileImage }} />
+            <Navbar darkMode={darkMode} setDarkMode={setDarkMode} pageType="my-profile" 
+            profileData={{name: userDetails?.name?.split(" ")[0] || "Guest",email: userDetails?.email || "N/A"}}/>
 
             <div className="myPage_Container">
 
@@ -197,7 +206,7 @@ export const MyProfile = () => {
                                 <label>
                                     Password
                                 </label>
-                                {!isEditingPass && <button className="myPage_EditDetails" value="Edit" onClick={handleEditPass}> Edit </button>}
+                                {!isEditingPass && userDetails?.registrationMethod === "normal" && <button className="myPage_EditDetails" value="Edit" onClick={handleEditPass}> Edit </button>}
                             </div>
 
                             <div className="myPage_InfValue">
@@ -211,9 +220,9 @@ export const MyProfile = () => {
                                                     value={currPass}
                                                     onChange={(e) => setCurrPass(e.target.value)}
                                                 />
-                                                <button className="myPage_password-toggle1" onClick={() => setShowPassword1(!showPassword1)}>
+                                                <button className="myPage_password-toggle1" data-testid="myPage_password-toggle1" onClick={() => setShowPassword1(!showPassword1)}>
                                                     <span className="myPage_eye-symbol">
-                                                        <i className={`myPage_pi ${showPassword1 ? "pi-eye-slash" : "pi-eye"}`}></i>
+                                                        <i className={`pi ${showPassword1 ? "pi-eye-slash" : "pi-eye"}`}></i>
                                                     </span>
                                                 </button>
                                             </div>
@@ -224,9 +233,9 @@ export const MyProfile = () => {
                                                     value={newPass}
                                                     onChange={(e) => setNewPass(e.target.value)}
                                                 />
-                                                <button className="myPage_password-toggle2" onClick={() => setShowPassword2(!showPassword2)}>
+                                                <button className="myPage_password-toggle2" data-testid="myPage_password-toggle2" onClick={() => setShowPassword2(!showPassword2)}>
                                                     <span className="myPage_eye-symbol">
-                                                        <i className={`myPage_pi ${showPassword2 ? "pi-eye-slash" : "pi-eye"}`}></i>
+                                                        <i className={`pi ${showPassword2 ? "pi-eye-slash" : "pi-eye"}`}></i>
                                                     </span>
                                                 </button>
                                                 <p style={{ display: newPass ? 'block' : 'none' }} className="myPage_pass-error error">{passwordError}</p>
@@ -238,9 +247,9 @@ export const MyProfile = () => {
                                                     value={confirmPass}
                                                     onChange={(e) => setConfirmPass(e.target.value)}
                                                 />
-                                                <button className="myPage_password-toggle3" onClick={() => setShowPassword3(!showPassword3)}>
+                                                <button className="myPage_password-toggle3" data-testid="myPage_password-toggle3" onClick={() => setShowPassword3(!showPassword3)}>
                                                     <span className="myPage_eye-symbol">
-                                                        <i className={`myPage_pi ${showPassword3 ? "pi-eye-slash" : "pi-eye"}`}></i>
+                                                        <i className={`pi ${showPassword3 ? "pi-eye-slash" : "pi-eye"}`}></i>
                                                     </span>
                                                 </button>
                                                 <p style={{ display: confirmPass ? 'block' : 'none' }} className="myPage_confirm-pass-error error">{confirmPasswordError}</p>
@@ -259,19 +268,19 @@ export const MyProfile = () => {
                         <hr />
 
                         {userDetails?.registrationMethod === "google" && (
-                            <>    
-                            <div className="myPage_InfRow4">
-                                <label>Linked accounts</label>
-                                <div className="myPage_LinkedBox">
-                                    <img src={GoogleLogo} alt="Google Logo" />
-                                    <div className="myPage_InsideBox">
-                                        <span className="myPage_ServiceName">Google</span>
-                                        <span className="myPage_AccName">{userDetails?.name}</span>
+                            <>
+                                <div className="myPage_InfRow4">
+                                    <label>Linked accounts</label>
+                                    <div className="myPage_LinkedBox">
+                                        <img src={GoogleLogo} alt="Google Logo" />
+                                        <div className="myPage_InsideBox">
+                                            <span className="myPage_ServiceName">Google</span>
+                                            <span className="myPage_AccName">{userDetails?.name}</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <hr />
-                        </>
+                                <hr />
+                            </>
                         )}
 
                         <h2 className="myPage_InvProfile"> Your investment profile </h2>
@@ -308,7 +317,7 @@ export const MyProfile = () => {
                             <div className="myPage_FinGoals">
                                 <label>Financial Goals</label>
                                 <div className="myPage_InfValueDropDown3">
-                                    <select className="myPage_FinGoalList" value={userDetails?.FinGoal} onChange={handleFinGoals}>
+                                    <select className="myPage_FinGoalList" data-testid="myPage_FinGoalList" value={userDetails?.FinGoal} onChange={handleFinGoals}>
                                         <option value="" disabled>Select an option</option>
                                         <option value="Primary Growth">Primary growth</option>
                                         <option value="Income Generation">Income generation</option>
@@ -337,7 +346,7 @@ export const MyProfile = () => {
             </div >
             {/* OTP Overlay*/}
             {showOtpModal && (
-                <div className="myPage_OTPOverlay">
+                <div className="myPage_OTPOverlay" data-testid="myPage_OTPOverlay">
                     <div className="myPage_OTPModel">
                         <h3>Verification required</h3>
                         <p className="myPage_OTPNote">We have sent the verification OTP to your registered mail ID.</p>
@@ -348,7 +357,6 @@ export const MyProfile = () => {
                             value={otp}
                             onChange={(e) => setOtp(e.target.value)}
                         />
-                        {otpError && <p className="myPage_OTPErrors">{otpError}</p>}
 
                         <div className="myPage_OTPButtons">
                             <button className="myPage_OTPContinue" onClick={verifyOtpAndReset} disabled={isVerifyingOtp}>
@@ -358,7 +366,7 @@ export const MyProfile = () => {
                                 {checkCountdown()}
 
                             </button>
-                            <button className="myPage_OTPCancel" onClick={() => { setShowOtpModal(false); setOtp(""); setOtpError(""); }}>
+                            <button className="myPage_OTPCancel" onClick={() => { setShowOtpModal(false); setOtp("");}}>
                                 Cancel
                             </button>
                         </div>
@@ -369,9 +377,9 @@ export const MyProfile = () => {
             <div className="footer-div">
                 <Footer darkMode={darkMode}
                     navigationLinks={[
-                        { text: "Portfolio", href: "#" },
-                        { text: "AI Insigths", href: "#" },
-                        { text: "Wacthlist", href: "#" },
+                        { text: "Portfolio", href: "/portfolio" },
+                        { text: "AI Insigths", href: "/ai-insight" },
+                        { text: "Wacthlist", href: "/watchlist" },
                         { text: "Compare Stocks", href: "#" },
 
                     ]}

@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Montserrat:wght@500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&family=Varela+Round&display=swap');
 *{
     margin: 0;
     padding: 0;
@@ -77,7 +78,7 @@ body {
     padding-bottom: 10px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px; /* add a bit more vertical space between bubbles */
     scroll-behavior: smooth;
     width: 95%;
     position: relative;
@@ -102,11 +103,113 @@ body {
     word-break: break-word;
     overflow-wrap: break-word;
     font-size: 16px; /* or 16px on mobile */
-    line-height: 1.8;
+    line-height: 1.95; /* increase line-height for better readability */
     /* overflow-x: auto; */
     /* overflow-y: hidden; */
     text-wrap: wrap;
-    font-weight: 600;
+    font-weight: 500; /* reduced from 600 for better legibility */
+    position: relative;
+}
+
+/* Subtle divider after each message */
+.chat-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,200,83,0.15), transparent);
+}/* Spacing for common block elements inside chat bubbles */
+.chat-bubble p {
+    margin: 0 0 0.75rem; /* give paragraphs breathing room */
+    line-height: 1.9;
+}
+
+/* Style the main title paragraph only (first paragraph inside a message).
+   This avoids changing all `.chat-bubble p` content. */
+.chat-bubble > div > p:first-of-type {
+    position: relative;
+    margin: 0 0 1.1rem;
+    padding: 12px 16px 18px;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    color: #fff;
+
+    /* border-left: 4px solid #00C853; */
+
+    /* subtle inner shine for premium look */
+    /* background: rgba(255, 255, 255, 0.03); */
+    border-radius: 6px;
+}
+  
+.chat-bubble > div > p:first-of-type::after {
+    content: "";
+    position: absolute;
+    bottom: 6px;    /* lifted slightly for better spacing */
+    left: 16px;
+    width: 80%;
+    height: 2px;
+
+    background: linear-gradient(90deg, #00C853 0%, rgba(0, 200, 83, 0.6) 50%, transparent 100%);
+    opacity: 0.9;
+
+    /* soft blur for glow effect */
+    /* filter: blur(0.5px); */
+}
+
+.chat-bubble ul,
+.chat-bubble ol {
+    margin: 0.3rem 0 1.1rem 0;
+    padding-left: 1.25rem;
+}
+
+.chat-bubble li {
+    margin-bottom: 0.55rem;
+    line-height: 1.75;
+    padding-left: 14px;
+    position: relative;
+    color: #e5e5e5;
+    font-size: 0.97rem;
+}
+
+.chat-bubble li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.7em;
+    width: 6px;
+    height: 6px;
+    background: rgba(174, 165, 165, 0.689);
+    border-radius: 50%;
+    opacity: 0.85;      /* subtle, premium */
+}
+
+
+
+
+.chat-bubble h1,
+.chat-bubble h2,
+.chat-bubble h3,
+.chat-bubble h4,
+.chat-bubble h5 {
+     margin: 1rem 0;
+    font-weight: 700;
+    font-size: 1.12rem;
+    letter-spacing: 0.5px;
+    border-left: 4px solid #00C853;
+    padding-left: 10px;
+    color: #ffffff;
+    background-color: black;
+    padding: 4px 8px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+.chat-bubble pre,
+.chat-bubble code {
+    margin-bottom: 0.75rem;
 }
 
 .user-bubble{
@@ -183,7 +286,7 @@ body {
     font-size: 15px;
     font-family: 'Poppins', sans-serif;
     outline: none;
-    font-weight: 700;
+    font-weight: 600;
 }
 .send-btn{
     margin-left: 10px;
@@ -217,6 +320,102 @@ body {
 }
 .chat-content{
     padding: 20px;
+}
+
+/* Basic table styling for markdown/html tables rendered inside chat bubbles */
+/* Tables and related elements inside chat bubbles */
+.chat-bubble table {
+    border-collapse: separate;
+    border-spacing: 0;
+    cursor:text;
+    width: 100%;
+    max-width: 90%;
+    overflow-x: auto;
+    display: block;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius: 10px;
+   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.32),
+            inset 0 1px 1px rgba(255,255,255,0.08);
+    margin: 10px 10px;
+}
+
+.chat-bubble th,
+.chat-bubble td {
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    padding: 10px 8px;
+    text-align: center;
+    vertical-align: middle;
+    color: rgb(255, 255, 255); /* pale green text for readability */
+    font-weight: 300;
+}
+
+.chat-bubble thead th {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3),
+                inset 0 1px 1px rgba(255, 255, 255, 0.15);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    font-weight: 600;
+}
+
+.chat-bubble tbody tr:nth-child(even) td {
+    background: rgba(0, 0, 0, 0.414);
+}
+
+.chat-bubble tbody tr:hover td {
+    background: rgba(0, 0, 0, 0.55);
+}
+
+.chat-bubble caption {
+    caption-side: top;
+    padding: 8px 0;
+    color: #cfefd1;
+    font-weight: 700;
+}
+
+/* Ensure tables don't overflow the chat area on small screens */
+
+/* Links, code and blockquote styling inside chat bubbles */
+.chat-bubble a {
+    color: #00C853;
+    text-decoration: underline;
+}
+
+.chat-bubble pre {
+    background: rgba(0,0,0,0.6);
+    border: 1px solid rgba(0,200,83,0.12);
+    padding: 12px;
+    border-radius: 8px;
+    overflow: auto;
+    color: #d9ffd9;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', 'Courier New', monospace;
+    font-size: 0.9rem;
+}
+
+.chat-bubble code {
+    background: rgba(255,255,255,0.03);
+    padding: 2px 6px;
+    border-radius: 6px;
+    color: #e6ffe6;
+}
+
+.chat-bubble blockquote {
+    border-left: 3px solid rgba(0,200,83,0.2);
+    padding-left: 12px;
+    color: #cfefd1;
+    margin: 6px 0;
+}
+
+/* Make sure table inside very narrow chat bubbles can scroll horizontally */
+.chat-bubble > table,
+.chat-bubble table {
+    -webkit-overflow-scrolling: touch;
 }
 .chat-placeholder {
   flex: 1;
@@ -254,6 +453,14 @@ body {
 .send-btn{
     padding: 12px 35px;
 }
+ .chat-bubble h1,
+.chat-bubble h2,
+.chat-bubble h3,
+.chat-bubble h4,
+.chat-bubble h5 {
+    font-weight: 700;
+    font-size:1.5rem;
+}
 }
 /* Extra large (desktop) */
 @media (min-width:1200px) and (max-width:1599px) {
@@ -290,9 +497,36 @@ body {
     box-shadow: 0 4px 15px rgba(0, 200, 83, 0.4);
     font-size : 16px;
 }
-
+ .chat-bubble h1,
+.chat-bubble h2,
+.chat-bubble h3,
+.chat-bubble h4,
+.chat-bubble h5 {
+    font-weight: 700;
+    font-size:1.1rem;
+}
 .chat-content{
     padding: 20px;
+}
+.chat-bubble > div > p:first-of-type {
+    position: relative;
+    margin: 0 0 1.1rem;
+    padding: 12px 16px 18px;
+    font-size: 0.95rem;
+  
+}
+.chat-bubble p {
+    margin: 0 0 0.75rem;
+    line-height: 1.9;
+    font-size: 0.9rem;
+}
+.chat-bubble li {
+    margin-bottom: 0.55rem;
+    line-height: 1.75;
+    padding-left: 14px;
+    position: relative;
+    color: #e5e5e5;
+    font-size: 0.95rem;
 }
 
 }
@@ -330,9 +564,36 @@ body {
     box-shadow: 0 4px 15px rgba(0, 200, 83, 0.4);
     font-size : 14px;
 }
-
+ .chat-bubble h1,
+.chat-bubble h2,
+.chat-bubble h3,
+.chat-bubble h4,
+.chat-bubble h5 {
+    font-weight: 700;
+    font-size:1rem;
+}
 .chat-content{
     padding: 20px;
+}
+.chat-bubble > div > p:first-of-type {
+    position: relative;
+    margin: 0 0 1.1rem;
+    padding: 12px 16px 18px;
+    font-size: 0.9rem;
+  
+}
+.chat-bubble p {
+    margin: 0 0 0.75rem;
+    line-height: 1.9;
+    font-size: 0.75rem;
+}
+.chat-bubble li {
+    margin-bottom: 0.55rem;
+    line-height: 1.75;
+    padding-left: 14px;
+    position: relative;
+    color: #e5e5e5;
+    font-size: 0.9rem;
 }
 
 }
@@ -365,7 +626,14 @@ body {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
-
+   .chat-bubble h1,
+.chat-bubble h2,
+.chat-bubble h3,
+.chat-bubble h4,
+.chat-bubble h5 {
+    font-weight: 700;
+    font-size:0.8rem;
+}
   .chat-bubble{
     font-size: 0.82rem;
     padding: 14px 16px;
@@ -409,6 +677,27 @@ body {
   .chat-input:focus {
     font-size: 14px;
   }
+
+  .chat-bubble > div > p:first-of-type {
+    position: relative;
+    margin: 0 0 1.1rem;
+    padding: 12px 16px 18px;
+    font-size: 0.9rem;
+  
+}
+.chat-bubble p {
+    margin: 0 0 0.75rem;
+    line-height: 1.9;
+    font-size: 0.9rem;
+}
+.chat-bubble li {
+    margin-bottom: 0.55rem;
+    line-height: 1.75;
+    padding-left: 14px;
+    position: relative;
+    color: #e5e5e5;
+    font-size: 0.85rem;
+}
 }
 /* Extra small (mobile portrait) */
 @media (max-width: 576px) {
@@ -482,4 +771,25 @@ body {
 .chat-input:focus {
     font-size: 16px;
 }
+.chat-bubble > div > p:first-of-type {
+    position: relative;
+    margin: 0 0 1.1rem;
+    padding: 12px 16px 18px;
+    font-size: 0.9rem;
+  
+}
+.chat-bubble p {
+    margin: 0 0 0.75rem;
+    line-height: 1.9;
+    font-size: 0.9rem;
+}
+.chat-bubble li {
+    margin-bottom: 0.55rem;
+    line-height: 1.75;
+    padding-left: 14px;
+    position: relative;
+    color: #e5e5e5;
+    font-size: 0.8rem;
+}
+
 }

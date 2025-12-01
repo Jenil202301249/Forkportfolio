@@ -10,6 +10,7 @@ export const AppProvider = ({ children }) => {
     const [userDetails, setUserDetails] = useState(null); 
     const [userLoggedIn, setUserLoggedIn] = useState(false);
     const [headerStocks, setHeaderStocks] = useState(null);
+    const [changeInProfile, setChangeInProfile] = useState(null);
     const [headerStocksTimestamp, setHeaderStocksTimestamp] = useState(null);
     const val = { 
         darkMode, setDarkMode,
@@ -17,11 +18,13 @@ export const AppProvider = ({ children }) => {
         userLoggedIn, setUserLoggedIn,
         isSearchActive, setIsSearchActive,
         headerStocks, setHeaderStocks,
-        headerStocksTimestamp, setHeaderStocksTimestamp
+        headerStocksTimestamp, setHeaderStocksTimestamp,
+        setChangeInProfile
+
     };
     useEffect(() => {
         GetUserDetails(setUserDetails);
-    }, [userLoggedIn]);
+    }, [userLoggedIn, changeInProfile]);
 
     // Check token by calling backend endpoint. Returns boolean.
     const checkToken = async () => {
@@ -29,7 +32,7 @@ export const AppProvider = ({ children }) => {
             const res = await axios.get(import.meta.env.VITE_BACKEND_LINK + "/api/v1/users/checkToken");
             return Boolean(res?.data?.success);
         } catch (err) {
-            console.error("checkToken error:", err);
+            //console.error("checkToken error:", err);
             return false;
         }
     };

@@ -132,12 +132,8 @@ export const Preference = () => {
   return (
     <div className="PreferenceLayout">
       {/* --- Navbar --- */}
-      <Navbar
-        darkMode={darkMode}
-        setDarkMode={setDarkMode}
-        pageType="preferences"
-        profileData= {{ name: userInfo?.name, email: userInfo?.email, profileImage: userInfo?.profileImage }}
-      />
+      <Navbar darkMode={darkMode} setDarkMode={setDarkMode} pageType="preferences" 
+      profileData={{name: userInfo?.name?.split(" ")[0] || "Guest",email: userInfo?.email || "N/A"}}/>
 
       <div className="PreferenceBody">
         {/* --- Sidebar --- */}
@@ -197,9 +193,9 @@ export const Preference = () => {
         <Footer
           darkMode={darkMode}
           navigationLinks={[
-            { text: "Portfolio", href: "#" },
-            { text: "AI Insights", href: "#" },
-            { text: "Watchlist", href: "#" },
+            { text: "Portfolio", href: "/portfolio" },
+            { text: "AI Insights", href: "/ai-insight" },
+            { text: "Watchlist", href: "/watchlist" },
             { text: "Compare Stocks", href: "#" },
           ]}
           legalLinks={[

@@ -1,8 +1,9 @@
 import axios from "axios";
 import { validateNameStrength } from "./validation.js";
+import { useAppContext } from "../context/AppContext.jsx";
 
-export const MyProfileHandlers = ({ setUserInfo, setIsEditingInfo, editedName, resendCountdown,
-    currPass, newPass, confirmPass, setIsSendingOtp, setOtp, setOtpError, setResendCountdown,
+export const MyProfileHandlers = ({ setChangeInProfile, setUserDetails, setIsEditingInfo, editedName, resendCountdown,
+    currPass, newPass, confirmPass, setIsSendingOtp, setOtp, setResendCountdown,
     setIsVerifyingOtp, setConfirmPass, setCurrPass, setNewPass, setShowOtpModal, otp, setIsEditingPass
 }) => {
 
@@ -20,15 +21,13 @@ export const MyProfileHandlers = ({ setUserInfo, setIsEditingInfo, editedName, r
             try {
                 await axios.patch(import.meta.env.VITE_BACKEND_LINK + "/api/v1/users/updateProfileImage", picData,
                     { withCredentials: true, headers: { "Content-Type": "multipart/form-data" }, });
-                setUserInfo((prev) => ({
-                    ...prev,
-                    profimg: profilePicURL
-                }));
+                setChangeInProfile(picData);
                 setIsEditingInfo(false);
 
             } catch (err) {
-                console.error("Error updating profile image:", err.response?.data?.message || err.message);
-                alert(err.response?.data?.message || "Failed to update profile image. Try again later.");
+                //1
+                //console.error("Error updating profile image:", err.response?.data?.message || err.message);
+                alert("Failed to update profile image. Try again later.");
                 return;
             }
         }
@@ -43,16 +42,14 @@ export const MyProfileHandlers = ({ setUserInfo, setIsEditingInfo, editedName, r
         console.log("Valid Name", editedName);
         if (testName) {
             try {
-                await axios.patch(import.meta.env.VITE_BACKEND_LINK + "/api/v1/users/updateProfileName", { name: editedName }, { withCredentials: true });
-                setUserInfo((prev) => ({
-                    ...prev,
-                    name: editedName
-                }));
+                await axios.patch(import.meta.env.VITE_BACKEND_LINK + "/api/v1/users/updateProfileName", { name: editedName.trim() }, { withCredentials: true });
+                setChangeInProfile(editedName);
                 setIsEditingInfo(false);
 
             } catch (err) {
-                console.error("Error updating name:", err.response?.data?.message || err.message);
-                alert(err.response?.data?.message || "Failed to update name. Try again later.");
+                //2
+                //console.error("Error updating name:", err.response?.data?.message || err.message);
+                alert("Failed to update name. Try again later.");
                 return;
             }
         }
@@ -68,18 +65,19 @@ export const MyProfileHandlers = ({ setUserInfo, setIsEditingInfo, editedName, r
                 setIsSendingOtp(true);
                 await axios.patch(import.meta.env.VITE_BACKEND_LINK + "/api/v1/users/resetPassword", { password: currPass, newPassword: newPass }, { withCredentials: true });
                 setShowOtpModal(true);
+                setChangeInProfile(newPass);
                 setOtp("");
-                setOtpError("");
                 setResendCountdown(30);
             } catch (err) {
-                console.error("Error sending OTP:", err.response?.data?.message || err.message);
-                alert(err.response?.data?.message || "Failed to send OTP. Try again later.");
+                //3
+                //console.error("Error sending OTP:", err.response?.data?.message || err.message);
+                alert("Failed to send OTP. Try again later.");
             } finally {
                 setIsSendingOtp(false);
             }
         }
         else {
-            console.log("new password and confirm password does not match!");
+            alert("new password and confirm password does not match!");
         }
     };
 
@@ -90,8 +88,9 @@ export const MyProfileHandlers = ({ setUserInfo, setIsEditingInfo, editedName, r
             await axios.patch(import.meta.env.VITE_BACKEND_LINK + "/api/v1/users/resetPassword", { password: currPass, newPassword: newPass }, { withCredentials: true });
             setResendCountdown(30);
         } catch (err) {
-            console.error("Error resending OTP:", err.response?.data?.message || err.message);
-            setOtpError("Failed to resend OTP. Try again.");
+            //4
+            //console.error("Error resending OTP:", err.response?.data?.message || err.message);
+            alert("Failed to resend OTP. Try again.");
         } finally {
             setIsSendingOtp(false);
         }
@@ -99,27 +98,28 @@ export const MyProfileHandlers = ({ setUserInfo, setIsEditingInfo, editedName, r
 
     const verifyOtpAndReset = async () => {
         if (!otp.trim()) {
-            setOtpError("Please enter the OTP");
+            alert("Please enter the OTP");
             return;
         }
 
         try {
             setIsVerifyingOtp(true);
-            setOtpError("");
             await axios.post(import.meta.env.VITE_BACKEND_LINK + "/api/v1/users/verifyOtpForProfile", { otp: otp }, { withCredentials: true });
             setShowOtpModal(false);
+            setChangeInProfile(otp);
             await axios.patch(import.meta.env.VITE_BACKEND_LINK + "/api/v1/users/setNewPasswordForProfile", { newPassword: newPass }, { withCredentials: true });
             setIsEditingPass(false);
             setCurrPass("");
             setNewPass("");
             setConfirmPass("");
             setOtp("");
-            setOtpError("");
-            console.log("Password changed successfully after OTP verification.");
+            
+            alert("Password changed successfully after OTP verification.");
         } catch (err) {
             const msg = err.response?.data?.message || err.message;
-            console.error("OTP verify/reset error:", msg);
-            setOtpError(msg.includes("OTP") ? msg : "Wrong OTP or verification failed");
+            //5
+            //console.error("OTP verify/reset error:", msg);
+            alert("OTP verify/reset error:");
         } finally {
             setIsVerifyingOtp(false);
         }
@@ -133,17 +133,15 @@ export const MyProfileHandlers = ({ setUserInfo, setIsEditingInfo, editedName, r
         else {
 
             try {
-                axios.patch(import.meta.env.VITE_BACKEND_LINK + "/api/v1/users/updateProfileInvestmentExperience",
+                await axios.patch(import.meta.env.VITE_BACKEND_LINK + "/api/v1/users/updateProfileInvestmentExperience",
                     { investmentExperience: event.target.value },
                     { withCredentials: true });
-                setUserInfo((prev) => ({
-                    ...prev,
-                    investmentExp: event.target.value
-                }))
+                setChangeInProfile(event.target.value);
             }
             catch (err) {
-                console.error("Error updating investment experience:", err.response?.data?.message || err.message);
-                alert(err.response?.data?.message || "Failed to update investment experience. Try again later.");
+                //6
+                //console.error("Error updating investment experience:", err.response?.data?.message || err.message);
+                alert("Failed to update investment experience. Try again later.");
                 return;
             }
         }
@@ -156,17 +154,15 @@ export const MyProfileHandlers = ({ setUserInfo, setIsEditingInfo, editedName, r
         }
         else {
             try {
-                axios.patch(import.meta.env.VITE_BACKEND_LINK + "/api/v1/users/updateProfileRiskProfile",
+                await axios.patch(import.meta.env.VITE_BACKEND_LINK + "/api/v1/users/updateProfileRiskProfile",
                     { riskProfile: event.target.value },
                     { withCredentials: true })
-                setUserInfo((prev) => ({
-                    ...prev,
-                    riskProfile: event.target.value
-                }))
+                setChangeInProfile(event.target.value);
             }
             catch (err) {
-                console.error("Error updating risk profile:", err.response?.data?.message || err.message);
-                alert(err.response?.data?.message || "Failed to update risk profile. Try again later.");
+                //7
+                //console.error("Error updating risk profile:", err.response?.data?.message || err.message);
+                alert("Failed to update risk profile. Try again later.");
                 return;
             }
         }
@@ -179,17 +175,15 @@ export const MyProfileHandlers = ({ setUserInfo, setIsEditingInfo, editedName, r
         }
         else {
             try {
-                axios.patch(import.meta.env.VITE_BACKEND_LINK + "/api/v1/users/updateProfileFinancialGoal",
+                await axios.patch(import.meta.env.VITE_BACKEND_LINK + "/api/v1/users/updateProfileFinancialGoal",
                     { financialGoals: event.target.value },
                     { withCredentials: true })
-                setUserInfo((prev) => ({
-                    ...prev,
-                    FinGoal: event.target.value
-                }))
+                setChangeInProfile(event.target.value);
             }
             catch (err) {
-                console.error("Error updating financial goal:", err.response?.data?.message || err.message);
-                alert(err.response?.data?.message || "Failed to update financial goal. Try again later.");
+                //8
+                //console.error("Error updating financial goal:", err.response?.data?.message || err.message);
+                alert("Failed to update financial goal. Try again later.");
                 return;
             }
         }
@@ -198,21 +192,19 @@ export const MyProfileHandlers = ({ setUserInfo, setIsEditingInfo, editedName, r
     const handleInvHorizon = async (event) => {
 
         if (event.target.value === "") {
-            alert("Please select a valid option!");
+            //alert("Please select a valid option!");
         }
         else {
             try {
-                axios.patch(import.meta.env.VITE_BACKEND_LINK + "/api/v1/users/updateProfileInvestmentHorizon",
+                await axios.patch(import.meta.env.VITE_BACKEND_LINK + "/api/v1/users/updateProfileInvestmentHorizon",
                     { investmentHorizon: event.target.value },
                     { withCredentials: true })
-                setUserInfo((prev) => ({
-                    ...prev,
-                    InvHorizon: event.target.value
-                }))
+                setChangeInProfile(event.target.value);
             }
             catch (err) {
-                console.error("Error updating investment horizon:", err.response?.data?.message || err.message);
-                alert(err.response?.data?.message || "Failed to update investment horizon. Try again later.");
+                //9    
+                //console.error("Error updating investment horizon:", err.response?.data?.message || err.message);
+                alert("Failed to update investment horizon. Try again later.");
                 return;
             }
         }

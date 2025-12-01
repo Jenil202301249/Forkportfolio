@@ -4,6 +4,8 @@ import axios from "axios";
 import ReactMarkDown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkEmoji from 'remark-emoji';
+import rehypeRaw from 'rehype-raw';
+import rehypeSanitize from 'rehype-sanitize';
 import { useAppContext } from "../context/AppContext";
 import { RingLoader } from "react-spinners";
 
@@ -46,8 +48,27 @@ useEffect(() => {
                 message : userMsg,
                 withCredentials: true,
             });
-            
-            const replyText = <ReactMarkDown remarkPlugins={[remarkGfm, remarkEmoji]}>{res.data.reply}</ReactMarkDown>;
+                        console.log("AI Reply:", res.data.reply);
+                        // Render markdown (GFM) and allow safe raw HTML (tables) by
+                        // enabling rehype-raw and configuring rehype-sanitize to permit
+                        // table-related tags.
+                        const sanitizeOptions = {
+                            tagNames: ['table','thead','tbody','tr','th','td','strong','em','p','ul','ol','li','a','blockquote','code','pre','h1','h2','h3','h4','h5','h6'],
+                            attributes: {
+                                a: ['href', 'title', 'target', 'rel'],
+                                table: ['class'],
+                                '*': ['class']
+                            }
+                        };
+
+                        const replyText = (
+                            <ReactMarkDown
+                                remarkPlugins={[remarkGfm, remarkEmoji]}
+                                rehypePlugins={[rehypeRaw, [rehypeSanitize, sanitizeOptions]]}
+                            >
+                                {res.data.reply}
+                            </ReactMarkDown>
+                        );
             setMessages((prev) => [...prev.filter((msg)=>msg.id !== "typing"), { id: Date.now(), text: replyText, sender: 'bot' }]);
             setIsLoading(false);
         }catch(err){
@@ -62,6 +83,7 @@ useEffect(() => {
     }
 // Function to handle Enter key press
     const handleKeyDown = (e) => {
+        // console.log("enter key pressed : ", userDetails);
         if(e.key === "Enter") handleSend();
     }
     

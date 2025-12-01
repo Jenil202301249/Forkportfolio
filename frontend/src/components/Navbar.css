@@ -124,7 +124,7 @@
   z-index: 10000;
   padding: 0 16px 16px 16px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-  border: 2px solid #00C853;
+  border: 1px solid #00c85367;
   animation: slideDown 0.3s ease;
   transform-origin: top right;
 }
@@ -193,7 +193,7 @@
   border-radius: 16px;
   z-index: 10000;
   padding: 1rem 1.2rem;
-  border: 2px solid #00C853;
+  border: 1px solid #00c85367;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   animation: slideDown 0.3s ease;
   transform-origin: top right;
@@ -325,6 +325,9 @@
   }
   .popupoptions li {
     font-size: 0.85rem;
+  }
+  .logo img{
+    height: 40px;
   }
 }
 

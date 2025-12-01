@@ -82,7 +82,7 @@ const helpContent = {
   }
 };
 
-function HelpTopicModal({ topic, onNavigate, onClose }) {
+export function HelpTopicModal({ topic, onNavigate, onClose }) {
  
   useEffect(() => {
     document.body.classList.add("modal-open");
@@ -254,10 +254,31 @@ export const HelpSupport = () => {
         return () => window.removeEventListener('keydown', onEsc);
     }, []);
 
+      const { ensureAuth } = useAppContext();
+    
+      useEffect(() => {
+                 // Run an initial check: this page is an auth/home page, so pass true
+              (async () => {
+                try {
+                  await ensureAuth(navigate, false);
+                } catch (e) {
+                  console.error("ensureAuth initial check failed:", e);
+                }
+              })();
+        
+              const intervalId = setInterval(() => {
+                ensureAuth(navigate, false).catch((e) => console.error(e));
+              }, 10000);
+        
+              return () => {
+                clearInterval(intervalId);
+              };
+        },  [navigate, ensureAuth]);
+
   return (
     <div className="HelpSupportLayout">
-       <Navbar darkMode={darkMode} setDarkMode={setDarkMode} pageType="help-support"
-                profileData={{ name: userInfo?.name, email: userInfo?.email, profileImage: userInfo?.profileImage }} />
+        <Navbar darkMode={darkMode} setDarkMode={setDarkMode} pageType="help-support" 
+        profileData={{name: userInfo?.name?.split(" ")[0] || "Guest",email: userInfo?.email || "N/A"}}/>
       
       <div className="HelpSupportBody">
        
@@ -277,9 +298,9 @@ export const HelpSupport = () => {
  <div className="footer-div">
                 <Footer darkMode={darkMode}
                     navigationLinks={[
-                        { text: "Portfolio", href: "#" },
-                        { text: "AI Insights", href: "#" },
-                        { text: "Watchlist", href: "#" },
+                        { text: "Portfolio", href: "/portfolio" },
+                        { text: "AI Insights", href: "/ai-insight" },
+                        { text: "Watchlist", href: "/watchlist" },
                         { text: "Compare Stocks", href: "#" },
 
                     ]}

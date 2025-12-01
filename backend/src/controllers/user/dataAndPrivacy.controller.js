@@ -1,6 +1,5 @@
 const dataAndPrivacy = async (req, res) => {
     try {
-        if(!req.user.aisuggestion) return res.status(500).json({ success: false, message: "expected aisuggestion field" });
         const data = {
             aisuggestion: req.user.aisuggestion,
         };

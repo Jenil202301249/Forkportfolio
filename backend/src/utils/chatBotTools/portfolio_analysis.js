@@ -15,13 +15,28 @@ export const Portfolio_analysis_tool = tool(
     
     console.log("User Details:", userDetails);
     console.log("Email ID:", email_Id);
-    
+    console.log("userDetails:", userDetails);
+    // if(!userDetails.aiSuggestionsEnabled)
+    // {
+    //   console.log("AI Insights disabled for user with email id", email_Id);
+    //   return {
+    //     statusCode: 400,
+    //     success: false,
+    //     message:
+    //       "You've turned off AI Insights for your portfolio. I won't analyze your portfolio until you switch it back on.",
+    //   };
+    // }
     const portfolio = await getStockSummary(email_Id);
     console.log("portfolio of user with email id", email_Id, "and name", name, "is", portfolio);
     if (!portfolio || portfolio.length === 0) {
-      console.log("No portfolio found for user with email id", email_Id);
-      throw new Error("No portfolio found for the current user.");
+      // console.log("No portfolio found for user with email id", email_Id);
+      return {
+        statusCode: 400,
+        success: false,
+        message: "Your portfolio is empty.",
+      };
     }
+    
 
     // Extract user details once (outside the loop)
     const financialGoals = userDetails.financialGoals || "not specified";
@@ -216,7 +231,6 @@ for (const stock of resultWithAllocation) {
         generatedBy : "Portfolio_analysis_tool v1.0",
         dataSource : "Yahoo Finance"
       }
-
     }
     console.log("Generated portfolio report: ", portfolioReport);
     return JSON.stringify(portfolioReport);

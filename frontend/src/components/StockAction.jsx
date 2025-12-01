@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./StockAction.css";
-
+import Swal from "sweetalert2";
+import "./alert.css";
 const StockAction = ({ action, handler, symbol, currPrice, priceChange, pricePercentChange, onClose }) => {
 
     const BASE_URL = import.meta.env.VITE_BACKEND_LINK;
@@ -22,16 +23,44 @@ const StockAction = ({ action, handler, symbol, currPrice, priceChange, pricePer
     }
 
     const handleSubmit = async () => {
-        if (!quantity || !Number.isInteger(Number(quantity))){ 
-            alert("Invalid quantity entered.");    
+        if (!quantity || !Number.isInteger(Number(quantity))) {
+            Swal.fire({
+                toast: true,
+                position: "top",
+                icon: "error",
+                title: "Please enter a valid integer quantity.",
+                iconColor: "#ff4b4b",
+                background: "#1a1a1a",
+                showConfirmButton: false,
+                timer: 3000,
+                customClass: {
+                    popup: "small-toast"
+                }
+            });
+            // alert("Invalid quantity entered.");    
             return;
         }
-    
+
         try {
             await axios.post(`${BASE_URL}/api/v1/dashBoard/addTransaction`, { symbol: symbol, quantity: Number(quantity), transaction_type: action }, { withCredentials: true });
-            alert(`Transaction done of amount: ${currPrice * quantity}`);
+            Swal.fire({
+                toast: true,
+                position: "top",
+                icon: "success",
+                title: `Transaction done of amount: ${(currPrice * quantity).toFixed(2)}`,
+                iconColor: "#33ff57",
+                background: "#1a1a1a",
+                showConfirmButton: false,
+                timer: 3000,
+                customClass: {
+                    popup: "small-toast"
+                }
+            });
+            onClose();
+            // alert(`Transaction done of amount: ${currPrice * quantity}`);
         } catch (err) {
             console.error("Error checking holding:", err);
+            onClose();
         }
     };
 
@@ -69,6 +98,7 @@ const StockAction = ({ action, handler, symbol, currPrice, priceChange, pricePer
                 <div className="model-price-info">
                     <div className="model-price">{currPrice}</div>
                     <div className="model-price-change"
+                        data-testid="model-price-change"
                         style={{
                             color:
                                 priceChange > 0
@@ -88,44 +118,37 @@ const StockAction = ({ action, handler, symbol, currPrice, priceChange, pricePer
                     <span className="model-calc">{Number.parseFloat(currPrice * quantity).toFixed(2)}</span>
                 </div>
 
-                {action === "remove" && !userHasStock ? (
-                    <p className="model-error">
-                        ❌ You do not own this stock.
-                        It cannot be removed.
-                    </p>
-                ) : (
-                    <>
-                        <label>Enter Quantity</label>
-                        <div className="model-custom-input">
-                            <input
-                                type="number"
-                                value={quantity}
-                                min="1"
-                                onKeyDown={(e) => {
-                                    if (["e", "E", "+", "-"].includes(e.key)) {
-                                        e.preventDefault();
-                                    }
-                                }}
-                                onChange={(e) => setQuantity(e.target.value)}
+                <>
+                    <label htmlFor="stock-quantity">Enter Quantity</label>
+                    <div className="model-custom-input">
+                        <input
+                            type="number"
+                            value={quantity}
+                            min="1"
+                            onKeyDown={(e) => {
+                                if (["e", "E", "+", "-"].includes(e.key)) {
+                                    e.preventDefault();
+                                }
+                            }}
+                            onChange={(e) => setQuantity(e.target.value)}
 
-                                style={{
-                                    caretColor: action === "BUY" ? "#00c853" : "#c81b00",
-                                    border: action === "BUY" ? "1px solid #00c853" : "1px solid #c81b00"
-                                }}
-                            />
-                            <div className="controls">
-                                <button onClick={() => setQuantity((prev) => Number(prev) + 1)}>▲</button>
-                                <button onClick={() => setQuantity((prev) => Math.max(0, Number(prev) - 1))}>▼</button>
-                            </div>
+                            style={{
+                                caretColor: action === "BUY" ? "#00c853" : "#c81b00",
+                                border: action === "BUY" ? "1px solid #00c853" : "1px solid #c81b00"
+                            }}
+                        />
+                        <div className="controls">
+                            <button onClick={() => setQuantity((prev) => Number(prev) + 1)}>▲</button>
+                            <button onClick={() => setQuantity((prev) => Math.max(0, Number(prev) - 1))}>▼</button>
                         </div>
-                        <button
-                            className={`model-confirm-btn ${action === "BUY" ? "BUY" : "SELL"}`}
-                            onClick={handleSubmit}
-                        >
-                            Confirm
-                        </button>
-                    </>
-                )}
+                    </div>
+                    <button
+                        className={`model-confirm-btn ${action === "BUY" ? "BUY" : "SELL"}`}
+                        onClick={handleSubmit}
+                    >
+                        Confirm
+                    </button>
+                </>
 
                 <button className="model-cancel-btn" onClick={onClose}>Cancel</button>
 

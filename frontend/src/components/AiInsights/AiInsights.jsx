@@ -1,11 +1,14 @@
 import React,{useEffect,useState} from 'react'
 import './AiInsights.css'
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { useAppContext } from '../../context/AppContext.jsx';
 
 
 const AiInsights = () => {
    const [formattedInsights, setFormattedInsights] = useState([]);
-
+    const [error, setError] = useState();
+    // const {userDetails} = useAppContext();
    /*-------------------------------------------------Function to format portfolio data into insights---------------------- */
    const formatPortfolioData = (jsonString) => {
      try {
@@ -73,40 +76,54 @@ const handlePortfolioAnalysis = async () => {
         try{
           const res = await axios.get(import.meta.env.VITE_BACKEND_LINK + "/api/v1/dashBoard/getPortfolioInsight",{withCredentials: true});
           console.log("AiInsights component mounted",res.data.reply);
-          const formatted = formatPortfolioData(res.data.reply);
-          setFormattedInsights(formatted);
+          if(res.data.reply.statusCode === 400){
+            // console.error("Error in response:", res.data.reply.message);
+            setError(res.data.reply.message);
+          }else{
+            const formatted = formatPortfolioData(res.data.reply);
+            console.log("Formatted Insights in state:", formatted);
+            setFormattedInsights(formatted);
+          }
         }
         catch(err){
-          console.error("Error fetching portfolio insights:", err);
-          setFormattedInsights(["Error fetching portfolio insights"]);
+          // console.error(err.message);
+          setError(err.message);
         }
     }
     
 
-
 /*-------------------------------------------------useEffect to call portfolio analysis on component mount---------------------- */
-  useEffect(() => {
+/*  
+useEffect(() => {
     handlePortfolioAnalysis();
+    const interval = setInterval(() => {
+      handlePortfolioAnalysis();
+    }, 60 * 60 * 1000);
+    
+    return () => clearInterval(interval);
   },[]);
+  */
   
-  return (
-    <div>
-      <div className="card insights-card">
-            <h2 className="ai-title">AI - Powered Insights</h2>
+return (
+  <div className="aiinsights-wrapper">
+    <div className="card insights-card">
+      <h2 className="ai-title">AI - Powered Insights</h2>
             <div className="insights">
               {formattedInsights.length > 0 ? (
                 formattedInsights.map((val, index) => (
                   <p key={index} className="insight-item">{val}</p>
                 ))
               ) : (
-                <p>Loading portfolio insights...</p>
+                <p >{error}</p>
               )}
             </div>
-            <p className="view-all">View all Insights →</p>
+            <p className="view-all">
+                <Link to="/ai-insight">Explore AI Insights →</Link>
+            </p>
           </div>
+  </div>
+);
 
-    </div>
-  )
 }
 
 export default AiInsights

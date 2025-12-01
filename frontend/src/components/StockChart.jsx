@@ -9,22 +9,13 @@ import {
   Title,
   Tooltip,
   Legend,
-  elements,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import "./StockChart.css";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-export default function StockChart({ symbol }) {
+export default function StockChart({ symbol, range: initialRange = "1Y", data: initialData }) {
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
@@ -41,14 +32,13 @@ export default function StockChart({ symbol }) {
   });
 
   const [hiddenDates, setHiddenDates] = useState([]);
-  const [range, setRange] = useState("1Y");
+  const [range, setRange] = useState(initialRange);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [rawDates, setRawDates] = useState([]);
   const [rawValues, setRawValues] = useState([]);
 
   axios.defaults.withCredentials = true;
-
   const BACKEND = import.meta.env.VITE_BACKEND_LINK;
   const API_URL = `${BACKEND}/api/v1/dashBoard/graph?ticker=${symbol}`;
 
@@ -56,10 +46,7 @@ export default function StockChart({ symbol }) {
     return {
       responsive: true,
       maintainAspectRatio: false,
-      elements: {
-        line: { borderWidth: 1.75 }
-      },
-
+      elements: { line: { borderWidth: 1.75 } },
       plugins: {
         legend: { display: false },
         tooltip: {
@@ -68,11 +55,8 @@ export default function StockChart({ symbol }) {
           borderWidth: 1,
           borderColor: "#00C853",
           displayColors: false,
-          padding: 10, 
+          padding: 10,
           cornerRadius: 4,
-
-          parser: () => { },
-
           callbacks: {
             title: (ctx) => {
               const index = ctx[0].dataIndex;
@@ -88,101 +72,82 @@ export default function StockChart({ symbol }) {
           },
         },
       },
-
-      interaction: {
-        mode: "index",
-        intersect: false,
-      },
-
+      interaction: { mode: "index", intersect: false },
       scales: {
         x: {
           type: "category",
-
           ticks: {
             color: "#fff",
-            autoSkip: (range === "1M" || range === "3M") ? true : false,
+            autoSkip: range === "1M" || range === "3M",
             maxRotation: 0,
             minRotation: 0,
-            callback: function (value, index) {
-              const label = this.getLabelForValue(value);
-              return label || "";
-            },
           },
-
           grid: { display: false },
         },
-
         y: {
-          ticks: {
-            color: "#fff",
-            callback: (v) => `${v.toLocaleString()}`,
-          },
-
+          ticks: { color: "#fff", callback: (v) => v.toLocaleString() },
           grid: { color: "#3F3F46" },
         },
       },
     };
-  }, [hiddenDates]);
+  }, [hiddenDates, range]);
 
   const sliceByRange = (allDates, allValues) => {
     switch (range) {
-      case "1M":
-        return [allDates.slice(-30), allValues.slice(-30)];
-      case "3M":
-        return [allDates.slice(-90), allValues.slice(-90)];
-      case "6M":
-        return [allDates.slice(-180), allValues.slice(-180)];
-      case "1Y":
-        return [allDates.slice(-365), allValues.slice(-365)];
-      default:
-        return [allDates, allValues];
+      case "1M": return [allDates.slice(-30), allValues.slice(-30)];
+      case "3M": return [allDates.slice(-90), allValues.slice(-90)];
+      case "6M": return [allDates.slice(-180), allValues.slice(-180)];
+      case "1Y": return [allDates.slice(-365), allValues.slice(-365)];
+      default: return [allDates, allValues];
     }
   };
 
   useEffect(() => {
+    if (initialData) {
+      setRawDates(initialData.map(d => d.datetime));
+      setRawValues(initialData.map(d => d.close));
+      return;
+    }
+
     const fetchData = async () => {
       try {
         setLoading(true);
         const res = await axios.get(API_URL);
         const { x, y } = res.data;
-
         setRawDates(x);
         setRawValues(y);
-
       } catch (err) {
         setError("Failed to fetch stock chart data.");
       } finally {
         setLoading(false);
       }
     };
-
     if (symbol) fetchData();
-  }, [symbol]);
-
+  }, [symbol, initialData]);
 
   useEffect(() => {
     if (rawDates.length === 0) return;
 
     const [filteredDates, filteredValues] = sliceByRange(rawDates, rawValues);
-
     setHiddenDates(filteredDates);
 
-    const labelFormat = filteredDates.map((iso, index) => {
-      const d = new Date(iso);
+    const isUnsupportedRange = !["1M", "3M", "6M", "1Y"].includes(range);
 
-      if (range === "1M" || range === "3M")
-        return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-
-      if (range === "6M" || range === "1Y") {
-        const curr = d.getMonth();
-        const prev = filteredDates[index - 1];
-        if (!prev) return d.toLocaleDateString("en-US", { month: "short" });
-        const prevMonth = new Date(prev).getMonth();
-        return curr !== prevMonth ? d.toLocaleDateString("en-US", { month: "short" }) : "";
-      }
-
-      return iso;
-    });
+    const labelFormat = isUnsupportedRange
+      ? filteredDates // raw ISO labels
+      : filteredDates.map((iso, index) => {
+          const d = new Date(iso);
+          if (range === "1M" || range === "3M")
+            return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+          if (range === "6M" || range === "1Y") {
+            const curr = d.getMonth();
+            const prev = filteredDates[index - 1];
+            if (!prev) return d.toLocaleDateString("en-US", { month: "short" });
+            const prevMonth = new Date(prev).getMonth();
+            return curr !== prevMonth ? d.toLocaleDateString("en-US", { month: "short" }) : "";
+          }
+          return iso;
+        });
 
     setChartData({
       labels: labelFormat,
@@ -197,25 +162,16 @@ export default function StockChart({ symbol }) {
         },
       ],
     });
-
   }, [range, rawDates, rawValues]);
 
-  if (loading)
-    return <div className="stockchart-container">Loading chart...</div>;
-
-  if (error)
-    return <div className="stockchart-container error">{error}</div>;
-
+  if (loading) return <div className="stockchart-container">Loading chart...</div>;
+  if (error) return <div className="stockchart-container error">{error}</div>;
 
   return (
     <div className="stockchart-container">
-
       <div className="stockchart-header">
-
         <h2>Chart</h2>
-
         <div className="stockchart-ranges">
-
           {["1M", "3M", "6M", "1Y"].map((r) => (
             <button
               key={r}
@@ -225,14 +181,11 @@ export default function StockChart({ symbol }) {
               {r}
             </button>
           ))}
-
         </div>
       </div>
-
       <div className="stockchart-graph">
-        <Line options={options} data={chartData} />
+        <Line data={chartData} options={options} data-testid="chart-line" />
       </div>
-
     </div>
   );
 }

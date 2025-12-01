@@ -25,22 +25,18 @@ export const formatLargeNumber = (num) => {
 export const formatSmallNumber = (num) => {
     if (num === null || num === undefined || isNaN(Number(num))) return "--";
     const val = Number.parseFloat(num);
-    if (Math.abs(val) < 1e-3) return "0.00";
+    if (Math.abs(val) < 1e-2) return "0";
     return val.toFixed(2);
 };
 
 export const formatDate = (isoString) => {
     if (!isoString || isoString.startsWith('-')) return "--";
-    try {
-        const date = new Date(isoString);
-        return date.toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short",
-            day: "numeric"
-        });
-    } catch {
-        return "--";
-    }
+    const date = new Date(isoString);
+    return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric"
+    });
 };
 
 // Classifier function for categorizing market caps
@@ -81,3 +77,13 @@ export function getPortfolioRiskFromCaps(portfolio) {
     if (riskScore >= 9) return "Moderate";
     return "Conservative";
 }
+
+// Function to betterly represent large amounts
+export function formatWithIndianCommas(num) {
+  if (num === null || num === undefined || isNaN(Number(num))) return "--";
+  return Number(num).toLocaleString("en-IN", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+

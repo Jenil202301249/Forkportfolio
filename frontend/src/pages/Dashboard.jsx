@@ -59,9 +59,9 @@ export const Dashboard = () => {
       <div className="footer-div">
         <Footer darkMode={darkMode}  
         navigationLinks={[
-            { text: "Portfolio", href: "#" },
-            { text: "AI Insigths", href: "#" },
-            { text: "Wacthlist", href: "#" },
+            { text: "Portfolio", href: "/portfolio" },
+            { text: "AI Insigths", href: "/ai-insight" },
+            { text: "Wacthlist", href: "/watchlist" },
             { text: "Compare Stocks", href: "#" },
 
         ]}

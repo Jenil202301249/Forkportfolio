@@ -16,19 +16,6 @@ describe("dataAndPrivacy.controller.js", () => {
         };
     });
 
-    // ---------- NEW TEST: aisuggestion missing ----------
-    it("returns 500 when req.user.aisuggestion is missing", async () => {
-        req.user.aisuggestion = null;
-
-        await dataAndPrivacy(req, res);
-
-        expect(res.status).toHaveBeenCalledWith(500);
-        expect(res.json).toHaveBeenCalledWith({
-            success: false,
-            message: "expected aisuggestion field",
-        });
-    });
-
     // ---------- SUCCESS PATH ----------
     it("returns 200 with aisuggestion data", async () => {
         await dataAndPrivacy(req, res);

@@ -15,18 +15,25 @@ export const Sidebar = ({ primaryData = {} }) => {
 
     useEffect(() => {
         const path = location.pathname.toLowerCase();
+        if (!currentField) {
+            const saved = localStorage.getItem("activeMenu");
+            if (saved) {
+                setActiveField(saved);
+                return;
+            }
+        }
 
         if (path.includes("/data-privacy")) setActiveField("Data & Privacy");
         else if (path.includes("/activity")) setActiveField("Activity");
         else if (path.includes("/preferences")) setActiveField("Preferences");
         else if (path.includes("/help-support")) setActiveField("Help & Support");
-        else setActiveField("My Profile"); // default for /my-profile or unknown paths
+        else setActiveField("My Profile");
 
     }, [location.pathname]);
 
     const handleLogout = async () => {
         try {
-            await axios.post(import.meta.env.VITE_BACKEND_LINK + "/api/v1/users/logout", { withCredentials: true });
+            await axios.post(import.meta.env.VITE_BACKEND_LINK + "/api/v1/users/logout", {}, { withCredentials: true });
             localStorage.removeItem("activeMenu");
             navigate("/");
         }
@@ -54,10 +61,10 @@ export const Sidebar = ({ primaryData = {} }) => {
         <aside className="Sidebar">
             <div className="ProfileSection">
                 <div className="Avatar">
-                    <img src={primaryData.profileImage ? primaryData.profileImage : profileImg} alt="Profile Pic" />
+                    <img src={primaryData?.profileImage || profileImg} alt="Profile Pic" />
                 </div>
-                <h2>{primaryData.name}</h2>
-                <p className="Email">{primaryData.email}</p>
+                <h2>{primaryData?.name}</h2>
+                <p className="Email">{primaryData?.email}</p>
             </div>
 
             <nav className="Menu">
@@ -72,7 +79,8 @@ export const Sidebar = ({ primaryData = {} }) => {
                     <button
                         key={index}
                         onClick={() => handleMenuClick(item)}
-                        className={`Sidebar-item ${currentField === item ? "Active" : ""}`}
+                        className={`Sidebar-item ${currentField === item ? "Active" : ""}` }
+                        data-testid="activity-item"
                     >
                         {item}
                         <img

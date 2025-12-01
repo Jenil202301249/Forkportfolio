@@ -1,3 +1,4 @@
+import { Auth } from "../../src/pages/auth.jsx";
 import { render, screen,fireEvent,waitFor } from "@testing-library/react";
 import { expect, vi } from "vitest";
 import { MemoryRouter } from "react-router-dom";
@@ -23,7 +24,6 @@ vi.mock("../../src/assets/dark-mode-login-bg.png", () => ({
   default: "bg_mock.png",
 }));
 
-import { Auth } from "../../src/pages/Auth.jsx";
 
 
 vi.mock("../../src/components/LoginForm.jsx", () => ({
@@ -36,7 +36,7 @@ vi.mock("../../src/components/LoginForm.jsx", () => ({
 }));
 
 // Import AFTER the mock so Auth receives the mocked LoginForm
-const { Auth: AuthToggle } = await import("../../src/pages/Auth.jsx");
+const { Auth: AuthToggle } = await import("../../src/pages/auth.jsx");
 
 describe("Auth Component", () => {
 
@@ -142,7 +142,7 @@ test("Test 6: console.error is called when ensureAuth initial check fails", asyn
   }));
 
   // Re-import Auth AFTER mock
-  const { Auth: AuthFailCheck } = await import("../../src/pages/Auth.jsx");
+  const { Auth: AuthFailCheck } = await import("../../src/pages/auth.jsx");
 
   render(
     <MemoryRouter>
@@ -168,13 +168,21 @@ test("Test 7: ensureAuth is called repeatedly by setInterval every 5000ms", asyn
 
   // Mock context BEFORE importing Auth
   vi.doMock("../../src/context/AppContext.jsx", () => ({
+/*************  ✨ Windsurf Command ⭐  *************/
+/**
+ * useAppContext hook returns an object containing ensureAuth function
+ * ensureAuth: a function that takes a navigate function and a boolean value
+ *   indicating whether to check for authentication or not, and returns a promise
+ *   that resolves if the user is authenticated, or rejects if not
+ * @return {object} an object with ensureAuth function
+/*******  9b77fbd1-836f-402f-b424-859668a3f14d  *******/
     useAppContext: () => ({
       ensureAuth: ensureAuthMock
     })
   }));
 
   // Import Auth AFTER the mock
-  const { Auth: AuthIntervalTest } = await import("../../src/pages/Auth.jsx");
+  const { Auth: AuthIntervalTest } = await import("../../src/pages/auth.jsx");
 
   render(
     <MemoryRouter>

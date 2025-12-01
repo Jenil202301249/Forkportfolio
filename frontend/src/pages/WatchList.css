@@ -200,9 +200,16 @@
 }
 
 .company-name {
-    display:block;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+    max-height: calc(1.2em * 3);
     font-weight: 600;
-    font-size: 1rem;
+    display: block;
 }
 
 .company-symbol {
@@ -217,6 +224,54 @@
 }
 .change-cell-after {
   display: none;
+}
+.change-cell {
+    font-weight: 500;
+}
+
+.change-positive {
+    color: #24B500;
+}
+
+.change-negative {
+    color: #C81B00;
+}
+
+.action-btn {
+    border: 2px solid #1e1e1e;
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    color: #999;
+    cursor: pointer;
+    font-size: 0.85rem;
+    z-index: 10;
+}
+
+.action-btn:hover {
+    background-color: #1a1a1a;
+    color: #fff;
+    border-color: #c81b00;
+}
+.watchlist-hidden{
+    display:none;
+}
+@media (max-width: 1150px) {
+   .action-btn::before {
+    content: "-";
+  }
+  .action-btn{
+       border-radius: 50%;
+       height:40px;
+        width:40px;
+        padding:0;
+  }
+  .action-btn:hover::before {
+    color:#c81b00;
+
+  }
+  .action-btn span{
+    display: none; 
+  }
 }
 @media (max-width: 1000px) {
     .search-container input {
@@ -251,12 +306,11 @@
         padding:0.75rem 0 0.75rem 1.5rem;
     }
     .watchlist-table th:first-child{
-    padding:0 0 0.75rem 1.75rem;
-        width:40% !important;
+        width:40%;
     }
     .watchlist-table td:first-child{
     padding:0.75rem 0 0.75rem 1.75rem;
-    width:40% !important;
+    width:40%;
     }
     .watchlist-table th:last-child{
     padding-right:1.75rem;
@@ -287,7 +341,7 @@
     
     .watchlist-table td:nth-child(3) {
         width: 35%;
-        padding-left: 3rem;
+        padding-left: 2.5rem;
     }
     
     .watchlist-table th:last-child {
@@ -300,7 +354,7 @@
         width: 72px;
         min-width: 72px;
         padding-left: 1.5rem;
-        padding-right: 0.5rem;
+        padding-right: 0;
     }
     
     .company-name,.price-cell{
@@ -318,8 +372,8 @@
     }
     
     .action-btn {
-        height: 32px;
-        width: 32px;
+        height: 35px;
+        width: 35px;
         font-size: 1rem;
     }
 }
@@ -329,53 +383,7 @@
         width: 90%;
     }
 }
-.change-cell {
-    font-weight: 500;
-}
 
-.change-positive {
-    color: #24B500;
-}
-
-.change-negative {
-    color: #C81B00;
-}
-
-.action-btn {
-    border: 2px solid #1e1e1e;
-    border-radius: 10px;
-    padding: 0.5rem 1rem;
-    color: #999;
-    cursor: pointer;
-    font-size: 0.85rem;
-    z-index: 10;
-}
-@media (max-width: 1150px) {
-   .action-btn::before {
-    content: "-";
-  }
-  .action-btn{
-       border-radius: 50%;
-       height:40px;
-        width:40px;
-        padding:0;
-  }
-  .action-btn:hover::before {
-    color:#c81b00;
-
-  }
-  .action-btn span{
-    display: none; 
-  }
-}
-.action-btn:hover {
-    background-color: #1a1a1a;
-    color: #fff;
-    border-color: #c81b00;
-}
-.watchlist-hidden{
-    display:none;
-}
 /* Filter Modal */
 .filter-modal-overlay {
     position: fixed;

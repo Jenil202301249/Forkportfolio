@@ -8,6 +8,8 @@ import PasswordInputField from "./PasswordInputField.jsx";
 import  {checkPasswordStrength,validateEmail,} from "../utils/validation.js";
 import { useAppContext } from "../context/AppContext.jsx";
 import LogoDark from "../assets/LogoDark.png";
+import Swal from "sweetalert2";
+import "./alert.css";
 const LoginForm = ({ toggleForm, resetFormStates: parentResetFormStates }) => {
 /*----------------------------------- State Variables-----------------------------------------------------------*/
     const navigate = useNavigate();
@@ -57,6 +59,12 @@ const LoginForm = ({ toggleForm, resetFormStates: parentResetFormStates }) => {
         setTitleError("");
         setIsOtpSubmitted(false);
         setForgotUserExists(false);
+        setForgotOtpvarified(false);
+        setresetPassword(false);
+        setForgotOtpvarified(false);
+        setNewPassword("");
+        setNewPasswordError("");
+        setTimer(30);
         // Also call parent reset
         if (parentResetFormStates) parentResetFormStates();
     }
@@ -69,6 +77,19 @@ const LoginForm = ({ toggleForm, resetFormStates: parentResetFormStates }) => {
             access_token: tokenResponse.access_token},
             {withCredentials: true
           });
+          Swal.fire({
+  toast: true,
+  position: "top",
+  icon: "success",
+  title: "Login Successful!",
+  background: "linear-gradient(135deg, #0f0f0f, #003f2f)",
+  iconColor: "#2dff88",
+  color: "#b4ffd9",
+  showConfirmButton: false,
+  timer: 2800,
+  customClass: { popup: "toast-login-success" }
+});
+
           setUserLoggedIn(true);
           navigate("/Dashboard");
         }catch(err){  
@@ -114,9 +135,22 @@ const LoginForm = ({ toggleForm, resetFormStates: parentResetFormStates }) => {
     const handleLogin = async () => {
         setIsLoading(true);
         try {
-            const res = await axios.post(import.meta.env.VITE_BACKEND_LINK+"/api/v1/users/login", {email : email, password : password}, {withCredentials: true});
+            const res = await axios.post(import.meta.env.VITE_BACKEND_LINK+"/api/v1/users/login", {email : email.trim(), password : password.trim()}, {withCredentials: true});
             console.log("✅ Logged in successfully:", res.data);
             setUserLoggedIn(true);
+            Swal.fire({
+  toast: true,
+  position: "top",
+  icon: "success",
+  title: "Login Successful!",
+  background: "linear-gradient(135deg, #0f0f0f, #003f2f)",
+  iconColor: "#2dff88",
+  color: "#b4ffd9",
+  showConfirmButton: false,
+  timer: 2800,
+  customClass: { popup: "toast-login-success" }
+});
+
             navigate("/Dashboard");
         } catch (err) {
             if(err.response.data.message)
@@ -132,7 +166,19 @@ const LoginForm = ({ toggleForm, resetFormStates: parentResetFormStates }) => {
 const handleSendOtpForForgotPassword = async () => {
   
   try{
-    const res = await axios.post(import.meta.env.VITE_BACKEND_LINK+"/api/v1/users/forgotPasswordOtpGeneration", {email : email}, {withCredentials: true});
+    const res = await axios.post(import.meta.env.VITE_BACKEND_LINK+"/api/v1/users/forgotPasswordOtpGeneration", {email : email.trim()}, {withCredentials: true});
+    Swal.fire({
+  toast: true,
+  position: "top",
+  icon: "info",
+  title: "OTP Sent to your email",
+  background: "#0a0f26",
+  iconColor: "#5ab3ff",
+  color: "#a5d4ff",
+  showConfirmButton: false,
+  timer: 2800,
+  customClass: { popup: "toast-otp-sent" }
+});
     console.log("✅ OTP sent successfully:", res.data);
     setForgotUserExists(true);
     setTimer(30);
@@ -149,7 +195,20 @@ const handleSendOtpForForgotPassword = async () => {
 const handleOtpverificationForForgotPassword = async () => {
     setIsLoading(true);
 try{
-  const res = await axios.post(import.meta.env.VITE_BACKEND_LINK+"/api/v1/users/verifyOtp", {email : email, otp: otp}, {withCredentials: true});
+  const res = await axios.post(import.meta.env.VITE_BACKEND_LINK+"/api/v1/users/verifyOtp", {email : email.trim(), otp: otp.trim()}, {withCredentials: true});
+    Swal.fire({
+  toast: true,
+  position: "top",
+  icon: "success",
+  title: "OTP Verified Successfully!",
+  background: "rgba(0, 20, 0, 0.75)",   // dark neon base
+  iconColor: "#6aff7a",                // neon mint icon
+  color: "#b8ffcf",                    // soft mint text
+  showConfirmButton: false,
+  timer: 2800,
+  customClass: { popup: "toast-otp-verified" }
+});
+
    console.log("✅ OTP verified successfully:", res.data.message);
   setForgotOtpvarified(true);
   setResetPassword(true);
@@ -165,8 +224,23 @@ try{
 const handleResetPassword = async () => {
     setIsLoading(true);
     try{
-        const res = await axios.patch(import.meta.env.VITE_BACKEND_LINK+"/api/v1/users/setNewPassword", {email : email, newPassword : newPassword}, {withCredentials: true});
+        const res = await axios.patch(import.meta.env.VITE_BACKEND_LINK+"/api/v1/users/setNewPassword", {email : email.trim(), newPassword : newPassword.trim()}, {withCredentials: true});
+        Swal.fire({
+  toast: true,
+  position: "top",
+  icon: "success",
+  title: "Password Reset Successful",
+  text: "Redirecting to dashboard...",
+  background: "#101010",
+  iconColor: "#32ff8a",
+  color: "#b2ffd9",
+  showConfirmButton: false,
+  timer: 2800,
+  customClass: { popup: "toast-reset-to-dashboard" }
+});
+
         console.log("✅ Password reset successful:", res.data);
+        
         setUserLoggedIn(true);
         navigate("/Dashboard");
     } catch (err) {
@@ -195,7 +269,7 @@ useEffect(() => {
     if (newPassword.trim() === "") {
           setNewPasswordError(""); // default message
         } else {
-          setNewPasswordError(checkPasswordStrength(newPassword));
+          setNewPasswordError(checkPasswordStrength(newPassword.trim()));
         }
     }, [newPassword]);
 
@@ -204,7 +278,7 @@ useEffect(() => {
     if (password.trim()==="") {
       setPasswordError(""); // default message
     } else {
-      setPasswordError(checkPasswordStrength(password));
+      setPasswordError(checkPasswordStrength(password.trim()));
     }
    }, [password]);
 
@@ -228,6 +302,42 @@ useEffect(() => {
       return () => clearInterval(interval);
     }, [timer]);
 /*----------------------------------- JSX --------------------------------------------------------------------- */
+// Handle Enter key: submit only when fields are valid for the current flow
+const handleKeyDown = (e) => {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+
+    if (isForgotPassword) {
+      // If not yet requested OTP -> send OTP (requires valid email)
+      if (!isOtpSubmitted) {
+        if (email.trim() === "" || emailError) return;
+        setTitleError("");
+        handleForgotPasswordInputToggle(email);
+        handleSendOtpForForgotPassword();
+        return;
+      }
+
+      // OTP submitted and user exists -> verify OTP (requires OTP)
+      if (isOtpSubmitted && forgotUserExists && !forgotOtpvarified) {
+        if (otp.trim() === "") return;
+        setTitleError("");
+        handleOtpverificationForForgotPassword();
+        return;
+      }
+
+      // If OTP verified -> reset password (requires new password valid)
+      if (forgotOtpvarified) {
+        if (newPasswordError !== "") return;
+        handleResetPassword();
+        return;
+      }
+    } else {
+      // Normal login flow: require both email and password valid
+      if (!areAllFieldsValid) return;
+      handleLogin();
+    }
+};
+
 return (
         <>
 
@@ -242,7 +352,7 @@ return (
           </div>
 
           {/* Login and Forgot password field */}
-          <form className="form" style={{gap : isForgotPassword ? '0.5rem' : '0rem' }} onSubmit={(e)=>e.preventDefault()}>
+          <form className="form" style={{gap : isForgotPassword ? '0.5rem' : '0rem' }} onSubmit={(e)=>e.preventDefault()} onKeyDown={handleKeyDown}>
             {/* Email Field */}
             <InputField htmlFor="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} id="email" placeholder="Enter your email" labelVal="Email" styleVal={{ display: forgotUserExists ? 'none':'block' }}/>
             <p className="email-error error" style={{ display: isOtpSubmitted && forgotUserExists ? 'none' : 'block' }}>{emailError}</p>
@@ -264,7 +374,7 @@ return (
             {isForgotPassword && !forgotOtpvarified && (<button type="button" disabled={!areAllFieldsValid} className="submit loading" style={{display: 'flex', opacity: areAllFieldsValid ? 1 : 0.5, cursor: areAllFieldsValid ? 'pointer' : 'not-allowed'}}  onClick= {()=>{setTitleError(""); if(isOtpSubmitted && forgotUserExists ){handleOtpverificationForForgotPassword() } else { handleForgotPasswordInputToggle(email);handleSendOtpForForgotPassword();}}}>{isLoading ? <><i className="pi pi-spin pi-spinner spin"></i><span>Processing...</span></> : <>{isOtpSubmitted && forgotUserExists ? 'Verify OTP' : 'Send OTP'}</>}</button>)}
 
             {/* New Password Error Message */}
-            {resetPassword && <p style={{ display : "block" }} className="pass-error error">{newPasswordError}</p>}
+            {resetPassword && forgotOtpvarified && <p style={{ display : "block" }} className="pass-error error">{newPasswordError}</p>}
 
             {/* Resend OTP Button */}
             {isOtpSubmitted && forgotUserExists && !forgotOtpvarified && (<button type="button" className="resubmit" disabled = {timer!==0} style = {{opacity: timer===0 ? 1 : 0.5, cursor: timer===0 ? 'pointer' : 'not-allowed',display: "block"}} onClick={() => { setTitleError("");handleSendOtpForForgotPassword();}}>Resend</button>)}

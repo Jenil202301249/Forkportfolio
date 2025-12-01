@@ -14,6 +14,8 @@ import {Preference} from './pages/Preference'
 import AiInsight from './pages/AiInsight';
 import Watchlist from './pages/WatchList';
 import {createBrowserRouter,RouterProvider} from "react-router-dom";
+import { DataPrivacy } from './pages/DataPrivacy'; 
+import { ActivitySessionHistory } from './pages/ActivitySessionHistory';
 const router = createBrowserRouter(
   [
     {
@@ -55,6 +57,14 @@ const router = createBrowserRouter(
     ,{
       path:"/watchlist",
       element:<Watchlist/>
+    },
+    {
+      path:"/data-privacy",
+      element:<DataPrivacy/>
+    },
+    {
+      path:"/activity",
+      element:<ActivitySessionHistory/>
     }
   ]
 );

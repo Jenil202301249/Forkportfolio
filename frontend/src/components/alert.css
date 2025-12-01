@@ -1,0 +1,109 @@
+/* Toast should always appear above any popup */
+.swal2-container {
+  z-index: 999999 !important;
+}
+
+/* Base toast style (same for success + error) */
+.small-toast {
+  width: 260px !important;
+  padding: 12px 18px !important;
+  border-radius: 12px !important;
+
+  background: rgba(26, 26, 26, 0.9) !important;
+  backdrop-filter: blur(8px) !important;
+
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+
+  animation: slideDown 0.35s ease-out;
+}
+
+/* Error (red border + glow) */
+.swal2-icon.swal2-error ~ .swal2-title,
+.swal2-icon.swal2-error {
+  border-color: #ff4b4b !important;
+  color: #ff8a8a !important;
+}
+
+.swal2-error.small-toast {
+  border: 1px solid #ff4b4b40 !important;
+  box-shadow: 0 0 12px #ff4b4b50 !important;
+  color: #ff8a8a !important;
+}
+
+/* Success (green border + glow) */
+.swal2-icon.swal2-success ~ .swal2-title,
+.swal2-icon.swal2-success {
+  border-color: #33ff57 !important;
+  color: #8affc1 !important;
+}
+
+.swal2-success.small-toast {
+  border: 1px solid #33ff5740 !important;
+  box-shadow: 0 0 12px #33ff5750 !important;
+  color: #8affc1 !important;
+}
+
+/* Slide animation */
+
+.toast-login-success {
+  max-width: fit-content;
+  padding: 14px 20px !important;
+  border-radius: 14px !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid #2dff8840 !important;
+  box-shadow: 0 0 18px #2dff8850 !important;
+  animation: slideDown 0.35s ease-out;
+}
+.toast-otp-sent {
+  width: 260px !important;
+  padding: 12px 18px !important;
+  border-radius: 10px !important;
+  border: 1px solid #5ab3ff40 !important;
+  box-shadow: 0 0 15px #5ab3ff80 !important;
+  backdrop-filter: blur(8px);
+  animation: slideDown 0.35s ease-out;
+}
+.toast-otp-verified {
+  width: 260px !important;
+  padding: 14px 20px !important;
+  border-radius: 14px !important;
+
+  backdrop-filter: blur(10px);
+  background: rgba(0, 20, 0, 0.75) !important;
+
+  border: 1px solid #6aff7a40 !important;   /* mint border */
+  box-shadow: 0 0 18px #6aff7a60 !important; /* neon glow */
+
+  animation: slideDown 0.35s ease-out;
+  font-weight: 600 !important;
+}
+
+
+.toast-reset-to-dashboard {
+  width: 260px !important;
+  padding: 14px 20px !important;
+  border-radius: 12px !important;
+
+  background: #101010 !important;
+  backdrop-filter: blur(6px);
+
+  border: 1px solid rgba(50, 255, 138, 0.35) !important;
+  box-shadow: 0 0 14px rgba(50, 255, 138, 0.45) !important;
+
+  color: #b2ffd9 !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.2px;
+
+  animation: slideDown 0.32s ease-out;
+}
+@keyframes slideDown {
+  0% { transform: translateY(-15px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+
+

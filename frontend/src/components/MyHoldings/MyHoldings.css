@@ -1,106 +1,103 @@
-
 .card {
-  background-color: #161616;
+  background-color: #000000;
   border: 1px solid #00c853;
   border-radius: 12px;
   padding: 1.5rem;
-  /* margin: 20px; */
   box-shadow: 0 0 15px rgba(0,255,128,0.05);
 }
 
-.holdings-card {
+.myholdings-wrapper .holdings-card {
   justify-content: center;
   width: 82%;
   margin: 0 auto;
   margin-top: 40px;
 }
 
-.holdings-card table {
+.myholdings-wrapper table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 1rem;
   text-align: center;
-  
 }
 
-.holdings-card th, .holdings-card td {
-  border: 1px solid #2c2c2c;
-  padding: 0.8rem;
+.myholdings-wrapper th,
+.myholdings-wrapper td {
   border: 1px solid white;
+  padding: 0.8rem;
 }
 
-.holdings-card th {
-  background-color: #1f1f1f;
+.myholdings-wrapper th {
+  background-color: #0E0E0E;
   font-weight: 700;
-  
 }
 
-.holdings-card td {
-  background-color: #1f1f1f;
+.myholdings-wrapper td {
+  background-color: #0E0E0E;
   font-weight: 700;
   color: gray;
 }
 
-/* Tablet breakpoint */
 @media (max-width: 1050px) {
-  .holdings-card {
-    width: 100%;
+  .myholdings-wrapper .holdings-card {
+    width: 80%;
     margin-top: 24px;
     padding: 1rem;
   }
 
-  .holdings-card table {
+  .myholdings-wrapper table {
     font-size: 0.92rem;
   }
 
-  .holdings-card th, .holdings-card td {
+  .myholdings-wrapper th,
+  .myholdings-wrapper td {
     padding: 0.6rem;
   }
 }
 
 
-
 @media (max-width: 600px) {
-  .holdings-card {
+  .myholdings-wrapper{
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
+  }
+  .myholdings-wrapper .holdings-card {
     width: 100%;
     padding: 0.8rem;
   }
 
-  .table-wrapper {
+  .myholdings-wrapper .table-wrapper {
     overflow-x: auto;
-    width: 100%;        
+    width: 100%;
   }
 
-  /* Allow the table to shrink and wrap on very small screens. Use fixed layout so columns respect available width */
-  .holdings-card table {
-    min-width: auto;
+  .myholdings-wrapper table {
     width: 100%;
     table-layout: fixed;
     font-size: 0.82rem;
     word-break: break-word;
-    -webkit-font-smoothing: antialiased;
   }
 
-  .holdings-card th, .holdings-card td {
+  .myholdings-wrapper th,
+  .myholdings-wrapper td {
     padding: 0.45rem;
     white-space: normal;
   }
 
-  .header-title {
+  .myholdings-wrapper .header-title {
     font-size: 1.1rem;
     text-align: center;
   }
 }
-  .holdings-card .see-more {
-    font-weight: 700;
-    display: inline-block;
-    margin-top: 0.8rem;
-    color: inherit;
-    text-decoration: none;
-  }
 
-  .holdings-card .see-more:hover {
-    text-decoration: underline;
-    cursor: pointer;
-  }
+.myholdings-wrapper .see-more {
+  font-weight: 700;
+  display: inline-block;
+  margin-top: 0.8rem;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
 
+.myholdings-wrapper .see-more:hover {
+  text-decoration: underline;
+}

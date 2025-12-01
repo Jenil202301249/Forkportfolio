@@ -45,6 +45,13 @@
     padding: 14px;
     max-width: 100%;
     width: 95%;
+    height: fit-content;
+  }
+  .sector-allocation-container .chart-wrapper canvas,
+  .sector-allocation-container .chart-wrapper svg {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
   }
 
   .chart-wrapper {

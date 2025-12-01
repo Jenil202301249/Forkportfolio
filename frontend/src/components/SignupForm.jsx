@@ -7,6 +7,8 @@ import PasswordInputField from "./PasswordInputField.jsx";
 import  {checkPasswordStrength,validateEmail,validateNameStrength} from "../utils/validation.js";
 import { useAppContext } from "../context/AppContext.jsx"
 import LogoDark from "../assets/LogoDark.png";
+import Swal from "sweetalert2";
+import "./alert.css";
 const SignupForm = ({ toggleForm, resetFormStates: parentResetFormStates }) => {
 /*----------------------------------- State Variables----------------------------------------------------------- */
     const navigate = useNavigate();
@@ -56,8 +58,21 @@ const handleOtpGeneration = async () => {
     setIsLoading(true);
     setAreAllFieldsValid(false);
     try {
-        const res = await axios.post(import.meta.env.VITE_BACKEND_LINK+"/api/v1/users/registerOtpGeneration", {email : email, name: name, password : password}, {withCredentials: true});
+        const res = await axios.post(import.meta.env.VITE_BACKEND_LINK+"/api/v1/users/registerOtpGeneration", {email : email.trim(), name: name.trim(), password : password.trim()}, {withCredentials: true});
+        Swal.fire({
+          toast: true,
+          position: "top",
+          icon: "info",
+          title: "OTP Sent to your email",
+          background: "#0a0f26",
+          iconColor: "#5ab3ff",
+          color: "#a5d4ff",
+          showConfirmButton: false,
+          timer: 2800,
+          customClass: { popup: "toast-otp-sent" }
+        });
         console.log("✅ OTP generation successful:", res.data);
+
         setAreAllFieldsValid(true);
         setIsOtpSent((prev)=>!prev);
         setTimer(30);
@@ -74,7 +89,19 @@ const handleOtpGeneration = async () => {
   const handleResendOtpGeneration = async () => {
     // setIsLoading(true);
     try {
-        const res = await axios.post(import.meta.env.VITE_BACKEND_LINK+"/api/v1/users/registerOtpGeneration", {email : email, name: name, password : password}, {withCredentials: true});
+        const res = await axios.post(import.meta.env.VITE_BACKEND_LINK+"/api/v1/users/registerOtpGeneration", {email : email.trim(), name: name.trim(), password : password.trim()}, {withCredentials: true});
+        Swal.fire({
+          toast: true,
+          position: "top",
+          icon: "info",
+          title: "OTP Sent to your email",
+          background: "#0a0f26",
+          iconColor: "#5ab3ff",
+          color: "#a5d4ff",
+          showConfirmButton: false,
+          timer: 2800,
+          customClass: { popup: "toast-otp-sent" }
+        });
          console.log("✅ OTP resend successful:", res.data);
         setTimer(30);
     } catch (err) {
@@ -89,8 +116,21 @@ const handleOtpGeneration = async () => {
 const handleRegister = async () => {
     setIsLoading(true);
    try {
-    const res = await axios.post(import.meta.env.VITE_BACKEND_LINK+"/api/v1/users/register", {email : email, otp: otp}, {withCredentials: true});
+    const res = await axios.post(import.meta.env.VITE_BACKEND_LINK+"/api/v1/users/register", {email : email.trim(), otp: otp.trim()}, {withCredentials: true});
     console.log("✅ Registered successfully:", res.data);
+    Swal.fire({
+      toast: true,
+      position: "top",
+      icon: "success",
+      title: "Registered Successfully!",
+      background: "linear-gradient(135deg, #0f0f0f, #003f2f)",
+      iconColor: "#2dff88",
+      color: "#b4ffd9",
+      showConfirmButton: false,
+      timer: 2800,
+      customClass: { popup: "toast-login-success" }
+    });
+    
     setIsOtpSent((prev)=>!prev);
     setUserLoggedIn(true);
     navigate("/Dashboard");
@@ -113,15 +153,14 @@ useEffect(() => {
     }
     else
     {
-        const allValid = email.trim() !== "" && password.trim() !== "" && name.trim() !== "" && confirmPassword.trim() !== "" && password === confirmPassword && passwordError === "" && nameError === "" && emailError === "" &&privacyPolicy;
+        const allValid = email.trim() !== "" && password.trim() !== "" && name.trim() !== "" && confirmPassword.trim() !== "" && password.trim() === confirmPassword.trim() && passwordError === "" && nameError === "" && emailError === "" &&privacyPolicy;
         setAreAllFieldsValid(allValid)
     }
   }, [email, password, name, confirmPassword, passwordError, nameError, emailError, otp, isOtpSent,privacyPolicy]);
   
   //useEffect for error message validation
   useEffect(() => {
-    const trimmedName = name.trim();
-      if (trimmedName && !validateNameStrength(trimmedName)) {
+      if (name.trim() && !validateNameStrength(name.trim())) {
         setNameError("Name should not contain numbers or special characters");
       } else {
         setNameError("");
@@ -130,17 +169,16 @@ useEffect(() => {
 
     //useEffect for password error message validation
 useEffect(() => {
-        const trimmedPassword = password.trim();
-        if (!trimmedPassword) {
-          setPasswordError(""); // default message
+        if (!password.trim()) {
++          setPasswordError(""); // default message
         } else {
-          setPasswordError(checkPasswordStrength(trimmedPassword));
+          setPasswordError(checkPasswordStrength(password.trim()));
         }
        }, [password]);
     
     //useEffect for confirm password error message validation
 useEffect(() => {
-    if (password && confirmPassword && password !== confirmPassword) {
+    if (password.trim() && confirmPassword.trim() && password.trim() !== confirmPassword.trim()) {
       setConfirmPasswordError("Passwords do not match");
     } else {
       setConfirmPasswordError("");
@@ -149,8 +187,7 @@ useEffect(() => {
 
    //useEffect for email error message validation
 useEffect(() => {
-    const trimmedEmail = email.trim();
-    if (trimmedEmail && !validateEmail(trimmedEmail)) {
+    if (email.trim() && !validateEmail(email.trim())) {
       setEmailError("Invalid email format");
    } else {
       setEmailError("");
@@ -166,6 +203,24 @@ useEffect(() => {
 
     return () => clearInterval(interval);
   }, [timer]);
+  
+  // Handle Enter key: submit only when fields are valid for current flow
+  const handleKeyDown = (e) => {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+
+    if (isOtpSent) {
+      if (otp.trim() === "") return;
+      setTitleError("");
+      handleRegister();
+      return;
+    }
+
+    // If not OTP flow, trigger OTP generation only when all fields valid
+    if (!areAllFieldsValid) return;
+    setTitleError("");
+    handleOtpGeneration();
+  };
 
 /*----------------------------------- JSX --------------------------------------------------------------------- */
     return (
@@ -181,7 +236,7 @@ useEffect(() => {
           </div>
         
         {/* SignUp form Division */}
-      <form className="form" style={{ gap: isOtpSent ? '0.3rem' : '0rem' }} onSubmit={(e)=>{e.preventDefault();}}>
+      <form className="form" style={{ gap: isOtpSent ? '0.3rem' : '0rem' }} onSubmit={(e)=>{e.preventDefault();}} onKeyDown={handleKeyDown}>
           {/* Input Fields for Name */}
         <InputField htmlFor="name" type="text" value={name} onChange={(e) => setName(e.target.value)} id="name" placeholder="Enter your full name" labelVal="Full Name" styleVal={{ display: isOtpSent ? 'none' : 'block' }} />
           <p style={{ display: isOtpSent ? 'none' : 'block' }} className="name-error error">{nameError}</p>

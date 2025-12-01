@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./MyHoldings.css";
-
+import {Link} from 'react-router-dom'
 //Base backend URL
 const BACKEND_URL = import.meta.env.VITE_BACKEND_LINK;
 const HOLDINGS_API = `${BACKEND_URL}/api/v1/dashboard/stockSummary`;
@@ -56,11 +56,12 @@ const MyHoldings = () => {
     );
   }
 
-  // Normal Render
-  return (
-    <div>
-      <div className="card holdings-card">
-        <h2 className="header-title">My Holdings</h2>
+
+return (
+  <div className="myholdings-wrapper">
+    <div className="card holdings-card">
+      <h2 className="header-title">My Holdings</h2>
+      <div className="table-wrapper">
         <table>
           <thead>
             <tr>
@@ -83,10 +84,11 @@ const MyHoldings = () => {
             ))}
           </tbody>
         </table>
-        <p className="see-more">See More →</p>
       </div>
     </div>
-  );
+  </div>
+);
+
 };
 
 export default MyHoldings;

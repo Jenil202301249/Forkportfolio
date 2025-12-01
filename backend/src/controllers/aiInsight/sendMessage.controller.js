@@ -25,6 +25,7 @@ export const sendMessage = async (req, res) => {
             }
         });
         let reply = result.messages.at(-1)?.content;
+        // console.log("Agent Reply:", reply);
         return res.status(200).json({reply});
     } catch (err) {
         console.log("Agent Error:", err);

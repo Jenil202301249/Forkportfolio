@@ -11,7 +11,8 @@
     border: none;
     border-top: 3px solid #1e1e1e;
     margin-right: 3rem;
-    margin-top: 1.8rem;
+    margin-top: 1.6rem;
+    margin-left: 0rem;
 }
 
 .myPage_PasswordEditFields input {
@@ -396,23 +397,18 @@
 .myPage_NewPass,
 .myPage_ConfPass {
     display: flex;
-    position: relative;
     justify-content: space-between;
-    flex-wrap: wrap;
     width: 32%;
     font-family: 'Poppins', sans-serif;
-}
-
-.myPage_eye-symbol {
-    margin-left: -5rem;
 }
 
 .myPage_password-toggle1,
 .myPage_password-toggle2,
 .myPage_password-toggle3 {
     cursor: pointer;
+    display: flex;
     width: auto;
-    margin-top: 0.3rem;
+    align-items: center;
     color: #00C853;
     background: none;
 }
@@ -422,7 +418,11 @@
 .myPage_password-toggle3:hover {
     background: none;
     box-shadow: none;
-    color: #00a844;
+    color: #00c853;
+}
+
+.myPage_eye-symbol{
+    margin-left: -3rem;
 }
 
 .myPage_pass-error,
@@ -611,6 +611,7 @@
     .myPage_MainContent hr {
         margin-right: 2rem;
         margin-top: 1rem;
+        margin-left: 0rem;
     }
 
     .myPage_PersProfile {
@@ -720,6 +721,7 @@
     .myPage_MainContent hr {
         margin-right: 2rem;
         margin-top: 0.8rem;
+        margin-left: 0rem;
         border: 1.5px solid #1e1e1e;
     }
 
@@ -880,6 +882,7 @@
     .myPage_MainContent hr {
         margin-right: 2rem;
         margin-top: 0.8rem;
+        margin-left: 0rem;
         border: 1.2px solid #1e1e1e;
     }
 
@@ -1031,6 +1034,14 @@
         font-size: 0.8rem;
         height: 30px;
     }
+
+    .myPage_eye-symbol {
+        margin-left: -2.4rem;
+    }
+
+    .myPage_eye-symbol i {
+        font-size: 0.6rem;
+    }
 }
 
 @media (max-width: 600px) {
@@ -1047,6 +1058,7 @@
     .myPage_MainContent hr {
         margin-right: 1.6rem;
         margin-top: 0.8rem;
+        margin-left: 0rem;
         border: 1.15px solid #1e1e1e;
     }
 
@@ -1225,6 +1237,22 @@
         font-size: 0.75rem;
         height: 28px;
     }
+
+    .myPage_ConfPass input,
+    .myPage_CurrPass input,
+    .myPage_NewPass input{
+        font-size: 0.5rem;
+    }
+
+    .myPage_password-toggle1,
+    .myPage_password-toggle2,
+    .myPage_password-toggle3{
+        margin-top: -0.3rem;
+    }
+
+    .myPage_eye-symbol i{
+        font-size: 0.6rem;
+    }
 }
 
 @media (max-width: 400px) {
@@ -1241,6 +1269,7 @@
     .myPage_MainContent hr {
         margin-right: 1rem;
         margin-top: 0.8rem;
+        margin-left: 0rem;
         border: 1.15px solid #1e1e1e;
     }
 
@@ -1397,10 +1426,6 @@
         margin-left: -0.4rem;
     }
 
-    .myPage_eye-symbol {
-        margin-left: -1.8rem;
-    }
-
     .myPage_InfRow3 img,
     .myPage_InfRow6 img {
         margin-top: 1rem;
@@ -1450,5 +1475,26 @@
         border-radius: 4px;
         font-size: 0.65rem;
         height: 24px;
+    }
+
+    .myPage_ConfPass input,
+    .myPage_CurrPass input,
+    .myPage_NewPass input{
+        font-size: 0.4rem;
+    }
+
+    .myPage_password-toggle1,
+    .myPage_password-toggle2,
+    .myPage_password-toggle3{
+        margin-top: -0.35rem;
+        margin-right: 0rem;
+    }
+    
+    .myPage_eye-symbol{
+        margin-left: -1.1rem;
+    }
+
+    .myPage_eye-symbol i{
+        font-size: 0.4rem;
     }
 }

@@ -86,7 +86,7 @@ body {
   align-items: center;
   padding: 8px 0;
   border-bottom: 1px solid #374151;
-  transition: 0.25s ease;
+  transition: 0.25s;
 }
 
 .stock-item:last-child {
@@ -123,18 +123,16 @@ body {
 .stock-item:hover.gainer-row {
   transform: translateY(-3px);
   background: rgba(0, 255, 120, 0.07);
-  cursor: pointer;
-  padding: 0.5rem;              
-  border-radius: 1.5rem;
+  cursor: pointer;             
+  border-radius: 0.5rem;
 
 }
 
 .stock-item:hover.loser-row {
   transform: translateY(-3px);
   background: rgba(255, 80, 80, 0.07);
-  cursor: pointer;
-  padding: 0.5rem;              
-  border-radius: 1.5rem;
+  cursor: pointer;           
+  border-radius: 0.5rem;
 }
 
 

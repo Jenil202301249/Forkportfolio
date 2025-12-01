@@ -1,0 +1,637 @@
+/* ===== General Page Layout ===== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+.Page {
+    height: 100%;
+    width: 100%;
+    background-color: #000;
+}
+
+hr {
+    border: none;
+    border-top: 3px solid #28282889;
+    /* margin-right: 3rem; - Removed, handled by MainContent/Container structure */
+    margin-top: 1.8rem;
+    margin-left: 3rem; /* Consistent left margin */
+    margin-right: 3rem; /* Consistent right margin */
+}
+
+
+.recent-activities {
+  margin: 1rem 3rem;
+}
+
+.activity-item {
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  margin-bottom: 0;
+  font-size: 1rem;
+  font-weight: 100; /* space between text, dot, and date */
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background-color: #fff; /* same color for all dots */
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.date {
+  font-size: 14px;
+  color: #fff;
+}
+
+
+.Container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background-color: #000;
+
+}
+
+.Container::-webkit-scrollbar {
+    display: none;
+}
+
+.MainContent {
+    width: 73%;
+    min-height: 1080px;
+    margin-top: 1rem;
+    border: 3px solid #28282889;
+    background-color: #0f0f0f;
+
+}
+.MainContent h1 {
+    margin-bottom: 4rem;
+    margin-top: 3rem;
+    margin-left: 3rem;
+    font-size: 2.2rem;
+    display: flex;
+    justify-content: space-between;
+
+}
+.activity-and-session {
+    margin-bottom: 3rem;
+    margin-top: 3rem;
+    margin-left: 3rem;
+    font-size: 2rem;
+    display: flex;
+    font-weight: 500;
+    justify-content: space-between;
+
+}
+
+/* ===== Activity & Session History ===== */
+.activity-session-history {
+  margin-top: 20px;
+}
+.header-section {
+    display: flex;
+    flex-direction: column;
+    margin-left: 3rem;
+    padding-right: 3rem; /* ADDED: Ensures all content respects a 3rem right padding */
+    color: #fff;
+    font-size: 1.25rem;
+}
+.header-section p{
+    display: flex;
+    flex-direction: column;
+    color: #888;
+    font-size: 0.85rem;
+}
+
+
+.seemore{
+  display: flex;
+  justify-content: flex-end;
+  align-self: flex-end; /* ADDED: Aligns button to the right end of the flex-column */
+  font-size: 0.95rem;
+  height: 30px;
+  white-space: nowrap;
+  /* Removed: margin-left: 45rem; */
+  margin-right: -0.5rem; /* Adjusted alignment from old margin */
+  background-color: #0f0f0f;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.seemore:hover{
+  color: #888;
+}
+
+.signout{
+  display: flex;
+  justify-content: flex-end;
+  margin-left: auto;
+  /* Removed: margin-right: 3rem; */
+  font-size: 0.95rem;
+  color: #888;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 0.3rem 0.6rem;
+}
+
+.signout:hover{
+  border: 1px solid #00c46a;
+  color:#fff;
+  background-color: transparent;
+  border-radius: 8px;
+  padding: 0.3rem 0.6rem;
+  transition: 0.3s;
+}
+.base-section {
+    font-size: 1rem;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.6rem;
+    margin-top: 4rem;
+}
+.activity-session-history h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 15px;
+  padding-bottom: 6px;
+}
+
+.activity-session-history h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 20px 0 12px 0;
+}
+
+.activity-session-history p {
+  font-size: 0.8rem;
+  color: #aaa;
+  margin-bottom: 15px;
+  line-height: 1.4;
+}
+.more-info{
+	margin-right: 4rem;
+	height: 16px;
+	width: 16px;
+	cursor: pointer;
+  margin-left: 0.5rem;
+}
+/* Activity Items - No boxes */
+
+.security-alerts{
+  padding: 8px 0;
+  margin-bottom: 0;
+  font-size: 1rem;
+  font-weight: 100;
+}
+.briefer-activity-item {
+  padding: 8px 0;
+  margin-bottom: 0;
+  margin-left: 3rem;
+  font-size: 1rem;
+  color: #888;
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+}
+
+.activity-item h4 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 2px;
+}
+
+.activity-item .timestamp {
+  font-size: 0.75rem;
+  color: #888;
+}
+
+/* Session Items - No boxes */
+.session-item {
+  padding: 8px 0;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.session-item:last-child {
+  border-bottom: none;
+}
+
+.session-info h4 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 2px;
+}
+
+.session-info .last-active {
+  font-size: 0.75rem;
+  color: #888;
+}
+
+/* Security Alerts - No boxes */
+
+
+.security-alert-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.security-alert-item:last-child {
+  border-bottom: none;
+}
+
+.security-alert-text {
+  font-size: 0.8rem;
+  color: #fff;
+}
+
+.security-alert-date {
+  font-size: 0.7rem;
+  color: #888;
+}
+
+/* Action Buttons - Updated positioning */
+.activity-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.download-activity {
+  background-color: #00c853;
+  color: #000;
+  display: block;
+  height: 35px;
+  white-space: nowrap;
+	/* Removed: margin-right: 3rem; */
+  border: 1px solid #00c853;
+  padding: 0.3rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: 0.3s;
+  margin-bottom: 1rem;
+}
+
+.download-activity:hover {
+  background-color: transparent;
+  color: #fff;
+}
+
+.clear-history {
+  background-color: #c81b00;
+  color: #fff;
+  display: block;
+  height: 35px;
+  white-space: nowrap;
+	/* Removed: margin-right: 3rem; */
+  border: 1px solid #c81b00;
+  padding: 0.3rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: 0.3s;
+  margin-bottom: 1rem;
+}
+
+.clear-history:hover {
+  background-color: transparent;
+  color: #fff;
+}
+
+/* Sign Out All - Smaller and left aligned */
+.sign-out-all {
+  background-color: #1e1e1e;
+  color: #fff;
+  display: block;
+  height: 35px;
+  margin-top: 0.5rem;
+  white-space: nowrap;
+	/* Removed: margin-right: 3rem; */
+  border: 2px solid #1e1e1e;
+  padding: 0.3rem 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: 0.3s;
+  align-self: flex-start; /* Ensures it is left-aligned within the flex container */
+}
+
+.sign-out-all:hover {
+  background-color: transparent;
+}
+
+/* Divider */
+.divider {
+  border: none;
+    border-top: 3px solid #28282889;
+    margin-right: 3rem;
+    margin-left: 3rem;
+    margin-top: 1.8rem;
+    margin-bottom: 1.8rem;
+}
+
+/* --- RESPONSIVE STYLES for ActivitySessionHistory --- */
+
+/* Tablet/Medium Desktops (max-width: 1280px) */
+@media (max-width: 1280px) {
+    .divider{
+      margin-left: 2rem;
+    }
+
+    .Container {
+        margin-top: 5rem;
+        margin-left: 1px;
+    }
+
+    .MainContent {
+        width: 74%; /* Increased width for better use of space */
+        min-height: 100vh;
+    }
+
+    .activity-and-session{
+      margin-bottom: 2.5rem;
+    }
+    .activity-and-session h2 {
+        margin-top: -1rem;
+        font-size: 1.5rem;
+        margin-left: -1rem;
+    }
+
+    .header-section {
+        margin-left: 2rem;
+        padding-right: 2rem;
+        font-size: 1.1rem;
+    }
+
+    hr {
+        margin-left: 2rem;
+        margin-right: 2rem;
+        margin-top: 1.5rem;
+        border-top: 2px solid #28282889;
+    }
+
+    .activity-item, .security-alerts {
+        font-size: 0.9rem;
+    }
+
+    .signout, .seemore, .sign-out-all, .download-activity, .clear-history {
+        font-size: 0.7rem;
+        height: 28px;
+        padding: 0.2rem 0.7rem;
+    }
+
+    .seemore {
+        margin-right: -0.2rem;
+    }
+}
+
+/* Smaller Tablets (max-width: 1024px) */
+@media (max-width: 1024px) {
+    .divider{
+      margin-left: 1.5rem;
+      margin-right: 1.5rem;
+    }
+    .Container {
+        margin-left: -0.5px;
+        margin-right: 1px;
+    }
+
+    .MainContent {
+        width: 73%; /* Adjusted width */
+        min-height: 100vh;
+        margin-right: 5px;
+    }
+
+    .activity-and-session h2 {
+        margin-top: -1.5rem;
+        margin-left: -1.5rem;
+        font-size: 1.3rem;
+    }
+
+    .header-section {
+        margin-left: 1.5rem;
+        padding-right: 1.5rem;
+        font-size: 1rem;
+    }
+
+    hr {
+        margin-left: 1.5rem;
+        margin-right: 1.5rem;
+        margin-top: 1rem;
+        border-top: 1.5px solid #28282889;
+    }
+
+    .activity-item, .security-alerts {
+        font-size: 0.85rem;
+    }
+
+    .date {
+        font-size: 12px;
+    }
+
+    .signout, .seemore, .sign-out-all, .download-activity, .clear-history {
+        font-size: 0.65rem;
+        height: 25px;
+        padding: 0.15rem 0.6rem;
+    }
+}
+
+/* Mobile Devices (max-width: 768px) */
+@media (max-width: 768px) {
+    .divider{
+      margin-left: 1.5rem;
+      margin-right: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .MainContent {
+        width: 73%; /* Increased width */
+        border: 2px solid #1e1e1e;
+    }
+
+    .activity-and-session h2 {
+        margin-top: -1.5rem;
+        margin-left: -1.5rem;
+        font-size: 1.3rem;
+        margin-bottom: -3rem;
+    }
+
+    .header-section h3{
+
+        padding-right: 1rem;
+        font-size: 0.95rem;
+        margin-top: -1.5rem;
+    }
+    
+    .header-section p {
+        font-size: 0.75rem;
+    }
+
+    hr {
+        margin-left: 1rem;
+        margin-right: 1rem;
+        margin-top: 0.8rem;
+        border-top: 1px solid #28282889;
+    }
+
+    .activity-list {
+        /* Ensure items don't stretch too much */
+        width: 100%;
+    }
+
+    .activity-item, .security-alerts {
+        font-size: 0.8rem;
+        padding: 6px 0;
+    }
+
+    .date {
+        font-size: 10px;
+    }
+
+    .signout, .seemore, .sign-out-all, .download-activity, .clear-history {
+        font-size: 0.6rem;
+        height: 22px;
+        padding: 0.1rem 0.5rem;
+    }
+
+    /* Stack Download and Clear buttons */
+    .activity-actions {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px; /* Space between stacked buttons */
+    }
+
+    .download-activity{
+        margin-bottom: 0; /* Remove excess bottom margin */
+    }
+    .clear-history{
+      align-self: self-end;
+      margin-top: -2rem;
+    }
+}
+
+/* Small Mobile Devices (max-width: 600px) */
+@media (max-width: 600px) {
+    .MainContent {
+        width: 72%;
+    }
+
+    .activity-and-session h2 {
+        margin-left: -1.5rem;
+        margin-top: -1.5rem;
+        font-size: 1rem;
+    }
+
+    .header-section {
+        margin-left: 1.5rem;
+        padding-right: 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    .header-section p {
+        font-size: 0.7rem;
+    }
+
+    hr {
+        margin-left: 0.8rem;
+        margin-right: 0.8rem;
+    }
+    
+    .activity-item, .security-alerts {
+        /* Further reduce font size for readability */
+        font-size: 0.75rem;
+    }
+
+    .signout {
+        /* Ensure signout button is still clickable */
+        padding: 0.1rem 0.4rem;
+    }
+
+    .sign-out-all, .download-activity, .clear-history {
+        font-size: 0.55rem;
+        height: 20px;
+        padding: 0.1rem 0.4rem;
+    }
+}
+
+/* Very Small Mobile (max-width: 400px) */
+@media (max-width: 400px) {
+  .divider {
+      margin-left: 1rem;
+      margin-right: 0.5rem;
+  }
+  .clear-history{
+    margin-right: -0.5rem;
+    margin-top: -1.8rem;
+  }
+    .MainContent {
+        width: 73%;
+        border: 1.5px solid #1e1e1e;
+        margin-right: -0.5px;
+    }
+    .activity-and-session{
+      margin-bottom: 1.5rem;
+    }
+
+    .activity-and-session h2 {
+        font-size: 0.8rem;
+        margin-top: -2rem;
+        margin-left: -2rem;
+    }
+
+    .header-section {
+        margin-top: -1.5rem;
+        font-size: 0.7rem;
+        padding-right: 0.5rem;
+        margin-left: 1rem;
+    }
+    .header-section h3{
+        margin-top: 0rem;
+        font-size: 0.7rem;
+        padding-right: 0.5rem;
+    }
+    .header-section p {
+        font-size: 0.6rem;
+    }
+
+    .activity-item, .security-alerts {
+        font-size: 0.50rem;
+    }
+
+    .date {
+        font-size: 8px;
+    }
+
+    .dot {
+        width: 6px;
+        height: 6px;
+    }
+
+    hr {
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+        margin-top: 0.6rem;
+        margin-bottom: 0.6rem;
+    }
+}

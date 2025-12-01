@@ -4,22 +4,18 @@
 .footer_div{
     position: static;
     background-color: #0B0B0B;
-    height: 70vh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .footer_text_part{
-    height: 80%;
     width: 80%;
-    display: grid;
-    grid-template-rows: 2fr 1fr;
 }
 
 .footer_upper_text_part{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr !important;
+    grid-template-columns: 1fr 1fr 1fr ;
     padding-bottom: 10px;
     border-bottom: 2px solid rgba(255, 255, 255, 0.637);
 }
@@ -28,6 +24,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 15px 0px;
 }
 
 .rights_text p{
@@ -38,23 +35,28 @@
     font-weight: lighter;
     position: relative;
 }
-.footer_web img{
+
+.footer_web_desktop{
     max-height: 48px;
+    display: block;
+}
+.footer_web_mobile{
+    max-height: 45px;
+    display: none;
 }
 .column_div{
     display: flex;
     flex-direction: column;
-    justify-content: start !important;
-    padding: 5px 20px 50px 20px !important;
-    font-size: 15px !important;
+    justify-content: start ;
+    padding: 40px 20px 20px 20px ;
+    font-size: 15px ;
     gap:20px;
 }
 .footer_first_column{
     display:flex;
-    flex-direction: row !important;
-    align-items: flex-start !important;
-    justify-content: center !important;
-    padding-top: 20px !important;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
 }
 
 .logotext{
@@ -76,7 +78,7 @@
     position: relative;
     cursor: pointer;
     transition: all 0.3s linear;
-    margin-bottom: 5px !important;
+    margin-bottom: 5px ;
 }
 
 .column_div a:hover{
@@ -84,20 +86,20 @@
 }
 
 .textcolumn{
-    align-items: flex-start !important;
-    text-align: left !important;
+    align-items: flex-start;
+    text-align: left;
     display: flex;
     flex-direction: column;
     gap: 10px;
     
 }
 .footer_second_column, .footer_third_column{
- align-items: flex-start !important;
-    text-align: left !important;
+ align-items: flex-start ;
+    text-align: left ;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding: 20px 0px 50px 150px !important;
+    padding: 40px 0px 20px 150px ;
 }
 
 .column_div h2{
@@ -109,85 +111,57 @@
     position: relative;
 }
 
-.github_logo img{
+.gitlogo_dekstop img{
     margin: 10px 10px;
     cursor: pointer;
-    max-height: 30px;
+    max-height: 40px;
+}
+.gitlogo_mobile{
+    display: none;
 }
 @media (max-width: 1140px) {
   .footer_upper_text_part {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: 1fr;
   }
 
-  .footer_second_column,.footer_third_column, .textcolumn {
-    align-items: center !important;
-    padding:20px 0px 50px 0px !important;
+  .footer_second_column, .textcolumn {
+    align-items: center ;
+    padding:20px 0px 0px 0px ;
   }
-.footer_first_column{
-    padding-bottom: 0 !important;
-    padding-right:70px !important;
+  .footer_third_column{
+    align-items: center ;
+    padding:20px 0 30px 0 ;
+  }
+ .footer_first_column{
+    padding: 20px 0 0 0;
   }
   .footer_div{
-    height: auto !important;
+    height: auto ;
   }
-  .footer_web{
-    padding-top: 15px !important;   
+  .footer_web_desktop{
+    display: none;
   }
-}
-
-/* Mobile font size adjustments */
-@media (max-width: 768px) {
-  .column_div {
-    font-size: 13px !important;
+  .footer_web_mobile{
+    display: block;
   }
-  
-  .column_div h2 {
-    font-size: 0.95rem;
+  .logotext{
+    display:flex;
+    padding: 0;
+    gap:6px;
   }
-  
-  .rights_text p {
-    font-size: 0.9rem;
+  .gitlogo_dekstop{
+    display: none;
   }
-  
-  .column_div a {
-    font-size: 13px;
+  .gitlogo_mobile{
+    display: block;
+    cursor: pointer;
+    max-height: 40px;
   }
-  
-  .column_div p {
-    font-size: 13px;
+  .tagline_text{
+    display: flex;
+    align-items: center;
   }
-}
-
-@media (max-width: 480px) {
-  .column_div {
-    font-size: 11px !important;
-  }
-  
-  .column_div h2 {
-    font-size: 0.85rem;
-  }
-  
-  .rights_text p {
-    font-size: 0.75rem;
-  }
-  
-  .column_div a {
-    font-size: 11px;
-  }
-  
-  .column_div p {
-    font-size: 11px;
-  }
-  
-  .footer_web img {
-    max-height: 36px;
-  }
-  
-  .logotext {
-    max-height: 36px;
-  }
-  
-  .github_logo img {
-    max-height: 24px;
+  .footer_below_text_part p{
+    font-size:12px;
   }
 }

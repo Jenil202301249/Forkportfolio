@@ -1,0 +1,583 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+.modal-overlay {
+    /* 1. Positioning and Z-Index: Covers the entire viewport and sits above all other elements */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    
+    /* 2. Background: Dark, semi-transparent background to dim the main page */
+    background: rgba(0, 0, 0, 0.8); 
+    
+    /* 3. Centering: Uses Flexbox to center the modal content */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; 
+    
+    /* 4. Accessibility: Ensure it doesn't block focus (optional, but good practice) */
+    pointer-events: auto;
+}
+
+.modal-content {
+    /* 1. Appearance: Based on your dark theme */
+    background-color: #0f0f0f; /* Matches your MainContent background */
+    color: #ffffff;
+    border: 1px solid #28282889; 
+    
+    /* 2. Sizing and Scroll */
+    padding: 25px 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 650px; /* Standard modal size */
+    max-height: 85vh; /* Allows modal to scroll if content is long */
+    overflow-y: auto; 
+    
+    /* 3. Shadow/Depth */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    
+    /* Ensure the modal content itself is interactable */
+    pointer-events: auto;
+}
+
+/* Modal Header and Close Button */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #28282889;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.modal-header h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.modal-close-btn {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    line-height: 1; /* Ensures 'x' is vertically centered */
+    cursor: pointer;
+    color: #fff;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    padding: 0;
+}
+
+.modal-close-btn:hover {
+    opacity: 1;
+}
+
+/* Modal Body/Content Styling */
+.modal-body {
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.modal-body h4 {
+    font-weight: 500;
+    color: #00c853; /* Highlight main section headings */
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.modal-body p {
+    margin-bottom: 12px;
+    opacity: 0.9;
+}
+
+.Page {
+    height: 100%;
+    width: 100%;
+    background-color: #000;
+}
+
+.hr {
+    border: none;
+    border-top: 3px solid #28282889;
+    margin-right: 3rem;
+    margin-top: 1.8rem;
+}
+
+
+.Container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background-color: #000;
+    margin-top: 5rem;
+    margin-left: -3.5px;
+}
+
+
+.Container::-webkit-scrollbar {
+    display: none;
+}
+
+.MainContent-data-privacy {
+    /* Base style (Desktop/Large Screen) */
+
+    width: 73%;
+    min-height: 100vh;
+    margin-top: 1rem;
+    border: 3px solid #1e1e1e;
+    background-color: #0f0f0f;
+}
+
+.title {
+    margin-bottom: 2rem;
+    margin-top: 3rem;
+    margin-left: 3rem;
+    font-size: 2rem;
+    display: flex;
+    font-weight: 500;
+    justify-content: space-between;
+}
+
+.privacy-section {
+    display: flex;
+    flex-direction: column;
+    margin-left: 3rem;
+}
+
+.ai-insights,
+.analytics-improvement,
+.consent-compliance,
+.manage-data,
+.delete-account {
+    margin-top: 1rem;
+}
+
+.main-concept {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.usage-brief {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 0.9rem;
+    opacity: 0.8;
+}
+
+.usage-brief1 {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.9rem;
+}
+
+.usage-brief2 {
+    justify-content: space-between;
+    margin-top: 0.9rem;
+}
+
+.delete-account {
+    border: 1px solid #C81B00;
+    width: 94%;
+    border-radius: 8px;
+    padding: 1rem 1rem;
+    margin-bottom: 3rem;
+}
+
+.del-acc-p {
+    opacity: 0.8;
+}
+
+.more-info {
+    margin-right: 4rem;
+    height: 16px;
+    width: 16px;
+    cursor: pointer;
+}
+
+.download {
+    display: block;
+    height: 30px;
+    white-space: nowrap;
+    color: #000;
+    margin-right: 3rem;
+    border: 1px solid #00c853;
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    background-color: #00c853;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: 0.3s;
+}
+
+.download:hover {
+    background-color: transparent;
+    color: #fff;
+}
+
+.toggle-component {
+    margin-right: 3.5rem;
+}
+
+.delete {
+    background: #C81B00;
+    color: #fff;
+    border: 1px solid #C81B00;
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    font-size: 0.8rem;
+    transition: 0.3s;
+    flex-shrink: 0;
+}
+
+.delete:hover {
+    color: #fff;
+    background-color: transparent;
+}
+
+/* --- RESPONSIVE STYLES --- */
+
+/* Tablet/Medium Desktops (based on 1280px in MyProfile.css) */
+@media (max-width: 1280px) {
+
+    .Container {
+        margin-top: 5rem;
+        margin-left: 1px;
+    }
+
+    .MainContent-data-privacy {
+        width: 74%; /* Increased width for better use of space */
+        min-height: 100vh;
+        margin-top: 1rem;
+        border: 3px solid #1e1e1e;
+    }
+
+    .title {
+        margin-top: 2rem;
+        margin-left: 2rem;
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+        
+    hr {
+        margin-right: 2rem;
+        margin-top: 1.5rem;
+        border-top: 2px solid #28282889;
+    }
+
+    .privacy-section {
+        margin-left: 2rem;
+    }
+
+    .main-concept {
+        font-size: 18px;
+    }
+
+    .usage-brief, .usage-brief1, .usage-brief2 {
+        font-size: 0.9rem;
+    }
+
+    .delete-account {
+        width: 95%;
+    }
+
+    .download {
+        font-size: 0.7rem;
+        height: 28px;
+        padding: 0.2rem 0.7rem;
+        margin-right: 2rem;
+    }
+
+    .delete {
+        font-size: 0.7rem;
+        height: 28px;
+        padding: 0.2rem 0.7rem;
+    }
+
+    .more-info {
+        margin-right: 2.5rem;
+        height: 14px;
+        width: 14px;
+    }
+
+    .toggle-component {
+        margin-right: 2.5rem;
+    }
+}
+
+/* Smaller Tablets (based on 1024px in MyProfile.css) */
+@media (max-width: 1024px) {
+    .Container {
+        margin-left: -0.5px;
+        margin-right: 1px;
+    }
+
+    .MainContent-data-privacy {
+        width: 73%; /* Further increased width */
+        min-height: 100vh;
+        margin-top: 1rem;
+        border: 3px solid #1e1e1e;
+        margin-right: 5px;
+    }
+
+    .title {
+        margin-top: 1.5rem;
+        margin-left: 1.5rem;
+        font-size: 1.3rem;
+    }
+
+    hr {
+        margin-right: 1.5rem;
+        margin-top: 1rem;
+        border-top: 1.5px solid #28282889;
+    }
+
+    .privacy-section {
+        margin-left: 1.5rem;
+    }
+
+    .main-concept {
+        font-size: 16px;
+    }
+
+    .usage-brief, .usage-brief1, .usage-brief2 {
+        font-size: 0.85rem;
+    }
+
+    .delete-account {
+        width: 95%;
+        padding: 0.8rem 0.8rem;
+    }
+
+    .download {
+        font-size: 0.65rem;
+        height: 25px;
+        padding: 0.15rem 0.6rem;
+        margin-right: 1.5rem;
+    }
+
+    .delete {
+        font-size: 0.65rem;
+        height: 25px;
+        padding: 0.15rem 0.6rem;
+    }
+
+    .more-info {
+        margin-right: 2rem;
+        height: 12px;
+        width: 12px;
+    }
+
+    .toggle-component {
+        margin-right: 2rem;
+    }
+}
+
+/* Mobile Devices (based on 768px in MyProfile.css) */
+@media (max-width: 768px) {
+
+    .MainContent-data-privacy {
+        width: 73%; /* Near full width on mobile */
+        border: 2px solid #1e1e1e;
+    }
+
+    .title {
+        margin-top: 1.5rem;
+        margin-left: 1.5rem;
+        font-size: 1.1rem;
+        font-size: 1.3rem;
+        margin-bottom: 0rem;
+    }
+
+    hr {
+        margin-right: 1rem;
+        margin-top: 0.8rem;
+        border-top: 1px solid #28282889;
+    }
+
+    .privacy-section {
+        margin-left: 1.5rem;
+    }
+
+    .main-concept {
+        font-size: 14px;
+    }
+    .usage-brief{
+        font-size: 0.8rem;
+        margin-right: 5rem;
+    }
+
+   .usage-brief1, .usage-brief2 {
+        font-size: 0.8rem;
+        margin-right: 0.5rem;
+    }
+
+    .delete-account {
+        width: 97%;
+        padding: 0.6rem 0.6rem;
+    }
+
+    .download {
+        font-size: 0.6rem;
+        height: 22px;
+        padding: 0.1rem 0.5rem;
+        margin-right: 1rem;
+        margin-left: 25rem;
+        margin-top: -1.5rem;
+    }
+
+    .delete {
+        font-size: 0.6rem;
+        height: 22px;
+        padding: 0.1rem 0.5rem;
+    }
+
+    .more-info {
+        margin-right: 1.5rem;
+        height: 10px;
+        width: 10px;
+    }
+
+    .toggle-component {
+        margin-right: 1.5rem;
+        margin-left: 28rem;
+        margin-top: -1.5rem;
+    }
+
+    /* Stack buttons/toggles if they run out of space */
+    .usage-brief, .usage-brief1, .usage-brief2 {
+        flex-wrap: wrap;
+    }
+}
+
+/* Small Mobile Devices (based on 600px and 400px in MyProfile.css) */
+@media (max-width: 600px) {
+
+
+    .MainContent-data-privacy {
+        width: 72%;
+    }
+
+    .title {
+        margin-left: 1.5rem;
+        font-size: 1rem;
+    }
+
+    .hr {
+        margin-right: 1rem;
+    }
+
+    .more-info{
+        margin-right: 12rem;
+        align-self: self-end;
+        margin-top: -1rem;
+    }
+    .privacy-section {
+        margin-left: 1.5rem;
+    }
+
+    .main-concept {
+        font-size: 12px;
+    }
+
+    .usage-brief, .usage-brief1, .usage-brief2 {
+        flex-direction: column; /* Stack usage brief content */
+        align-items: flex-start;
+        font-size: 0.75rem;
+    }
+
+    .more-info{
+        margin-left: 23rem !important; /* Remove right margin for stacking */
+        margin-top: -1rem; /* Add top margin for separation when stacked */
+    }
+
+    .download {
+        align-self: self-start; /* Align download button to the right */
+        font-size: 0.55rem;
+        height: 20px;
+        padding: 0.1rem 0.4rem;
+        margin-left: 0rem;
+        margin-top: 1rem;
+    }
+
+    .delete {
+        font-size: 0.55rem;
+        height: 20px;
+        padding: 0.1rem 0.4rem;
+    }
+
+    .delete-account {
+        width: 100%;
+    }
+    .toggle-component{
+        margin-left: 22rem;
+        margin-top: -2rem;
+    }
+}
+
+/* Very Small Mobile (400px) */
+@media (max-width: 400px) {
+    .MainContent-data-privacy {
+        width: 73%;
+        margin-top: "1rem";
+        border: 1.5px solid #1e1e1e;
+        margin-right: -0.5px;
+    }
+    .ai-insights,
+.analytics-improvement,
+.consent-compliance,
+.manage-data {
+    font-size: 0.3rem;
+    margin-right: 3rem;
+    margin-top: 0.6rem;
+    margin-bottom: -1rem;
+    margin-left: -0.5rem;
+}
+
+
+    .title {
+        font-size: 0.8rem;
+        margin-bottom: 0;
+        margin-left: 1rem;
+        margin-top: 1rem;
+    }
+
+    .main-concept {
+        font-size: 0.7rem;
+        margin-top: 0.2rem;
+    }
+
+    .usage-brief, .usage-brief1, .usage-brief2 {
+        font-size: 0.55rem;
+        margin-right: 0.5rem;
+        margin-top: 0.5rem;
+        margin-left: 0;
+    }
+    .hr{
+        margin-right: 2px;
+        margin-left: -0.5rem;
+    }
+    .toggle-component{
+        margin-left: 15rem;
+        margin-top: -1rem;
+    }
+    .more-info{
+        margin-left: 15.5rem !important;
+        height: 8px;
+        width: 8px;
+    }
+    .delete-account{
+        width: 100%;
+        padding: 0.4rem 0.4rem;
+        margin-left: -0.5rem;
+    }
+}

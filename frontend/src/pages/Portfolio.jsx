@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 export const Portfolio = () => {
     const BASE_URL = import.meta.env.VITE_BACKEND_LINK;
     axios.defaults.withCredentials = true;
-    const { userDetails, setIsSearchActive } = useAppContext();
+    const { userDetails, setIsSearchActive, ensureAuth } = useAppContext();
     const [darkMode, setDarkMode] = useState(true);
     const [userPortfolio, setUserPortfolio] = useState({});
     const [portfolioSummary, setPortfolioSummary] = useState([]);
@@ -29,7 +29,6 @@ export const Portfolio = () => {
     }
 
     const navigate = useNavigate();
-      const { ensureAuth } = useAppContext();
     
       useEffect(() => {
                  // Run an initial check: this page is an auth/home page, so pass true
@@ -55,12 +54,7 @@ export const Portfolio = () => {
             try {
                 const res = await axios.get(`${BASE_URL}/api/v1/dashBoard/Valuation`, { withCredentials: true });
                 const raw = res.data;
-
-                if (!raw.success) {
-                    setError(raw.message || "Failed to fetch user's portfolio data");
-                    return;
-                }
-
+                
                 console.log("User portfolio data:", raw);
 
                 setUserPortfolio(raw);
@@ -76,16 +70,12 @@ export const Portfolio = () => {
         const getPortfolioSummary = async () => {
             try {
                 const res = await axios.get(`${BASE_URL}/api/v1/portfolio/portfolioSummary`, { withCredentials: true });
-                const { success, summary } = res.data;
+                const summary = res.data.summary;
 
-                if (!success) {
-                    setError("Failed to fetch portfolio summary data");
-                    return;
-                }
-
-                setPortfolioRisk(getPortfolioRiskFromCaps(summary));
-
+                if(summary){
                 console.log("Portfolio Summary:", summary);
+                setPortfolioRisk(getPortfolioRiskFromCaps(summary));
+                
                 const cleaned = summary.map(item => ({
                     ...item,
                     marketCap: formatLargeNumber(item.marketCap),
@@ -99,6 +89,7 @@ export const Portfolio = () => {
                     allocationPercentage: formatPercentage(item.allocationPercentage),
                 }));
                 setPortfolioSummary(cleaned);
+                }
 
             } catch (error) {
                 console.error("Error fetching portfolio summary:", error);
@@ -111,16 +102,13 @@ export const Portfolio = () => {
         const getPortfolioHoldings = async () => {
             try {
                 const res = await axios.get(`${BASE_URL}/api/v1/portfolio/portfolioHoldings`, { withCredentials: true });
-                const { success, count, data } = res.data;
-
-                if (!success) {
-                    setError("Failed to fetch portfolio holdings data");
-                    return;
-                }
+                const data  = res.data.data;
 
                 console.log("Portfolio Holdings:", data);
                 
+                if(data){
                 setPortfolioHoldings(data);
+                }
 
             } catch (error) {
                 console.error("Error fetching portfolio holdings:", error);
@@ -133,13 +121,9 @@ export const Portfolio = () => {
         const getPortfolioFundamentals = async () => {
             try {
                 const res = await axios.get(`${BASE_URL}/api/v1/portfolio/portfolioFundamentals`, { withCredentials: true });
-                const { success, count, data } = res.data;
-
-                if (!success) {
-                    setError("Failed to fetch portfolio fundamentals data");
-                    return;
-                }
-
+                const data = res.data.data;
+                
+                if(data){
                 console.log("Portfolio Fundamentals:", data);
                 const cleaned = data.map(item => ({
                     ...item,
@@ -158,6 +142,7 @@ export const Portfolio = () => {
                 }));
 
                 setPortfolioFundamentals(cleaned);
+                }
 
             } catch (error) {
                 console.error("Error fetching portfolio fundamentals:", error);
@@ -168,8 +153,9 @@ export const Portfolio = () => {
 
     return (
         <div className="portfolio-main-page">
-            <Navbar darkMode={darkMode} setDarkMode={setDarkMode} pageType="portfolio"
-                profileData={{ name: userDetails?.name, email: userDetails?.email, profileImage: userDetails?.profileImage }} />
+            <Navbar darkMode={darkMode} setDarkMode={setDarkMode} pageType="portfolio" 
+            profileData={{name: userDetails?.name?.split(" ")[0] || "Guest",email: userDetails?.email || "N/A"}}/>
+            
             <DashboardHeader />
             <div className="portfolio-empty"></div>
             <div className="portfolio-maincontent">
@@ -187,13 +173,15 @@ export const Portfolio = () => {
                     <div className="second-div">
                         <div className="today-gl">
                             <div className="today-gl-label">Today's Gain/Loss</div>
-                            <div className={`today-gl-amount ${userPortfolio.todayProfitLoss > 0 ? "profit" : "loss"}`}>
+                            <div className={`today-gl-amount ${userPortfolio.todayProfitLoss > 0 ? "profit" : 
+                                                                userPortfolio.todayProfitLoss < 0 ? "loss" : ""}`} data-testid="today-gl-amount">
                                 ₹{userPortfolio.todayProfitLoss} ({userPortfolio.todayProfitLosspercentage > 0 ? "+" : ""}{`${userPortfolio.todayProfitLosspercentage}%`})
                             </div>
                         </div>
                         <div className="overall-gl">
                             <div className="overall-gl-label">Overall Gain/Loss</div>
-                            <div className={`overall-gl-amount ${userPortfolio.overallProfitLoss > 0 ? "profit" : "loss"}`}>
+                            <div className={`overall-gl-amount ${userPortfolio.overallProfitLoss > 0 ? "profit" :
+                                                                    userPortfolio.overallProfitLoss < 0 ? "loss" : ""}`} data-testid="overall-gl-amount">
                                 ₹{userPortfolio.overallProfitLoss} ({userPortfolio.overallProfitLosspercentage > 0 ? "+" : ""}{`${userPortfolio.overallProfitLosspercentage}%`})
                             </div>
                         </div>
@@ -233,9 +221,9 @@ export const Portfolio = () => {
                 <Footer
                     darkMode={darkMode}
                     navigationLinks={[
-                        { text: "Portfolio", href: "#" },
-                        { text: "AI Insigths", href: "#" },
-                        { text: "Wacthlist", href: "#" },
+                        { text: "Portfolio", href: "/portfolio" },
+                        { text: "AI Insigths", href: "/ai-insight" },
+                        { text: "Wacthlist", href: "/watchlist" },
                         { text: "Compare Stocks", href: "#" },
                     ]}
                     legalLinks={[

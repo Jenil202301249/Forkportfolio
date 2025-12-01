@@ -113,11 +113,8 @@ body {
   cursor: pointer;
 }
 .trending-stock-item:hover {
-  transform: translateY(-3px);
-  background:rgba(0, 255, 120, 0.12);
-  box-shadow: 0 4px 14px rgba(0, 255, 120, 0.12);
-  padding: 0.5rem;              
-  border-radius: 0.7rem;
+  background-color: rgba(0, 200, 83, 0.08);
+  border-bottom-color: #00C853;
 }
 .trending-stock-item:last-of-type { border-bottom: none; }
 
