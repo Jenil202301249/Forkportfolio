@@ -12,7 +12,7 @@ export const getStockSummary = async (email) => {
 
 export const getPortfolioStockSummary = async (email) => {
     try {
-        const result = await sql`SELECT s.short_name,s.long_name,ss.current_holding,ss.spended_amount FROM "stock_summary" as ss join "stocks" as s on ss.symbol=s.symbol Where ss.email=${email} ORDER BY s.short_name ASC`;
+        const result = await sql`SELECT s.short_name,s.long_name,ss.current_holding,ss.spended_amount FROM "stock_summary" as ss join "stocks" as s on ss.symbol=s.symbol Where ss.email=${email} AND ss.current_holding>0 ORDER BY s.short_name ASC`;
         return result;
     } catch (error) {
         console.error('Database error - getPortfolioStockSummary',error);

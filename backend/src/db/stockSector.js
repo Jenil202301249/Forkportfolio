@@ -12,7 +12,7 @@ LEFT JOIN
     stocks s 
     ON ss.symbol = s.symbol
 WHERE 
-    ss.email = ${email}`;
+    ss.email = ${email} AND ss.current_holding>0`;
         return result;
     } catch (error) {
         console.error('Stock sector fetch error:', error);

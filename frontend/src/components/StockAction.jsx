@@ -60,6 +60,19 @@ const StockAction = ({ action, handler, symbol, currPrice, priceChange, pricePer
             // alert(`Transaction done of amount: ${currPrice * quantity}`);
         } catch (err) {
             console.error("Error checking holding:", err);
+            Swal.fire({
+                toast: true,
+                position: "top",
+                icon: "error",
+                title: err.response?.data?.message || "Transaction failed!",
+                iconColor: "#ff4b4b",
+                background: "#1a1a1a",
+                showConfirmButton: false,
+                timer: 3000,
+                customClass: {
+                    popup: "small-toast"
+                }
+            });
             onClose();
         }
     };
