@@ -5,12 +5,45 @@ import './AiInsight.css'
 import Navbar from '../components/Navbar'
 import { useAppContext } from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios'
+import Swal from "sweetalert2";
 
+
+
+const aiallowed = async()=>{
+  const ai = await axios.get(import.meta.env.VITE_BACKEND_LINK + "/api/v1/users/getDataAndPrivacy", { withCredentials: true });
+  const user = ai.data?.data;
+  console.log(user);
+  if(user && !user.aisuggestion){
+    return false;
+  }
+  return true;
+}
 const Home = () => {
   const { darkMode, setDarkMode ,userDetails} = useAppContext();
   const { ensureAuth } = useAppContext();
-   const navigate = useNavigate();
+  const navigate = useNavigate();
   useEffect(() => {
+    (async () => {
+      const allowed = await aiallowed();
+      if(!allowed){
+        Swal.fire({
+          toast: true,
+          position: "top",
+          icon: "error",
+          title: `Please enable AI insights in settings to access this page.`,
+          iconColor: "#ff5c33ff",
+          background: "#1a1a1a",
+          showConfirmButton: false,
+          timer: 3000,
+          customClass: {
+            popup: "small-toast"
+          }
+        });
+        navigate("/dashboard");
+        return;
+    }
+  })();
            // Run an initial check: this page is an auth/home page, so pass true
         (async () => {
           try {

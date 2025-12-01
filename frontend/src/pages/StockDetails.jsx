@@ -12,6 +12,7 @@ import { useParams } from "react-router-dom";
 import { useAppContext } from "../context/AppContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { formatDate, formatLargeNumber, formatPercentage, formatSmallNumber, roundTo } from "../utils/dataCleaningFuncs.jsx";
+import Swal from "sweetalert2";
 
 export const StockDetails = () => {
     const BASE_URL = import.meta.env.VITE_BACKEND_LINK;
@@ -149,6 +150,20 @@ export const StockDetails = () => {
             }
             catch (error) {
                 console.error("Error fetching stock details:", error);
+                Swal.fire({
+                    toast: true,
+                    position: "top",
+                    icon: "error",
+                    title: `Can't get stock company details for Indexies.`,
+                    iconColor: "#ff5c33ff",
+                    background: "#1a1a1a",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    customClass: {
+                        popup: "small-toast"
+                    }
+                });
+                navigate("/dashboard");
             }
 
         };
