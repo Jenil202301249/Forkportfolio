@@ -74,6 +74,12 @@ const AiInsights = () => {
 
 const handlePortfolioAnalysis = async () => {
         try{
+          const ai = await axios.get(import.meta.env.VITE_BACKEND_LINK + "/api/v1/users/getDataAndPrivacy", { withCredentials: true });
+          const user = ai.data?.data;
+          if(user && !user.aisuggestion){
+            setError("AI insights consent not given. Please enable it in settings to view insights.");
+            return;
+          }
           const res = await axios.get(import.meta.env.VITE_BACKEND_LINK + "/api/v1/dashBoard/getPortfolioInsight",{withCredentials: true});
           console.log("AiInsights component mounted",res.data.reply);
           if(res.data.reply.statusCode === 400){
