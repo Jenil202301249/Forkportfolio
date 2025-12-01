@@ -93,7 +93,7 @@ const handlePortfolioAnalysis = async () => {
     
 
 /*-------------------------------------------------useEffect to call portfolio analysis on component mount---------------------- */
-/*  
+ 
 useEffect(() => {
     handlePortfolioAnalysis();
     const interval = setInterval(() => {
@@ -102,7 +102,6 @@ useEffect(() => {
     
     return () => clearInterval(interval);
   },[]);
-  */
   
 return (
   <div className="aiinsights-wrapper">
